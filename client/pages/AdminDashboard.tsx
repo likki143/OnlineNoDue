@@ -956,7 +956,11 @@ const AdminDashboard: React.FC = () => {
                 <h2 className="text-2xl font-bold">Audit Trail</h2>
                 <p className="text-muted-foreground">Track all system activities and changes</p>
               </div>
-              <Button variant="outline">
+              <Button
+                variant="outline"
+                onClick={() => exportAuditLogsCSV(getFilteredAuditLogs())}
+                disabled={loading}
+              >
                 <Download className="h-4 w-4 mr-2" />
                 Export Logs
               </Button>
