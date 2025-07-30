@@ -736,39 +736,47 @@ const AdminDashboard: React.FC = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {applications.map((app) => (
-                      <TableRow key={app.id}>
-                        <TableCell className="font-medium">{app.studentName}</TableCell>
-                        <TableCell>{app.rollNumber}</TableCell>
-                        <TableCell>{app.department}</TableCell>
-                        <TableCell>{app.submissionDate}</TableCell>
-                        <TableCell>
-                          <div className="flex space-x-1">
-                            {Object.entries(app.progress).map(([dept, status]) => (
-                              <div
-                                key={dept}
-                                className={`w-3 h-3 rounded-full ${
-                                  status === 'approved' ? 'bg-green-500' :
-                                  status === 'rejected' ? 'bg-red-500' : 'bg-yellow-500'
-                                }`}
-                                title={`${dept}: ${status}`}
-                              />
-                            ))}
-                          </div>
-                        </TableCell>
-                        <TableCell>{getStatusBadge(app.status)}</TableCell>
-                        <TableCell>
-                          <div className="flex space-x-2">
-                            <Button size="sm" variant="outline">
-                              <Eye className="h-4 w-4" />
-                            </Button>
-                            <Button size="sm" variant="outline">
-                              <Settings className="h-4 w-4" />
-                            </Button>
-                          </div>
+                    {applications.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
+                          No applications submitted yet
                         </TableCell>
                       </TableRow>
-                    ))}
+                    ) : (
+                      applications.map((app) => (
+                        <TableRow key={app.id}>
+                          <TableCell className="font-medium">{app.studentName}</TableCell>
+                          <TableCell>{app.rollNumber}</TableCell>
+                          <TableCell>{app.department}</TableCell>
+                          <TableCell>{app.submissionDate}</TableCell>
+                          <TableCell>
+                            <div className="flex space-x-1">
+                              {Object.entries(app.progress).map(([dept, status]) => (
+                                <div
+                                  key={dept}
+                                  className={`w-3 h-3 rounded-full ${
+                                    status === 'approved' ? 'bg-green-500' :
+                                    status === 'rejected' ? 'bg-red-500' : 'bg-yellow-500'
+                                  }`}
+                                  title={`${dept}: ${status}`}
+                                />
+                              ))}
+                            </div>
+                          </TableCell>
+                          <TableCell>{getStatusBadge(app.status)}</TableCell>
+                          <TableCell>
+                            <div className="flex space-x-2">
+                              <Button size="sm" variant="outline">
+                                <Eye className="h-4 w-4" />
+                              </Button>
+                              <Button size="sm" variant="outline">
+                                <Settings className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    )}
                   </TableBody>
                 </Table>
               </CardContent>
