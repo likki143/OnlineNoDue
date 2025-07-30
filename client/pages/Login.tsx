@@ -8,6 +8,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { signInUser, resetPassword } from '@/lib/auth';
+import { testFirebaseConnection } from '@/lib/firebase';
 import { 
   GraduationCap, 
   Mail, 
