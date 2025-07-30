@@ -68,6 +68,12 @@ const AdminDashboard: React.FC = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
+  // Filter states
+  const [applicationFilter, setApplicationFilter] = useState('all');
+  const [auditLogFilter, setAuditLogFilter] = useState('all');
+  const [applicationSearchTerm, setApplicationSearchTerm] = useState('');
+  const [auditSearchTerm, setAuditSearchTerm] = useState('');
+
   // Real data from application store
   const [applications, setApplications] = useState<Application[]>([]);
   const [students, setStudents] = useState<Student[]>([]);
