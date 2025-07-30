@@ -18,9 +18,9 @@ const demoUsers: DemoUser[] = [
   },
   {
     uid: 'demo-admin-1',
-    email: 'admin@demo.com',
+    email: 'Admin@nodue.com',
     role: 'admin',
-    fullName: 'Demo Admin',
+    fullName: 'System Administrator',
     emailVerified: true
   },
   {
