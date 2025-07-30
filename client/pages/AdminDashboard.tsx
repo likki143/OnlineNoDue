@@ -57,130 +57,49 @@ const AdminDashboard: React.FC = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  // Demo data - in production this would come from Firebase
-  const [demoData] = useState<DemoData>({
-    totalStudents: 1247,
-    totalApplications: 324,
-    pendingApplications: 89,
-    approvedApplications: 198,
-    rejectedApplications: 37,
+  // Real data from application store
+  const [applications, setApplications] = useState<Application[]>([]);
+  const [students, setStudents] = useState<Student[]>([]);
+  const [officers, setOfficers] = useState<DepartmentOfficer[]>([]);
+  const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
+  const [statistics, setStatistics] = useState({
+    totalStudents: 0,
+    totalApplications: 0,
+    pendingApplications: 0,
+    inProgressApplications: 0,
+    approvedApplications: 0,
+    rejectedApplications: 0,
     totalDepartments: 5,
-    activeOfficers: 12
+    activeOfficers: 0
   });
 
-  const [students] = useState<Student[]>([
-    {
-      id: '1',
-      name: 'John Smith',
-      email: 'john.smith@university.edu',
-      rollNumber: 'CS2021001',
-      department: 'Computer Science Engineering',
-      course: 'B.Tech',
-      registrationDate: '2024-01-15',
-      emailVerified: true,
-      status: 'active'
-    },
-    {
-      id: '2',
-      name: 'Sarah Johnson',
-      email: 'sarah.j@university.edu',
-      rollNumber: 'EC2021045',
-      department: 'Electronics & Communication',
-      course: 'B.Tech',
-      registrationDate: '2024-01-20',
-      emailVerified: true,
-      status: 'active'
-    },
-    {
-      id: '3',
-      name: 'Mike Wilson',
-      email: 'mike.wilson@university.edu',
-      rollNumber: 'ME2021089',
-      department: 'Mechanical Engineering',
-      course: 'B.Tech',
-      registrationDate: '2024-02-01',
-      emailVerified: false,
-      status: 'inactive'
-    }
-  ]);
+  // Officer creation form
+  const [showOfficerForm, setShowOfficerForm] = useState(false);
+  const [newOfficer, setNewOfficer] = useState<NewOfficerForm>({
+    name: '',
+    email: '',
+    department: '',
+    role: ''
+  });
 
-  const [officers] = useState<DepartmentOfficer[]>([
-    {
-      id: '1',
-      name: 'Dr. Alice Brown',
-      email: 'alice.brown@university.edu',
-      department: 'Library',
-      role: 'Head Librarian',
-      lastLogin: '2024-01-28',
-      status: 'active'
-    },
-    {
-      id: '2',
-      name: 'Prof. David Lee',
-      email: 'david.lee@university.edu',
-      department: 'Computer Science',
-      role: 'HOD',
-      lastLogin: '2024-01-27',
-      status: 'active'
-    },
-    {
-      id: '3',
-      name: 'Ms. Emma Davis',
-      email: 'emma.davis@university.edu',
-      department: 'Accounts',
-      role: 'Finance Officer',
-      lastLogin: '2024-01-25',
-      status: 'active'
-    }
-  ]);
+  // Load data on component mount and tab change
+  React.useEffect(() => {
+    refreshData();
+  }, [activeTab]);
 
-  const [applications] = useState<Application[]>([
-    {
-      id: '1',
-      studentName: 'John Smith',
-      rollNumber: 'CS2021001',
-      department: 'Computer Science',
-      submissionDate: '2024-01-28',
-      status: 'in_progress',
-      progress: {
-        library: 'approved',
-        hostel: 'approved',
-        accounts: 'pending',
-        lab: 'approved',
-        sports: 'pending'
-      }
-    },
-    {
-      id: '2',
-      studentName: 'Sarah Johnson',
-      rollNumber: 'EC2021045',
-      department: 'Electronics & Communication',
-      submissionDate: '2024-01-27',
-      status: 'approved',
-      progress: {
-        library: 'approved',
-        hostel: 'approved',
-        accounts: 'approved',
-        lab: 'approved',
-        sports: 'approved'
-      }
-    },
-    {
-      id: '3',
-      studentName: 'Mike Wilson',
-      rollNumber: 'ME2021089',
-      department: 'Mechanical Engineering',
-      submissionDate: '2024-01-26',
-      status: 'rejected',
-      progress: {
-        library: 'approved',
-        hostel: 'rejected',
-        accounts: 'approved',
-        lab: 'approved',
-        sports: 'approved'
-      }
-    }
-  ]);
+  const refreshData = () => {
+    const apps = applicationStore.getAllApplications();
+    const studs = applicationStore.getAllStudents();
+    const offs = applicationStore.getAllOfficers();
+    const logs = applicationStore.getAllAuditLogs();
+    const stats = applicationStore.getStatistics();
+
+    setApplications(apps);
+    setStudents(studs);
+    setOfficers(offs);
+    setAuditLogs(logs);
+    setStatistics(stats);
+  };
 
   const handleSignOut = async () => {
     try {
