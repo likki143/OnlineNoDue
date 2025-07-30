@@ -45,24 +45,45 @@ const Login: React.FC = () => {
     setError('');
 
     try {
+      console.log('Attempting login with:', formData.email);
       const { user, profile } = await signInUser(formData.email, formData.password);
-      
+      console.log('Login successful:', { user: user.uid, profile: profile.role });
+
       // Redirect based on role
       switch (profile.role) {
         case 'student':
+          console.log('Redirecting to student dashboard');
           navigate('/student/dashboard');
           break;
         case 'department_officer':
+          console.log('Redirecting to department dashboard');
           navigate('/department/dashboard');
           break;
         case 'admin':
+          console.log('Redirecting to admin dashboard');
           navigate('/admin/dashboard');
           break;
         default:
+          console.log('Unknown role, redirecting to home');
           navigate('/');
       }
     } catch (err: any) {
-      setError(err.message || 'Failed to login');
+      console.error('Login error:', err);
+
+      // Provide more specific error messages
+      let errorMessage = err.message || 'Failed to login';
+
+      if (errorMessage.includes('user-not-found')) {
+        errorMessage = 'No account found with this email address';
+      } else if (errorMessage.includes('wrong-password')) {
+        errorMessage = 'Incorrect password';
+      } else if (errorMessage.includes('too-many-requests')) {
+        errorMessage = 'Too many failed attempts. Please try again later';
+      } else if (errorMessage.includes('email')) {
+        errorMessage = 'Please verify your email before logging in';
+      }
+
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
