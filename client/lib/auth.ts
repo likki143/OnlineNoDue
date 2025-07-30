@@ -76,7 +76,13 @@ export const signInUser = async (email: string, password: string) => {
     if (profile.role === 'student' && !user.emailVerified) {
       throw new Error('Please verify your email before logging in');
     }
-    
+
+    // Update email verification status in profile if it changed
+    if (profile.role === 'student' && user.emailVerified && !profile.emailVerified) {
+      profile.emailVerified = true;
+      await set(ref(database, `users/${user.uid}/emailVerified`), true);
+    }
+
     return { user, profile };
   } catch (error) {
     throw error;
