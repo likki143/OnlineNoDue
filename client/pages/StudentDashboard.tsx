@@ -102,43 +102,49 @@ const StudentDashboard: React.FC = () => {
                 <FileText className="h-5 w-5 text-primary" />
                 <div>
                   <p className="text-sm font-medium">Applications</p>
-                  <p className="text-2xl font-bold">0</p>
+                  <p className="text-2xl font-bold">{applications.length}</p>
                 </div>
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center space-x-2">
                 <Clock className="h-5 w-5 text-warning" />
                 <div>
                   <p className="text-sm font-medium">Pending</p>
-                  <p className="text-2xl font-bold">0</p>
+                  <p className="text-2xl font-bold">
+                    {applications.filter(app => app.status === 'pending').length}
+                  </p>
                 </div>
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center space-x-2">
                 <CheckCircle className="h-5 w-5 text-success" />
                 <div>
                   <p className="text-sm font-medium">Approved</p>
-                  <p className="text-2xl font-bold">0</p>
+                  <p className="text-2xl font-bold">
+                    {applications.filter(app => app.status === 'approved').length}
+                  </p>
                 </div>
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center space-x-2">
                 <AlertCircle className="h-5 w-5 text-destructive" />
                 <div>
                   <p className="text-sm font-medium">Rejected</p>
-                  <p className="text-2xl font-bold">0</p>
+                  <p className="text-2xl font-bold">
+                    {applications.filter(app => app.status === 'rejected').length}
+                  </p>
                 </div>
               </div>
             </CardContent>
