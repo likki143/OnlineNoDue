@@ -311,9 +311,21 @@ ${userProfile?.fullName}`;
                               </Badge>
                             </TableCell>
                             <TableCell>
-                              <Button size="sm" variant="outline">
-                                View Details
-                              </Button>
+                              <div className="flex space-x-2">
+                                <Button size="sm" variant="outline">
+                                  View Details
+                                </Button>
+                                {app.status === 'approved' && (
+                                  <Button
+                                    size="sm"
+                                    className="bg-green-600 hover:bg-green-700 text-white"
+                                    onClick={() => handleDownloadCertificate(app)}
+                                  >
+                                    <Award className="h-4 w-4 mr-1" />
+                                    Download Certificate
+                                  </Button>
+                                )}
+                              </div>
                             </TableCell>
                           </TableRow>
                         ))}
