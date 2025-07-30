@@ -93,74 +93,18 @@ ${userProfile?.fullName}`;
   };
 
   const handleViewGuidelines = () => {
-    // In a real implementation, this would open a guidelines page
-    const guidelinesContent = `
-NO DUE SYSTEM GUIDELINES
-========================
+    try {
+      generateGuidelinesPDF();
+    } catch (error) {
+      alert('Failed to generate guidelines PDF. Please try again.');
+    }
+  };
 
-Welcome to the Online No Due Form System. Please follow these guidelines:
-
-STUDENT GUIDELINES:
-
-1. APPLICATION PROCESS:
-   - Ensure your profile information is complete and accurate
-   - Fill all required fields in the application form
-   - Upload clear, readable documents
-   - Submit applications at least 15 days before your deadline
-
-2. REQUIRED DOCUMENTS:
-   - Student ID card (clear scan/photo)
-   - Latest fee payment receipt
-   - Library clearance (if applicable)
-   - Hostel documents (if applicable)
-
-3. DEPARTMENT CLEARANCES:
-   - Library: Return all books, pay pending fines
-   - Hostel: Clear room, return keys, pay dues
-   - Accounts: Clear all fee dues
-   - Lab/Department: Return equipment, submit projects
-   - Sports: Return sports equipment
-
-4. TRACKING YOUR APPLICATION:
-   - Use the dashboard to track real-time status
-   - You'll receive notifications on status changes
-   - Contact department officers for specific queries
-
-5. CERTIFICATE DOWNLOAD:
-   - Certificate available only after full approval
-   - Download and keep multiple copies
-   - QR code ensures authenticity
-
-6. COMMON ISSUES:
-   - Incomplete documents: Upload missing files
-   - Pending dues: Clear with respective departments
-   - Email verification: Check spam folder
-
-7. SUPPORT:
-   - Contact support for technical issues
-   - Contact department officers for clearance queries
-   - System admin for account issues
-
-IMPORTANT DEADLINES:
-- Submit applications 15 days before needed
-- Respond to department queries within 3 days
-- Download certificate within 30 days of approval
-
-For more information, contact: support@university.edu
-    `;
-
-    // Create a blob and download as text file
-    const blob = new Blob([guidelinesContent], { type: 'text/plain;charset=utf-8;' });
-    const link = document.createElement('a');
-
-    if (link.download !== undefined) {
-      const url = URL.createObjectURL(blob);
-      link.setAttribute('href', url);
-      link.setAttribute('download', 'no_due_system_guidelines.txt');
-      link.style.visibility = 'hidden';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+  const handleDownloadCertificate = async (application: Application) => {
+    try {
+      await generateCertificatePDF(application);
+    } catch (error) {
+      alert('Failed to generate certificate PDF. Please try again.');
     }
   };
 
