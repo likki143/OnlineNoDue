@@ -1012,33 +1012,36 @@ const AdminDashboard: React.FC = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {auditLogs.length === 0 ? (
-                      <TableRow>
-                        <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
-                          No audit logs available yet
-                        </TableCell>
-                      </TableRow>
-                    ) : (
-                      auditLogs.slice(0, 10).map((log) => (
-                        <TableRow key={log.id}>
-                          <TableCell>{new Date(log.timestamp).toLocaleString()}</TableCell>
-                          <TableCell>{log.userName}</TableCell>
-                          <TableCell>
-                            <Badge className={
-                              log.action.includes('Approved') ? 'bg-green-100 text-green-800' :
-                              log.action.includes('Created') ? 'bg-blue-100 text-blue-800' :
-                              log.action.includes('Submitted') ? 'bg-yellow-100 text-yellow-800' :
-                              'bg-gray-100 text-gray-800'
-                            }>
-                              {log.action}
-                            </Badge>
+                    {(() => {
+                      const filteredLogs = getFilteredAuditLogs();
+                      return filteredLogs.length === 0 ? (
+                        <TableRow>
+                          <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                            {auditLogs.length === 0 ? 'No audit logs available yet' : 'No logs match your search criteria'}
                           </TableCell>
-                          <TableCell>{log.target}</TableCell>
-                          <TableCell>{log.details}</TableCell>
-                          <TableCell>{log.ipAddress}</TableCell>
                         </TableRow>
-                      ))
-                    )}
+                      ) : (
+                        filteredLogs.slice(0, 20).map((log) => (
+                          <TableRow key={log.id}>
+                            <TableCell>{new Date(log.timestamp).toLocaleString()}</TableCell>
+                            <TableCell>{log.userName}</TableCell>
+                            <TableCell>
+                              <Badge className={
+                                log.action.includes('Approved') ? 'bg-green-100 text-green-800' :
+                                log.action.includes('Created') ? 'bg-blue-100 text-blue-800' :
+                                log.action.includes('Submitted') ? 'bg-yellow-100 text-yellow-800' :
+                                'bg-gray-100 text-gray-800'
+                              }>
+                                {log.action}
+                              </Badge>
+                            </TableCell>
+                            <TableCell>{log.target}</TableCell>
+                            <TableCell>{log.details}</TableCell>
+                            <TableCell>{log.ipAddress}</TableCell>
+                          </TableRow>
+                        ))
+                      );
+                    })()}
                   </TableBody>
                 </Table>
               </CardContent>
