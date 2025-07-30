@@ -46,6 +46,12 @@ const CertificateVerification: React.FC = () => {
     setLoading(false);
   }, [applicationId]);
 
+  const handleManualLookup = () => {
+    if (manualLookupId.trim()) {
+      navigate(`/verify/${manualLookupId.trim()}`);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center">
