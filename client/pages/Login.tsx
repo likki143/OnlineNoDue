@@ -121,6 +121,37 @@ const Login: React.FC = () => {
     }
   };
 
+  const handleDemoLogin = async () => {
+    setLoading(true);
+    setError('');
+
+    try {
+      const demoUser = await demoSignIn(formData.email, formData.password);
+
+      if (demoUser) {
+        enableDemoMode();
+        setDemoMode(true);
+
+        // Navigate based on role
+        switch (demoUser.role) {
+          case 'student':
+            navigate('/student/dashboard');
+            break;
+          case 'department_officer':
+            navigate('/department/dashboard');
+            break;
+          case 'admin':
+            navigate('/admin/dashboard');
+            break;
+        }
+      }
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleForgotPassword = async () => {
     if (!formData.email) {
       setError('Please enter your email address first');
