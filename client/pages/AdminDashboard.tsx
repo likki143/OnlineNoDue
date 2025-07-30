@@ -127,13 +127,37 @@ const AdminDashboard: React.FC = () => {
   };
 
   const handleCreateOfficer = async () => {
-    // Demo implementation - in production would create actual Firebase user
+    if (!newOfficer.name || !newOfficer.email || !newOfficer.department || !newOfficer.role) {
+      setError('Please fill in all required fields');
+      return;
+    }
+
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setSuccess('Department officer created successfully!');
+    setError('');
+
+    try {
+      // Add to application store
+      applicationStore.addOfficer({
+        name: newOfficer.name,
+        email: newOfficer.email,
+        department: newOfficer.department,
+        role: newOfficer.role
+      });
+
+      // In production, you would also create Firebase user here
+      // await createDepartmentOfficer(newOfficer.email, 'temp_password', newOfficer.name, newOfficer.department);
+
+      setSuccess(`Department officer "${newOfficer.name}" created successfully!`);
+      setNewOfficer({ name: '', email: '', department: '', role: '' });
+      setShowOfficerForm(false);
+      refreshData(); // Refresh the data
+
       setTimeout(() => setSuccess(''), 3000);
-    }, 1500);
+    } catch (err: any) {
+      setError(err.message || 'Failed to create department officer');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const getStatusBadge = (status: string) => {
