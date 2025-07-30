@@ -969,19 +969,34 @@ const AdminDashboard: React.FC = () => {
             <Card>
               <CardHeader>
                 <div className="flex items-center space-x-4">
-                  <Input placeholder="Search logs..." className="max-w-sm" />
-                  <Select>
+                  <Input
+                    placeholder="Search logs..."
+                    className="max-w-sm"
+                    value={auditSearchTerm}
+                    onChange={(e) => setAuditSearchTerm(e.target.value)}
+                  />
+                  <Select value={auditLogFilter} onValueChange={setAuditLogFilter}>
                     <SelectTrigger className="w-32">
                       <SelectValue placeholder="Action" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">All Actions</SelectItem>
-                      <SelectItem value="login">Login</SelectItem>
-                      <SelectItem value="approval">Approval</SelectItem>
-                      <SelectItem value="rejection">Rejection</SelectItem>
-                      <SelectItem value="creation">Creation</SelectItem>
+                      <SelectItem value="submitted">Submitted</SelectItem>
+                      <SelectItem value="approved">Approved</SelectItem>
+                      <SelectItem value="created">Created</SelectItem>
+                      <SelectItem value="officer">Officer</SelectItem>
                     </SelectContent>
                   </Select>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setAuditSearchTerm('');
+                      setAuditLogFilter('all');
+                    }}
+                  >
+                    Clear
+                  </Button>
                 </div>
               </CardHeader>
               <CardContent>
