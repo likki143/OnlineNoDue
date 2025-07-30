@@ -305,21 +305,29 @@ const AdminDashboard: React.FC = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {applications.slice(0, 5).map((app) => (
-                      <TableRow key={app.id}>
-                        <TableCell className="font-medium">{app.studentName}</TableCell>
-                        <TableCell>{app.rollNumber}</TableCell>
-                        <TableCell>{app.department}</TableCell>
-                        <TableCell>{app.submissionDate}</TableCell>
-                        <TableCell>{getStatusBadge(app.status)}</TableCell>
-                        <TableCell>
-                          <Button size="sm" variant="outline">
-                            <Eye className="h-4 w-4 mr-1" />
-                            View
-                          </Button>
+                    {applications.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                          No applications submitted yet
                         </TableCell>
                       </TableRow>
-                    ))}
+                    ) : (
+                      applications.slice(0, 5).map((app) => (
+                        <TableRow key={app.id}>
+                          <TableCell className="font-medium">{app.studentName}</TableCell>
+                          <TableCell>{app.rollNumber}</TableCell>
+                          <TableCell>{app.department}</TableCell>
+                          <TableCell>{app.submissionDate}</TableCell>
+                          <TableCell>{getStatusBadge(app.status)}</TableCell>
+                          <TableCell>
+                            <Button size="sm" variant="outline">
+                              <Eye className="h-4 w-4 mr-1" />
+                              View
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    )}
                   </TableBody>
                 </Table>
               </CardContent>
