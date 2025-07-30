@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { signInUser, resetPassword } from '@/lib/auth';
 import { testFirebaseConnection } from '@/lib/firebase';
+import { demoSignIn, isDemoMode, enableDemoMode } from '@/lib/demo-auth';
 import { 
   GraduationCap, 
   Mail, 
