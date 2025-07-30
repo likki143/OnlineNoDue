@@ -594,26 +594,34 @@ const AdminDashboard: React.FC = () => {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {officers.map((officer) => (
-                          <TableRow key={officer.id}>
-                            <TableCell className="font-medium">{officer.name}</TableCell>
-                            <TableCell>{officer.email}</TableCell>
-                            <TableCell>{officer.department}</TableCell>
-                            <TableCell>{officer.role}</TableCell>
-                            <TableCell>{officer.lastLogin}</TableCell>
-                            <TableCell>{getStatusBadge(officer.status)}</TableCell>
-                            <TableCell>
-                              <div className="flex space-x-2">
-                                <Button size="sm" variant="outline">
-                                  <Key className="h-4 w-4" />
-                                </Button>
-                                <Button size="sm" variant="outline">
-                                  <Edit className="h-4 w-4" />
-                                </Button>
-                              </div>
+                        {officers.length === 0 ? (
+                          <TableRow>
+                            <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
+                              No department officers created yet
                             </TableCell>
                           </TableRow>
-                        ))}
+                        ) : (
+                          officers.map((officer) => (
+                            <TableRow key={officer.id}>
+                              <TableCell className="font-medium">{officer.name}</TableCell>
+                              <TableCell>{officer.email}</TableCell>
+                              <TableCell>{officer.department}</TableCell>
+                              <TableCell>{officer.role}</TableCell>
+                              <TableCell>{officer.lastLogin || 'Never'}</TableCell>
+                              <TableCell>{getStatusBadge(officer.status)}</TableCell>
+                              <TableCell>
+                                <div className="flex space-x-2">
+                                  <Button size="sm" variant="outline">
+                                    <Key className="h-4 w-4" />
+                                  </Button>
+                                  <Button size="sm" variant="outline">
+                                    <Edit className="h-4 w-4" />
+                                  </Button>
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          ))
+                        )}
                       </TableBody>
                     </Table>
                   </CardContent>
