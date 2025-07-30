@@ -109,6 +109,12 @@ const AppRoutes: React.FC = () => {
         </ProtectedRoute>
       } />
 
+      <Route path="/student/apply" element={
+        <ProtectedRoute allowedRoles={['student']}>
+          <NoDueForm />
+        </ProtectedRoute>
+      } />
+
       <Route path="/department/dashboard" element={
         <ProtectedRoute allowedRoles={['department_officer']}>
           <DepartmentDashboard />
