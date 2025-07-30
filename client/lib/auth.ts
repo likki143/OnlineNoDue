@@ -105,6 +105,62 @@ export const resetPassword = async (email: string) => {
   }
 };
 
+export const createAdmin = async (
+  email: string,
+  password: string,
+  fullName: string
+) => {
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+
+    // Create admin profile in database
+    const userProfile: UserProfile = {
+      uid: user.uid,
+      email: user.email!,
+      role: 'admin',
+      fullName,
+      emailVerified: true, // Admins don't need email verification
+      createdAt: new Date().toISOString()
+    };
+
+    await set(ref(database, `users/${user.uid}`), userProfile);
+
+    return { user, profile: userProfile };
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const createDepartmentOfficer = async (
+  email: string,
+  password: string,
+  fullName: string,
+  department: string
+) => {
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+
+    // Create department officer profile in database
+    const userProfile: UserProfile = {
+      uid: user.uid,
+      email: user.email!,
+      role: 'department_officer',
+      fullName,
+      department,
+      emailVerified: true, // Department officers don't need email verification
+      createdAt: new Date().toISOString()
+    };
+
+    await set(ref(database, `users/${user.uid}`), userProfile);
+
+    return { user, profile: userProfile };
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getUserProfile = async (uid: string): Promise<UserProfile | null> => {
   try {
     const snapshot = await get(ref(database, `users/${uid}`));
