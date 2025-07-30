@@ -29,15 +29,17 @@ const CertificateVerification: React.FC = () => {
       // Find the application by ID
       const allApplications = applicationStore.getAllApplications();
       const foundApplication = allApplications.find(app => app.id === applicationId);
-      
+
       if (foundApplication) {
         setApplication(foundApplication);
       } else {
         setError('Certificate not found or invalid certificate ID');
       }
-      
-      setLoading(false);
+    } else {
+      setError('No certificate ID provided. Please scan a valid QR code or provide a certificate ID.');
     }
+
+    setLoading(false);
   }, [applicationId]);
 
   if (loading) {
