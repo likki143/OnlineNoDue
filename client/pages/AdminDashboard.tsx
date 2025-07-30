@@ -134,13 +134,29 @@ const AdminDashboard: React.FC = () => {
   };
 
   const handleExportData = (type: 'students' | 'applications' | 'officers') => {
-    // In production, this would generate and download actual CSV files
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
+
+    try {
+      switch (type) {
+        case 'applications':
+          exportApplicationsCSV(applications);
+          break;
+        case 'students':
+          exportStudentsCSV(students);
+          break;
+        case 'officers':
+          exportOfficersCSV(officers);
+          break;
+      }
+
       setSuccess(`${type} data exported successfully! Download started.`);
       setTimeout(() => setSuccess(''), 3000);
-    }, 2000);
+    } catch (error) {
+      setError(`Failed to export ${type} data`);
+      setTimeout(() => setError(''), 3000);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleCreateOfficer = async () => {
