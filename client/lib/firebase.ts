@@ -40,5 +40,31 @@ console.log('Firebase services initialized:', {
   storage: !!storage
 });
 
+// Test Firebase connection
+export const testFirebaseConnection = async () => {
+  try {
+    console.log('Testing Firebase connection...');
+
+    // Test auth connection
+    const authTest = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${firebaseConfig.apiKey}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ idToken: 'test' })
+    });
+
+    console.log('Firebase auth endpoint response status:', authTest.status);
+
+    return true;
+  } catch (error) {
+    console.error('Firebase connection test failed:', error);
+    return false;
+  }
+};
+
+// Auto-test connection on load
+testFirebaseConnection();
+
 // Export the app
 export default app;
