@@ -260,9 +260,15 @@ ${userProfile?.fullName}`;
                     <p className="text-muted-foreground mb-4">
                       Submit your first no due form to get started with the clearance process
                     </p>
-                    <Link to="/student/apply">
-                      <Button>Submit New Application</Button>
-                    </Link>
+                    {canApply ? (
+                      <Link to="/student/apply">
+                        <Button>Submit New Application</Button>
+                      </Link>
+                    ) : (
+                      <Button disabled>
+                        Only One Application Allowed
+                      </Button>
+                    )}
                   </div>
                 ) : (
                   <div className="space-y-4">
