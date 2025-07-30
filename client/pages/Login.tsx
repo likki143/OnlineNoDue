@@ -92,6 +92,13 @@ const Login: React.FC = () => {
         return;
       }
 
+      // If Firebase is completely unavailable, suggest demo mode
+      if (err.message?.includes('network') || err.message?.includes('Firebase')) {
+        setError(err.message + ' | Try demo mode below if Firebase is unavailable.');
+        setLoading(false);
+        return;
+      }
+
       // Provide more specific error messages
       let errorMessage = err.message || 'Failed to login';
 
