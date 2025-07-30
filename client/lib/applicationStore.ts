@@ -81,6 +81,13 @@ class ApplicationStore {
 
   submitApplication(application: Omit<Application, 'id' | 'submissionDate' | 'status' | 'progress'>): Application {
     const applications = this.getAllApplications();
+
+    // Check if student already has an application
+    const existingApplication = applications.find(app => app.studentId === application.studentId);
+    if (existingApplication) {
+      throw new Error('You have already submitted an application. Only one application per student is allowed.');
+    }
+
     const newApplication: Application = {
       ...application,
       id: Date.now().toString(),
@@ -97,7 +104,7 @@ class ApplicationStore {
 
     applications.push(newApplication);
     localStorage.setItem(this.APPLICATIONS_KEY, JSON.stringify(applications));
-    
+
     // Log the action
     this.addAuditLog({
       userId: application.studentId,
