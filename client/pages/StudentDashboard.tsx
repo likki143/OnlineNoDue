@@ -173,16 +173,78 @@ const StudentDashboard: React.FC = () => {
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="text-center py-8">
-                  <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                  <h3 className="font-semibold mb-2">No Applications Yet</h3>
-                  <p className="text-muted-foreground mb-4">
-                    Submit your first no due form to get started with the clearance process
-                  </p>
-                  <Link to="/student/apply">
-                    <Button>Submit New Application</Button>
-                  </Link>
-                </div>
+                {loading ? (
+                  <div className="text-center py-8">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+                    <p className="text-muted-foreground">Loading applications...</p>
+                  </div>
+                ) : applications.length === 0 ? (
+                  <div className="text-center py-8">
+                    <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                    <h3 className="font-semibold mb-2">No Applications Yet</h3>
+                    <p className="text-muted-foreground mb-4">
+                      Submit your first no due form to get started with the clearance process
+                    </p>
+                    <Link to="/student/apply">
+                      <Button>Submit New Application</Button>
+                    </Link>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Application ID</TableHead>
+                          <TableHead>Submission Date</TableHead>
+                          <TableHead>Department Progress</TableHead>
+                          <TableHead>Status</TableHead>
+                          <TableHead>Actions</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {applications.map((app) => (
+                          <TableRow key={app.id}>
+                            <TableCell className="font-mono">#{app.id}</TableCell>
+                            <TableCell>{app.submissionDate}</TableCell>
+                            <TableCell>
+                              <div className="flex space-x-1">
+                                {Object.entries(app.progress).map(([dept, status]) => (
+                                  <div
+                                    key={dept}
+                                    className={`w-3 h-3 rounded-full ${
+                                      status === 'approved' ? 'bg-green-500' :
+                                      status === 'rejected' ? 'bg-red-500' : 'bg-yellow-500'
+                                    }`}
+                                    title={`${dept}: ${status}`}
+                                  />
+                                ))}
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <Badge className={
+                                app.status === 'approved' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' :
+                                app.status === 'rejected' ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' :
+                                app.status === 'in_progress' ? 'status-in-progress' : 'status-pending'
+                              }>
+                                {app.status.replace('_', ' ').toUpperCase()}
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              <Button size="sm" variant="outline">
+                                View Details
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                    <div className="flex justify-center pt-4">
+                      <Button onClick={refreshApplications} variant="outline">
+                        Refresh Applications
+                      </Button>
+                    </div>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </div>
