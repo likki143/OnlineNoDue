@@ -1,18 +1,18 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from '@/contexts/AuthContext';
+import React from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 
 // Pages
-import Index from '@/pages/Index';
-import Login from '@/pages/Login';
-import Register from '@/pages/Register';
-import StudentDashboard from '@/pages/StudentDashboard';
-import DepartmentDashboard from '@/pages/DepartmentDashboard';
-import AdminDashboard from '@/pages/AdminDashboard';
-import AdminSetup from '@/pages/AdminSetup';
-import NoDueForm from '@/pages/NoDueForm';
-import CertificateVerification from '@/pages/CertificateVerification';
-import NotFound from '@/pages/NotFound';
+import Index from "@/pages/Index";
+import Login from "@/pages/Login";
+import Register from "@/pages/Register";
+import StudentDashboard from "@/pages/StudentDashboard";
+import DepartmentDashboard from "@/pages/DepartmentDashboard";
+import AdminDashboard from "@/pages/AdminDashboard";
+import AdminSetup from "@/pages/AdminSetup";
+import NoDueForm from "@/pages/NoDueForm";
+import CertificateVerification from "@/pages/CertificateVerification";
+import NotFound from "@/pages/NotFound";
 
 // Protected Route Component
 interface ProtectedRouteProps {
@@ -20,7 +20,10 @@ interface ProtectedRouteProps {
   allowedRoles?: string[];
 }
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowedRoles }) => {
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
+  children,
+  allowedRoles,
+}) => {
   const { currentUser, userProfile, loading } = useAuth();
 
   if (loading) {
@@ -61,11 +64,11 @@ const PublicRoute: React.FC<PublicRouteProps> = ({ children }) => {
   if (currentUser && userProfile) {
     // Redirect based on role
     switch (userProfile.role) {
-      case 'student':
+      case "student":
         return <Navigate to="/student/dashboard" replace />;
-      case 'department_officer':
+      case "department_officer":
         return <Navigate to="/department/dashboard" replace />;
-      case 'admin':
+      case "admin":
         return <Navigate to="/admin/dashboard" replace />;
       default:
         return <Navigate to="/" replace />;
@@ -79,58 +82,85 @@ const AppRoutes: React.FC = () => {
   return (
     <Routes>
       {/* Public Routes */}
-      <Route path="/" element={
-        <PublicRoute>
-          <Index />
-        </PublicRoute>
-      } />
-      
-      <Route path="/login" element={
-        <PublicRoute>
-          <Login />
-        </PublicRoute>
-      } />
-      
-      <Route path="/register" element={
-        <PublicRoute>
-          <Register />
-        </PublicRoute>
-      } />
+      <Route
+        path="/"
+        element={
+          <PublicRoute>
+            <Index />
+          </PublicRoute>
+        }
+      />
 
-      <Route path="/admin/setup" element={
-        <PublicRoute>
-          <AdminSetup />
-        </PublicRoute>
-      } />
+      <Route
+        path="/login"
+        element={
+          <PublicRoute>
+            <Login />
+          </PublicRoute>
+        }
+      />
+
+      <Route
+        path="/register"
+        element={
+          <PublicRoute>
+            <Register />
+          </PublicRoute>
+        }
+      />
+
+      <Route
+        path="/admin/setup"
+        element={
+          <PublicRoute>
+            <AdminSetup />
+          </PublicRoute>
+        }
+      />
 
       {/* Certificate verification - public routes */}
-      <Route path="/verify/:applicationId" element={<CertificateVerification />} />
+      <Route
+        path="/verify/:applicationId"
+        element={<CertificateVerification />}
+      />
       <Route path="/verify" element={<CertificateVerification />} />
 
       {/* Protected Routes */}
-      <Route path="/student/dashboard" element={
-        <ProtectedRoute allowedRoles={['student']}>
-          <StudentDashboard />
-        </ProtectedRoute>
-      } />
+      <Route
+        path="/student/dashboard"
+        element={
+          <ProtectedRoute allowedRoles={["student"]}>
+            <StudentDashboard />
+          </ProtectedRoute>
+        }
+      />
 
-      <Route path="/student/apply" element={
-        <ProtectedRoute allowedRoles={['student']}>
-          <NoDueForm />
-        </ProtectedRoute>
-      } />
+      <Route
+        path="/student/apply"
+        element={
+          <ProtectedRoute allowedRoles={["student"]}>
+            <NoDueForm />
+          </ProtectedRoute>
+        }
+      />
 
-      <Route path="/department/dashboard" element={
-        <ProtectedRoute allowedRoles={['department_officer']}>
-          <DepartmentDashboard />
-        </ProtectedRoute>
-      } />
+      <Route
+        path="/department/dashboard"
+        element={
+          <ProtectedRoute allowedRoles={["department_officer"]}>
+            <DepartmentDashboard />
+          </ProtectedRoute>
+        }
+      />
 
-      <Route path="/admin/dashboard" element={
-        <ProtectedRoute allowedRoles={['admin']}>
-          <AdminDashboard />
-        </ProtectedRoute>
-      } />
+      <Route
+        path="/admin/dashboard"
+        element={
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <AdminDashboard />
+          </ProtectedRoute>
+        }
+      />
 
       {/* Catch all route */}
       <Route path="*" element={<NotFound />} />

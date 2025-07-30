@@ -11,13 +11,13 @@ export interface Application {
   course: string;
   year: string;
   submissionDate: string;
-  status: 'pending' | 'in_progress' | 'approved' | 'rejected';
+  status: "pending" | "in_progress" | "approved" | "rejected";
   progress: {
-    library: 'pending' | 'approved' | 'rejected';
-    hostel: 'pending' | 'approved' | 'rejected';
-    accounts: 'pending' | 'approved' | 'rejected';
-    lab: 'pending' | 'approved' | 'rejected';
-    sports: 'pending' | 'approved' | 'rejected';
+    library: "pending" | "approved" | "rejected";
+    hostel: "pending" | "approved" | "rejected";
+    accounts: "pending" | "approved" | "rejected";
+    lab: "pending" | "approved" | "rejected";
+    sports: "pending" | "approved" | "rejected";
   };
   reason?: string;
   collegeName?: string;
@@ -37,7 +37,7 @@ export interface Student {
   phone: string;
   registrationDate: string;
   emailVerified: boolean;
-  status: 'active' | 'inactive';
+  status: "active" | "inactive";
 }
 
 export interface DepartmentOfficer {
@@ -48,7 +48,7 @@ export interface DepartmentOfficer {
   role: string;
   createdDate: string;
   lastLogin?: string;
-  status: 'active' | 'inactive';
+  status: "active" | "inactive";
 }
 
 export interface AuditLog {
@@ -64,10 +64,10 @@ export interface AuditLog {
 
 // Application Store
 class ApplicationStore {
-  private readonly APPLICATIONS_KEY = 'noDue_applications';
-  private readonly STUDENTS_KEY = 'noDue_students';
-  private readonly OFFICERS_KEY = 'noDue_officers';
-  private readonly AUDIT_KEY = 'noDue_audit';
+  private readonly APPLICATIONS_KEY = "noDue_applications";
+  private readonly STUDENTS_KEY = "noDue_students";
+  private readonly OFFICERS_KEY = "noDue_officers";
+  private readonly AUDIT_KEY = "noDue_audit";
 
   // Applications
   getAllApplications(): Application[] {
@@ -76,41 +76,54 @@ class ApplicationStore {
   }
 
   getApplicationsByStudentId(studentId: string): Application[] {
-    return this.getAllApplications().filter(app => app.studentId === studentId);
+    return this.getAllApplications().filter(
+      (app) => app.studentId === studentId,
+    );
   }
 
   canStudentApply(studentId: string): boolean {
     const applications = this.getAllApplications();
-    return !applications.some(app => app.studentId === studentId);
+    return !applications.some((app) => app.studentId === studentId);
   }
 
-  getStudentApplicationStatus(studentId: string): 'none' | 'pending' | 'in_progress' | 'approved' | 'rejected' {
+  getStudentApplicationStatus(
+    studentId: string,
+  ): "none" | "pending" | "in_progress" | "approved" | "rejected" {
     const applications = this.getAllApplications();
-    const studentApp = applications.find(app => app.studentId === studentId);
-    return studentApp ? studentApp.status : 'none';
+    const studentApp = applications.find((app) => app.studentId === studentId);
+    return studentApp ? studentApp.status : "none";
   }
 
-  submitApplication(application: Omit<Application, 'id' | 'submissionDate' | 'status' | 'progress'>): Application {
+  submitApplication(
+    application: Omit<
+      Application,
+      "id" | "submissionDate" | "status" | "progress"
+    >,
+  ): Application {
     const applications = this.getAllApplications();
 
     // Check if student already has an application
-    const existingApplication = applications.find(app => app.studentId === application.studentId);
+    const existingApplication = applications.find(
+      (app) => app.studentId === application.studentId,
+    );
     if (existingApplication) {
-      throw new Error('You have already submitted an application. Only one application per student is allowed.');
+      throw new Error(
+        "You have already submitted an application. Only one application per student is allowed.",
+      );
     }
 
     const newApplication: Application = {
       ...application,
       id: Date.now().toString(),
-      submissionDate: new Date().toISOString().split('T')[0],
-      status: 'pending',
+      submissionDate: new Date().toISOString().split("T")[0],
+      status: "pending",
       progress: {
-        library: 'pending',
-        hostel: 'pending',
-        accounts: 'pending',
-        lab: 'pending',
-        sports: 'pending'
-      }
+        library: "pending",
+        hostel: "pending",
+        accounts: "pending",
+        lab: "pending",
+        sports: "pending",
+      },
     };
 
     applications.push(newApplication);
@@ -120,37 +133,40 @@ class ApplicationStore {
     this.addAuditLog({
       userId: application.studentId,
       userName: application.studentName,
-      action: 'Application Submitted',
+      action: "Application Submitted",
       target: `Application #${newApplication.id}`,
       details: `No due application submitted for ${application.department}`,
-      ipAddress: '192.168.1.100'
+      ipAddress: "192.168.1.100",
     });
 
     return newApplication;
   }
 
-  updateApplicationStatus(applicationId: string, departmentStatus: Partial<Application['progress']>): void {
+  updateApplicationStatus(
+    applicationId: string,
+    departmentStatus: Partial<Application["progress"]>,
+  ): void {
     const applications = this.getAllApplications();
-    const appIndex = applications.findIndex(app => app.id === applicationId);
-    
+    const appIndex = applications.findIndex((app) => app.id === applicationId);
+
     if (appIndex !== -1) {
       applications[appIndex].progress = {
         ...applications[appIndex].progress,
-        ...departmentStatus
+        ...departmentStatus,
       };
 
       // Update overall status based on progress
       const progress = applications[appIndex].progress;
       const statuses = Object.values(progress);
-      
-      if (statuses.every(status => status === 'approved')) {
-        applications[appIndex].status = 'approved';
-      } else if (statuses.some(status => status === 'rejected')) {
-        applications[appIndex].status = 'rejected';
-      } else if (statuses.some(status => status === 'approved')) {
-        applications[appIndex].status = 'in_progress';
+
+      if (statuses.every((status) => status === "approved")) {
+        applications[appIndex].status = "approved";
+      } else if (statuses.some((status) => status === "rejected")) {
+        applications[appIndex].status = "rejected";
+      } else if (statuses.some((status) => status === "approved")) {
+        applications[appIndex].status = "in_progress";
       } else {
-        applications[appIndex].status = 'pending';
+        applications[appIndex].status = "pending";
       }
 
       localStorage.setItem(this.APPLICATIONS_KEY, JSON.stringify(applications));
@@ -163,13 +179,15 @@ class ApplicationStore {
     return data ? JSON.parse(data) : [];
   }
 
-  addStudent(student: Omit<Student, 'id' | 'registrationDate' | 'status'>): Student {
+  addStudent(
+    student: Omit<Student, "id" | "registrationDate" | "status">,
+  ): Student {
     const students = this.getAllStudents();
     const newStudent: Student = {
       ...student,
       id: Date.now().toString(),
-      registrationDate: new Date().toISOString().split('T')[0],
-      status: 'active'
+      registrationDate: new Date().toISOString().split("T")[0],
+      status: "active",
     };
 
     students.push(newStudent);
@@ -183,26 +201,28 @@ class ApplicationStore {
     return data ? JSON.parse(data) : [];
   }
 
-  addOfficer(officer: Omit<DepartmentOfficer, 'id' | 'createdDate' | 'status'>): DepartmentOfficer {
+  addOfficer(
+    officer: Omit<DepartmentOfficer, "id" | "createdDate" | "status">,
+  ): DepartmentOfficer {
     const officers = this.getAllOfficers();
     const newOfficer: DepartmentOfficer = {
       ...officer,
       id: Date.now().toString(),
-      createdDate: new Date().toISOString().split('T')[0],
-      status: 'active'
+      createdDate: new Date().toISOString().split("T")[0],
+      status: "active",
     };
 
     officers.push(newOfficer);
     localStorage.setItem(this.OFFICERS_KEY, JSON.stringify(officers));
-    
+
     // Log the action
     this.addAuditLog({
-      userId: 'admin',
-      userName: 'System Administrator',
-      action: 'Officer Created',
+      userId: "admin",
+      userName: "System Administrator",
+      action: "Officer Created",
       target: `Officer Account`,
       details: `Department officer created: ${officer.name} for ${officer.department}`,
-      ipAddress: '192.168.1.10'
+      ipAddress: "192.168.1.10",
     });
 
     return newOfficer;
@@ -214,16 +234,16 @@ class ApplicationStore {
     return data ? JSON.parse(data) : [];
   }
 
-  addAuditLog(log: Omit<AuditLog, 'id' | 'timestamp'>): AuditLog {
+  addAuditLog(log: Omit<AuditLog, "id" | "timestamp">): AuditLog {
     const logs = this.getAllAuditLogs();
     const newLog: AuditLog = {
       ...log,
       id: Date.now().toString(),
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
 
     logs.unshift(newLog); // Add to beginning
-    
+
     // Keep only last 100 logs
     if (logs.length > 100) {
       logs.splice(100);
@@ -242,12 +262,21 @@ class ApplicationStore {
     return {
       totalStudents: students.length,
       totalApplications: applications.length,
-      pendingApplications: applications.filter(app => app.status === 'pending').length,
-      inProgressApplications: applications.filter(app => app.status === 'in_progress').length,
-      approvedApplications: applications.filter(app => app.status === 'approved').length,
-      rejectedApplications: applications.filter(app => app.status === 'rejected').length,
+      pendingApplications: applications.filter(
+        (app) => app.status === "pending",
+      ).length,
+      inProgressApplications: applications.filter(
+        (app) => app.status === "in_progress",
+      ).length,
+      approvedApplications: applications.filter(
+        (app) => app.status === "approved",
+      ).length,
+      rejectedApplications: applications.filter(
+        (app) => app.status === "rejected",
+      ).length,
       totalDepartments: 5, // Fixed number of departments
-      activeOfficers: officers.filter(officer => officer.status === 'active').length
+      activeOfficers: officers.filter((officer) => officer.status === "active")
+        .length,
     };
   }
 

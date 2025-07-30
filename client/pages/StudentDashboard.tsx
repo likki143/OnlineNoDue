@@ -1,14 +1,31 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { useAuth } from '@/contexts/AuthContext';
-import { signOutUser } from '@/lib/auth';
-import { isDemoMode, disableDemoMode } from '@/lib/demo-auth';
-import { applicationStore, Application } from '@/lib/applicationStore';
-import { generateCertificatePDF, generateSampleFormsPDF, generateGuidelinesPDF } from '@/lib/utils/pdfGenerator';
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { useAuth } from "@/contexts/AuthContext";
+import { signOutUser } from "@/lib/auth";
+import { isDemoMode, disableDemoMode } from "@/lib/demo-auth";
+import { applicationStore, Application } from "@/lib/applicationStore";
+import {
+  generateCertificatePDF,
+  generateSampleFormsPDF,
+  generateGuidelinesPDF,
+} from "@/lib/utils/pdfGenerator";
 import {
   GraduationCap,
   FileText,
@@ -17,8 +34,8 @@ import {
   AlertCircle,
   LogOut,
   Plus,
-  Award
-} from 'lucide-react';
+  Award,
+} from "lucide-react";
 
 const StudentDashboard: React.FC = () => {
   const { userProfile } = useAuth();
@@ -26,12 +43,16 @@ const StudentDashboard: React.FC = () => {
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
   const [canApply, setCanApply] = useState(true);
-  const [applicationStatus, setApplicationStatus] = useState<'none' | 'pending' | 'in_progress' | 'approved' | 'rejected'>('none');
+  const [applicationStatus, setApplicationStatus] = useState<
+    "none" | "pending" | "in_progress" | "approved" | "rejected"
+  >("none");
 
   useEffect(() => {
     if (userProfile?.uid) {
       // Load applications for current student
-      const studentApplications = applicationStore.getApplicationsByStudentId(userProfile.uid);
+      const studentApplications = applicationStore.getApplicationsByStudentId(
+        userProfile.uid,
+      );
       setApplications(studentApplications);
 
       // Check if student can apply
@@ -39,7 +60,9 @@ const StudentDashboard: React.FC = () => {
       setCanApply(canStudentApply);
 
       // Get application status
-      const status = applicationStore.getStudentApplicationStatus(userProfile.uid);
+      const status = applicationStore.getStudentApplicationStatus(
+        userProfile.uid,
+      );
       setApplicationStatus(status);
 
       setLoading(false);
@@ -48,14 +71,18 @@ const StudentDashboard: React.FC = () => {
 
   const refreshApplications = () => {
     if (userProfile?.uid) {
-      const studentApplications = applicationStore.getApplicationsByStudentId(userProfile.uid);
+      const studentApplications = applicationStore.getApplicationsByStudentId(
+        userProfile.uid,
+      );
       setApplications(studentApplications);
 
       // Update application eligibility and status
       const canStudentApply = applicationStore.canStudentApply(userProfile.uid);
       setCanApply(canStudentApply);
 
-      const status = applicationStore.getStudentApplicationStatus(userProfile.uid);
+      const status = applicationStore.getStudentApplicationStatus(
+        userProfile.uid,
+      );
       setApplicationStatus(status);
     }
   };
@@ -64,14 +91,14 @@ const StudentDashboard: React.FC = () => {
     try {
       generateSampleFormsPDF();
     } catch (error) {
-      alert('Failed to generate forms PDF. Please try again.');
+      alert("Failed to generate forms PDF. Please try again.");
     }
   };
 
   const handleContactSupport = () => {
     // In a real implementation, this would open a support ticket system
-    const supportEmail = 'support@university.edu';
-    const subject = 'No Due System Support Request';
+    const supportEmail = "support@university.edu";
+    const subject = "No Due System Support Request";
     const body = `Dear Support Team,
 
 I need assistance with the No Due System.
@@ -90,14 +117,14 @@ Best regards,
 ${userProfile?.fullName}`;
 
     const mailtoLink = `mailto:${supportEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    window.open(mailtoLink, '_blank');
+    window.open(mailtoLink, "_blank");
   };
 
   const handleViewGuidelines = () => {
     try {
       generateGuidelinesPDF();
     } catch (error) {
-      alert('Failed to generate guidelines PDF. Please try again.');
+      alert("Failed to generate guidelines PDF. Please try again.");
     }
   };
 
@@ -105,7 +132,7 @@ ${userProfile?.fullName}`;
     try {
       await generateCertificatePDF(application);
     } catch (error) {
-      alert('Failed to generate certificate PDF. Please try again.');
+      alert("Failed to generate certificate PDF. Please try again.");
     }
   };
 
@@ -113,15 +140,15 @@ ${userProfile?.fullName}`;
     try {
       if (isDemoMode()) {
         disableDemoMode();
-        navigate('/');
+        navigate("/");
       } else {
         await signOutUser();
-        navigate('/');
+        navigate("/");
       }
     } catch (error) {
-      console.error('Error signing out:', error);
+      console.error("Error signing out:", error);
       // Even if sign out fails, redirect to home
-      navigate('/');
+      navigate("/");
     }
   };
 
@@ -135,7 +162,10 @@ ${userProfile?.fullName}`;
               <GraduationCap className="h-6 w-6 text-primary" />
               <span className="font-bold">Student Dashboard</span>
               {isDemoMode() && (
-                <Badge variant="outline" className="bg-yellow-100 text-yellow-800 border-yellow-300">
+                <Badge
+                  variant="outline"
+                  className="bg-yellow-100 text-yellow-800 border-yellow-300"
+                >
                   Demo Mode
                 </Badge>
               )}
@@ -143,7 +173,9 @@ ${userProfile?.fullName}`;
             <div className="flex items-center space-x-4">
               <div className="text-sm">
                 <div className="font-medium">{userProfile?.fullName}</div>
-                <div className="text-muted-foreground">{userProfile?.rollNumber}</div>
+                <div className="text-muted-foreground">
+                  {userProfile?.rollNumber}
+                </div>
               </div>
               <Button variant="outline" size="sm" onClick={handleSignOut}>
                 <LogOut className="h-4 w-4 mr-2" />
@@ -157,7 +189,9 @@ ${userProfile?.fullName}`;
       <div className="container mx-auto px-4 py-8">
         {/* Welcome Section */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">Welcome back, {userProfile?.fullName}!</h1>
+          <h1 className="text-3xl font-bold mb-2">
+            Welcome back, {userProfile?.fullName}!
+          </h1>
           <p className="text-muted-foreground">
             Track your no due applications and manage your clearance process
           </p>
@@ -184,7 +218,10 @@ ${userProfile?.fullName}`;
                 <div>
                   <p className="text-sm font-medium">Pending</p>
                   <p className="text-2xl font-bold">
-                    {applications.filter(app => app.status === 'pending').length}
+                    {
+                      applications.filter((app) => app.status === "pending")
+                        .length
+                    }
                   </p>
                 </div>
               </div>
@@ -198,7 +235,10 @@ ${userProfile?.fullName}`;
                 <div>
                   <p className="text-sm font-medium">Approved</p>
                   <p className="text-2xl font-bold">
-                    {applications.filter(app => app.status === 'approved').length}
+                    {
+                      applications.filter((app) => app.status === "approved")
+                        .length
+                    }
                   </p>
                 </div>
               </div>
@@ -212,7 +252,10 @@ ${userProfile?.fullName}`;
                 <div>
                   <p className="text-sm font-medium">Rejected</p>
                   <p className="text-2xl font-bold">
-                    {applications.filter(app => app.status === 'rejected').length}
+                    {
+                      applications.filter((app) => app.status === "rejected")
+                        .length
+                    }
                   </p>
                 </div>
               </div>
@@ -252,23 +295,24 @@ ${userProfile?.fullName}`;
                 {loading ? (
                   <div className="text-center py-8">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-                    <p className="text-muted-foreground">Loading applications...</p>
+                    <p className="text-muted-foreground">
+                      Loading applications...
+                    </p>
                   </div>
                 ) : applications.length === 0 ? (
                   <div className="text-center py-8">
                     <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                     <h3 className="font-semibold mb-2">No Applications Yet</h3>
                     <p className="text-muted-foreground mb-4">
-                      Submit your first no due form to get started with the clearance process
+                      Submit your first no due form to get started with the
+                      clearance process
                     </p>
                     {canApply ? (
                       <Link to="/student/apply">
                         <Button>Submit New Application</Button>
                       </Link>
                     ) : (
-                      <Button disabled>
-                        Only One Application Allowed
-                      </Button>
+                      <Button disabled>Only One Application Allowed</Button>
                     )}
                   </div>
                 ) : (
@@ -286,29 +330,42 @@ ${userProfile?.fullName}`;
                       <TableBody>
                         {applications.map((app) => (
                           <TableRow key={app.id}>
-                            <TableCell className="font-mono">#{app.id}</TableCell>
+                            <TableCell className="font-mono">
+                              #{app.id}
+                            </TableCell>
                             <TableCell>{app.submissionDate}</TableCell>
                             <TableCell>
                               <div className="flex space-x-1">
-                                {Object.entries(app.progress).map(([dept, status]) => (
-                                  <div
-                                    key={dept}
-                                    className={`w-3 h-3 rounded-full ${
-                                      status === 'approved' ? 'bg-green-500' :
-                                      status === 'rejected' ? 'bg-red-500' : 'bg-yellow-500'
-                                    }`}
-                                    title={`${dept}: ${status}`}
-                                  />
-                                ))}
+                                {Object.entries(app.progress).map(
+                                  ([dept, status]) => (
+                                    <div
+                                      key={dept}
+                                      className={`w-3 h-3 rounded-full ${
+                                        status === "approved"
+                                          ? "bg-green-500"
+                                          : status === "rejected"
+                                            ? "bg-red-500"
+                                            : "bg-yellow-500"
+                                      }`}
+                                      title={`${dept}: ${status}`}
+                                    />
+                                  ),
+                                )}
                               </div>
                             </TableCell>
                             <TableCell>
-                              <Badge className={
-                                app.status === 'approved' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' :
-                                app.status === 'rejected' ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' :
-                                app.status === 'in_progress' ? 'status-in-progress' : 'status-pending'
-                              }>
-                                {app.status.replace('_', ' ').toUpperCase()}
+                              <Badge
+                                className={
+                                  app.status === "approved"
+                                    ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                                    : app.status === "rejected"
+                                      ? "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
+                                      : app.status === "in_progress"
+                                        ? "status-in-progress"
+                                        : "status-pending"
+                                }
+                              >
+                                {app.status.replace("_", " ").toUpperCase()}
                               </Badge>
                             </TableCell>
                             <TableCell>
@@ -316,11 +373,13 @@ ${userProfile?.fullName}`;
                                 <Button size="sm" variant="outline">
                                   View Details
                                 </Button>
-                                {app.status === 'approved' && (
+                                {app.status === "approved" && (
                                   <Button
                                     size="sm"
                                     className="bg-green-600 hover:bg-green-700 text-white"
-                                    onClick={() => handleDownloadCertificate(app)}
+                                    onClick={() =>
+                                      handleDownloadCertificate(app)
+                                    }
                                   >
                                     <Award className="h-4 w-4 mr-1" />
                                     Download Certificate
@@ -353,7 +412,9 @@ ${userProfile?.fullName}`;
               <CardContent className="space-y-3">
                 <div>
                   <p className="text-sm font-medium">Department</p>
-                  <p className="text-muted-foreground">{userProfile?.department}</p>
+                  <p className="text-muted-foreground">
+                    {userProfile?.department}
+                  </p>
                 </div>
                 <div>
                   <p className="text-sm font-medium">Email</p>
@@ -361,7 +422,9 @@ ${userProfile?.fullName}`;
                 </div>
                 <div>
                   <p className="text-sm font-medium">Phone</p>
-                  <p className="text-muted-foreground">{userProfile?.phoneNumber}</p>
+                  <p className="text-muted-foreground">
+                    {userProfile?.phoneNumber}
+                  </p>
                 </div>
                 <div>
                   <p className="text-sm font-medium">Email Status</p>
@@ -386,13 +449,25 @@ ${userProfile?.fullName}`;
                 <CardTitle>Quick Actions</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <Button className="w-full" variant="outline" onClick={handleDownloadForms}>
+                <Button
+                  className="w-full"
+                  variant="outline"
+                  onClick={handleDownloadForms}
+                >
                   Download Forms
                 </Button>
-                <Button className="w-full" variant="outline" onClick={handleContactSupport}>
+                <Button
+                  className="w-full"
+                  variant="outline"
+                  onClick={handleContactSupport}
+                >
                   Contact Support
                 </Button>
-                <Button className="w-full" variant="outline" onClick={handleViewGuidelines}>
+                <Button
+                  className="w-full"
+                  variant="outline"
+                  onClick={handleViewGuidelines}
+                >
                   View Guidelines
                 </Button>
               </CardContent>

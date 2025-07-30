@@ -1,18 +1,43 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { useAuth } from '@/contexts/AuthContext';
-import { signOutUser, createDepartmentOfficer } from '@/lib/auth';
-import { isDemoMode, disableDemoMode } from '@/lib/demo-auth';
-import { applicationStore, Application, Student, DepartmentOfficer, AuditLog } from '@/lib/applicationStore';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useAuth } from "@/contexts/AuthContext";
+import { signOutUser, createDepartmentOfficer } from "@/lib/auth";
+import { isDemoMode, disableDemoMode } from "@/lib/demo-auth";
+import {
+  applicationStore,
+  Application,
+  Student,
+  DepartmentOfficer,
+  AuditLog,
+} from "@/lib/applicationStore";
 import {
   exportApplicationsCSV,
   exportStudentsCSV,
@@ -21,16 +46,16 @@ import {
   filterApplicationsByStatus,
   searchApplications,
   filterAuditLogsByAction,
-  searchAuditLogs
-} from '@/lib/utils/dataExport';
-import { generateCertificatePDF } from '@/lib/utils/pdfGenerator';
-import { 
-  Shield, 
-  Users, 
-  Building2, 
-  FileText, 
-  Download, 
-  Settings, 
+  searchAuditLogs,
+} from "@/lib/utils/dataExport";
+import { generateCertificatePDF } from "@/lib/utils/pdfGenerator";
+import {
+  Shield,
+  Users,
+  Building2,
+  FileText,
+  Download,
+  Settings,
   BarChart3,
   LogOut,
   Plus,
@@ -49,8 +74,8 @@ import {
   Calendar,
   TrendingUp,
   Award,
-  QrCode
-} from 'lucide-react';
+  QrCode,
+} from "lucide-react";
 
 interface NewOfficerForm {
   name: string;
@@ -62,17 +87,17 @@ interface NewOfficerForm {
 const AdminDashboard: React.FC = () => {
   const { userProfile } = useAuth();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('overview');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [activeTab, setActiveTab] = useState("overview");
+  const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   // Filter states
-  const [applicationFilter, setApplicationFilter] = useState('all');
-  const [auditLogFilter, setAuditLogFilter] = useState('all');
-  const [applicationSearchTerm, setApplicationSearchTerm] = useState('');
-  const [auditSearchTerm, setAuditSearchTerm] = useState('');
+  const [applicationFilter, setApplicationFilter] = useState("all");
+  const [auditLogFilter, setAuditLogFilter] = useState("all");
+  const [applicationSearchTerm, setApplicationSearchTerm] = useState("");
+  const [auditSearchTerm, setAuditSearchTerm] = useState("");
 
   // Real data from application store
   const [applications, setApplications] = useState<Application[]>([]);
@@ -87,16 +112,16 @@ const AdminDashboard: React.FC = () => {
     approvedApplications: 0,
     rejectedApplications: 0,
     totalDepartments: 5,
-    activeOfficers: 0
+    activeOfficers: 0,
   });
 
   // Officer creation form
   const [showOfficerForm, setShowOfficerForm] = useState(false);
   const [newOfficer, setNewOfficer] = useState<NewOfficerForm>({
-    name: '',
-    email: '',
-    department: '',
-    role: ''
+    name: "",
+    email: "",
+    department: "",
+    role: "",
   });
 
   // Load data on component mount and tab change
@@ -122,51 +147,56 @@ const AdminDashboard: React.FC = () => {
     try {
       if (isDemoMode()) {
         disableDemoMode();
-        navigate('/');
+        navigate("/");
       } else {
         await signOutUser();
-        navigate('/');
+        navigate("/");
       }
     } catch (error) {
-      console.error('Error signing out:', error);
-      navigate('/');
+      console.error("Error signing out:", error);
+      navigate("/");
     }
   };
 
-  const handleExportData = (type: 'students' | 'applications' | 'officers') => {
+  const handleExportData = (type: "students" | "applications" | "officers") => {
     setLoading(true);
 
     try {
       switch (type) {
-        case 'applications':
+        case "applications":
           exportApplicationsCSV(applications);
           break;
-        case 'students':
+        case "students":
           exportStudentsCSV(students);
           break;
-        case 'officers':
+        case "officers":
           exportOfficersCSV(officers);
           break;
       }
 
       setSuccess(`${type} data exported successfully! Download started.`);
-      setTimeout(() => setSuccess(''), 3000);
+      setTimeout(() => setSuccess(""), 3000);
     } catch (error) {
       setError(`Failed to export ${type} data`);
-      setTimeout(() => setError(''), 3000);
+      setTimeout(() => setError(""), 3000);
     } finally {
       setLoading(false);
     }
   };
 
   const handleCreateOfficer = async () => {
-    if (!newOfficer.name || !newOfficer.email || !newOfficer.department || !newOfficer.role) {
-      setError('Please fill in all required fields');
+    if (
+      !newOfficer.name ||
+      !newOfficer.email ||
+      !newOfficer.department ||
+      !newOfficer.role
+    ) {
+      setError("Please fill in all required fields");
       return;
     }
 
     setLoading(true);
-    setError('');
+    setError("");
 
     try {
       // Add to application store
@@ -174,20 +204,22 @@ const AdminDashboard: React.FC = () => {
         name: newOfficer.name,
         email: newOfficer.email,
         department: newOfficer.department,
-        role: newOfficer.role
+        role: newOfficer.role,
       });
 
       // In production, you would also create Firebase user here
       // await createDepartmentOfficer(newOfficer.email, 'temp_password', newOfficer.name, newOfficer.department);
 
-      setSuccess(`Department officer "${newOfficer.name}" created successfully!`);
-      setNewOfficer({ name: '', email: '', department: '', role: '' });
+      setSuccess(
+        `Department officer "${newOfficer.name}" created successfully!`,
+      );
+      setNewOfficer({ name: "", email: "", department: "", role: "" });
       setShowOfficerForm(false);
       refreshData(); // Refresh the data
 
-      setTimeout(() => setSuccess(''), 3000);
+      setTimeout(() => setSuccess(""), 3000);
     } catch (err: any) {
-      setError(err.message || 'Failed to create department officer');
+      setError(err.message || "Failed to create department officer");
     } finally {
       setLoading(false);
     }
@@ -195,33 +227,37 @@ const AdminDashboard: React.FC = () => {
 
   const handleGenerateCertificate = async () => {
     // For demo purposes, generate certificate for first approved application
-    const approvedApp = applications.find(app => app.status === 'approved');
+    const approvedApp = applications.find((app) => app.status === "approved");
 
     if (!approvedApp) {
-      setError('No approved applications found for certificate generation');
-      setTimeout(() => setError(''), 3000);
+      setError("No approved applications found for certificate generation");
+      setTimeout(() => setError(""), 3000);
       return;
     }
 
     setLoading(true);
     try {
       await generateCertificatePDF(approvedApp);
-      setSuccess('Certificate generated and downloaded successfully!');
-      setTimeout(() => setSuccess(''), 3000);
+      setSuccess("Certificate generated and downloaded successfully!");
+      setTimeout(() => setSuccess(""), 3000);
     } catch (error) {
-      setError('Failed to generate certificate');
-      setTimeout(() => setError(''), 3000);
+      setError("Failed to generate certificate");
+      setTimeout(() => setError(""), 3000);
     } finally {
       setLoading(false);
     }
   };
 
   const handleBulkCertificateGeneration = async () => {
-    const approvedApps = applications.filter(app => app.status === 'approved');
+    const approvedApps = applications.filter(
+      (app) => app.status === "approved",
+    );
 
     if (approvedApps.length === 0) {
-      setError('No approved applications found for bulk certificate generation');
-      setTimeout(() => setError(''), 3000);
+      setError(
+        "No approved applications found for bulk certificate generation",
+      );
+      setTimeout(() => setError(""), 3000);
       return;
     }
 
@@ -231,13 +267,15 @@ const AdminDashboard: React.FC = () => {
       for (const app of approvedApps) {
         await generateCertificatePDF(app);
         // Small delay between downloads
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise((resolve) => setTimeout(resolve, 500));
       }
-      setSuccess(`${approvedApps.length} certificates generated and downloaded successfully!`);
-      setTimeout(() => setSuccess(''), 3000);
+      setSuccess(
+        `${approvedApps.length} certificates generated and downloaded successfully!`,
+      );
+      setTimeout(() => setSuccess(""), 3000);
     } catch (error) {
-      setError('Failed to generate bulk certificates');
-      setTimeout(() => setError(''), 3000);
+      setError("Failed to generate bulk certificates");
+      setTimeout(() => setError(""), 3000);
     } finally {
       setLoading(false);
     }
@@ -259,17 +297,25 @@ const AdminDashboard: React.FC = () => {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'approved':
-        return <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">Approved</Badge>;
-      case 'rejected':
+      case "approved":
+        return (
+          <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+            Approved
+          </Badge>
+        );
+      case "rejected":
         return <Badge variant="destructive">Rejected</Badge>;
-      case 'in_progress':
+      case "in_progress":
         return <Badge className="status-in-progress">In Progress</Badge>;
-      case 'pending':
+      case "pending":
         return <Badge className="status-pending">Pending</Badge>;
-      case 'active':
-        return <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">Active</Badge>;
-      case 'inactive':
+      case "active":
+        return (
+          <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+            Active
+          </Badge>
+        );
+      case "inactive":
         return <Badge variant="outline">Inactive</Badge>;
       default:
         return <Badge variant="outline">{status}</Badge>;
@@ -286,7 +332,10 @@ const AdminDashboard: React.FC = () => {
               <Shield className="h-6 w-6 text-primary" />
               <span className="font-bold">Admin Dashboard</span>
               {isDemoMode() && (
-                <Badge variant="outline" className="bg-yellow-100 text-yellow-800 border-yellow-300">
+                <Badge
+                  variant="outline"
+                  className="bg-yellow-100 text-yellow-800 border-yellow-300"
+                >
                   Demo Mode
                 </Badge>
               )}
@@ -294,7 +343,9 @@ const AdminDashboard: React.FC = () => {
             <div className="flex items-center space-x-4">
               <div className="text-sm">
                 <div className="font-medium">{userProfile?.fullName}</div>
-                <div className="text-muted-foreground">System Administrator</div>
+                <div className="text-muted-foreground">
+                  System Administrator
+                </div>
               </div>
               <Button variant="outline" size="sm" onClick={handleSignOut}>
                 <LogOut className="h-4 w-4 mr-2" />
@@ -321,7 +372,11 @@ const AdminDashboard: React.FC = () => {
           </Alert>
         )}
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <Tabs
+          value={activeTab}
+          onValueChange={setActiveTab}
+          className="space-y-6"
+        >
           <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="users">Users</TabsTrigger>
@@ -339,8 +394,12 @@ const AdminDashboard: React.FC = () => {
                   <div className="flex items-center space-x-2">
                     <Users className="h-8 w-8 text-primary" />
                     <div>
-                      <p className="text-sm font-medium text-muted-foreground">Total Students</p>
-                      <p className="text-2xl font-bold">{statistics.totalStudents}</p>
+                      <p className="text-sm font-medium text-muted-foreground">
+                        Total Students
+                      </p>
+                      <p className="text-2xl font-bold">
+                        {statistics.totalStudents}
+                      </p>
                     </div>
                   </div>
                 </CardContent>
@@ -351,8 +410,12 @@ const AdminDashboard: React.FC = () => {
                   <div className="flex items-center space-x-2">
                     <FileText className="h-8 w-8 text-blue-600" />
                     <div>
-                      <p className="text-sm font-medium text-muted-foreground">Total Applications</p>
-                      <p className="text-2xl font-bold">{statistics.totalApplications}</p>
+                      <p className="text-sm font-medium text-muted-foreground">
+                        Total Applications
+                      </p>
+                      <p className="text-2xl font-bold">
+                        {statistics.totalApplications}
+                      </p>
                     </div>
                   </div>
                 </CardContent>
@@ -363,8 +426,12 @@ const AdminDashboard: React.FC = () => {
                   <div className="flex items-center space-x-2">
                     <Clock className="h-8 w-8 text-yellow-600" />
                     <div>
-                      <p className="text-sm font-medium text-muted-foreground">Pending</p>
-                      <p className="text-2xl font-bold">{statistics.pendingApplications}</p>
+                      <p className="text-sm font-medium text-muted-foreground">
+                        Pending
+                      </p>
+                      <p className="text-2xl font-bold">
+                        {statistics.pendingApplications}
+                      </p>
                     </div>
                   </div>
                 </CardContent>
@@ -375,8 +442,12 @@ const AdminDashboard: React.FC = () => {
                   <div className="flex items-center space-x-2">
                     <CheckCircle className="h-8 w-8 text-green-600" />
                     <div>
-                      <p className="text-sm font-medium text-muted-foreground">Approved</p>
-                      <p className="text-2xl font-bold">{statistics.approvedApplications}</p>
+                      <p className="text-sm font-medium text-muted-foreground">
+                        Approved
+                      </p>
+                      <p className="text-2xl font-bold">
+                        {statistics.approvedApplications}
+                      </p>
                     </div>
                   </div>
                 </CardContent>
@@ -387,7 +458,9 @@ const AdminDashboard: React.FC = () => {
             <Card>
               <CardHeader>
                 <CardTitle>Recent Applications</CardTitle>
-                <CardDescription>Latest no due form submissions</CardDescription>
+                <CardDescription>
+                  Latest no due form submissions
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <Table>
@@ -404,14 +477,19 @@ const AdminDashboard: React.FC = () => {
                   <TableBody>
                     {applications.length === 0 ? (
                       <TableRow>
-                        <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                        <TableCell
+                          colSpan={6}
+                          className="text-center py-8 text-muted-foreground"
+                        >
                           No applications submitted yet
                         </TableCell>
                       </TableRow>
                     ) : (
                       applications.slice(0, 5).map((app) => (
                         <TableRow key={app.id}>
-                          <TableCell className="font-medium">{app.studentName}</TableCell>
+                          <TableCell className="font-medium">
+                            {app.studentName}
+                          </TableCell>
                           <TableCell>{app.rollNumber}</TableCell>
                           <TableCell>{app.department}</TableCell>
                           <TableCell>{app.submissionDate}</TableCell>
@@ -440,25 +518,25 @@ const AdminDashboard: React.FC = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <Button 
-                    onClick={() => handleExportData('applications')} 
-                    className="w-full" 
+                  <Button
+                    onClick={() => handleExportData("applications")}
+                    className="w-full"
                     variant="outline"
                     disabled={loading}
                   >
                     Export Applications (CSV)
                   </Button>
-                  <Button 
-                    onClick={() => handleExportData('students')} 
-                    className="w-full" 
+                  <Button
+                    onClick={() => handleExportData("students")}
+                    className="w-full"
                     variant="outline"
                     disabled={loading}
                   >
                     Export Students (CSV)
                   </Button>
-                  <Button 
-                    onClick={() => handleExportData('officers')} 
-                    className="w-full" 
+                  <Button
+                    onClick={() => handleExportData("officers")}
+                    className="w-full"
                     variant="outline"
                     disabled={loading}
                   >
@@ -530,9 +608,14 @@ const AdminDashboard: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-2xl font-bold">User Management</h2>
-                <p className="text-muted-foreground">Manage students and department officers</p>
+                <p className="text-muted-foreground">
+                  Manage students and department officers
+                </p>
               </div>
-              <Button onClick={() => setShowOfficerForm(true)} disabled={loading}>
+              <Button
+                onClick={() => setShowOfficerForm(true)}
+                disabled={loading}
+              >
                 <UserPlus className="h-4 w-4 mr-2" />
                 Add Department Officer
               </Button>
@@ -543,7 +626,9 @@ const AdminDashboard: React.FC = () => {
               <Card className="border-primary">
                 <CardHeader>
                   <CardTitle>Create New Department Officer</CardTitle>
-                  <CardDescription>Add a new department officer account</CardDescription>
+                  <CardDescription>
+                    Add a new department officer account
+                  </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -552,7 +637,9 @@ const AdminDashboard: React.FC = () => {
                       <Input
                         id="officerName"
                         value={newOfficer.name}
-                        onChange={(e) => setNewOfficer({...newOfficer, name: e.target.value})}
+                        onChange={(e) =>
+                          setNewOfficer({ ...newOfficer, name: e.target.value })
+                        }
                         placeholder="Enter full name"
                       />
                     </div>
@@ -562,13 +649,22 @@ const AdminDashboard: React.FC = () => {
                         id="officerEmail"
                         type="email"
                         value={newOfficer.email}
-                        onChange={(e) => setNewOfficer({...newOfficer, email: e.target.value})}
+                        onChange={(e) =>
+                          setNewOfficer({
+                            ...newOfficer,
+                            email: e.target.value,
+                          })
+                        }
                         placeholder="Enter email address"
                       />
                     </div>
                     <div className="space-y-2">
                       <Label>Department *</Label>
-                      <Select onValueChange={(value) => setNewOfficer({...newOfficer, department: value})}>
+                      <Select
+                        onValueChange={(value) =>
+                          setNewOfficer({ ...newOfficer, department: value })
+                        }
+                      >
                         <SelectTrigger>
                           <SelectValue placeholder="Select department" />
                         </SelectTrigger>
@@ -586,21 +682,28 @@ const AdminDashboard: React.FC = () => {
                       <Input
                         id="officerRole"
                         value={newOfficer.role}
-                        onChange={(e) => setNewOfficer({...newOfficer, role: e.target.value})}
+                        onChange={(e) =>
+                          setNewOfficer({ ...newOfficer, role: e.target.value })
+                        }
                         placeholder="e.g., Head Librarian, HOD"
                       />
                     </div>
                   </div>
                   <div className="flex space-x-2">
                     <Button onClick={handleCreateOfficer} disabled={loading}>
-                      {loading ? 'Creating...' : 'Create Officer'}
+                      {loading ? "Creating..." : "Create Officer"}
                     </Button>
                     <Button
                       variant="outline"
                       onClick={() => {
                         setShowOfficerForm(false);
-                        setNewOfficer({ name: '', email: '', department: '', role: '' });
-                        setError('');
+                        setNewOfficer({
+                          name: "",
+                          email: "",
+                          department: "",
+                          role: "",
+                        });
+                        setError("");
                       }}
                     >
                       Cancel
@@ -612,8 +715,12 @@ const AdminDashboard: React.FC = () => {
 
             <Tabs defaultValue="students" className="space-y-4">
               <TabsList>
-                <TabsTrigger value="students">Students ({students.length})</TabsTrigger>
-                <TabsTrigger value="officers">Department Officers ({officers.length})</TabsTrigger>
+                <TabsTrigger value="students">
+                  Students ({students.length})
+                </TabsTrigger>
+                <TabsTrigger value="officers">
+                  Department Officers ({officers.length})
+                </TabsTrigger>
               </TabsList>
 
               <TabsContent value="students" className="space-y-4">
@@ -650,19 +757,26 @@ const AdminDashboard: React.FC = () => {
                       <TableBody>
                         {students.length === 0 ? (
                           <TableRow>
-                            <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
+                            <TableCell
+                              colSpan={7}
+                              className="text-center py-8 text-muted-foreground"
+                            >
                               No students registered yet
                             </TableCell>
                           </TableRow>
                         ) : (
                           students.map((student) => (
                             <TableRow key={student.id}>
-                              <TableCell className="font-medium">{student.name}</TableCell>
+                              <TableCell className="font-medium">
+                                {student.name}
+                              </TableCell>
                               <TableCell>{student.email}</TableCell>
                               <TableCell>{student.rollNumber}</TableCell>
                               <TableCell>{student.department}</TableCell>
                               <TableCell>{student.registrationDate}</TableCell>
-                              <TableCell>{getStatusBadge(student.status)}</TableCell>
+                              <TableCell>
+                                {getStatusBadge(student.status)}
+                              </TableCell>
                               <TableCell>
                                 <div className="flex space-x-2">
                                   <Button size="sm" variant="outline">
@@ -703,19 +817,28 @@ const AdminDashboard: React.FC = () => {
                       <TableBody>
                         {officers.length === 0 ? (
                           <TableRow>
-                            <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
+                            <TableCell
+                              colSpan={7}
+                              className="text-center py-8 text-muted-foreground"
+                            >
                               No department officers created yet
                             </TableCell>
                           </TableRow>
                         ) : (
                           officers.map((officer) => (
                             <TableRow key={officer.id}>
-                              <TableCell className="font-medium">{officer.name}</TableCell>
+                              <TableCell className="font-medium">
+                                {officer.name}
+                              </TableCell>
                               <TableCell>{officer.email}</TableCell>
                               <TableCell>{officer.department}</TableCell>
                               <TableCell>{officer.role}</TableCell>
-                              <TableCell>{officer.lastLogin || 'Never'}</TableCell>
-                              <TableCell>{getStatusBadge(officer.status)}</TableCell>
+                              <TableCell>
+                                {officer.lastLogin || "Never"}
+                              </TableCell>
+                              <TableCell>
+                                {getStatusBadge(officer.status)}
+                              </TableCell>
                               <TableCell>
                                 <div className="flex space-x-2">
                                   <Button size="sm" variant="outline">
@@ -742,7 +865,9 @@ const AdminDashboard: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-2xl font-bold">Department Management</h2>
-                <p className="text-muted-foreground">Configure departments and assign officers</p>
+                <p className="text-muted-foreground">
+                  Configure departments and assign officers
+                </p>
               </div>
               <Button>
                 <Plus className="h-4 w-4 mr-2" />
@@ -754,7 +879,9 @@ const AdminDashboard: React.FC = () => {
               {officers.length === 0 ? (
                 <div className="col-span-full text-center py-8">
                   <Building2 className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                  <h3 className="font-semibold mb-2">No Departments with Officers</h3>
+                  <h3 className="font-semibold mb-2">
+                    No Departments with Officers
+                  </h3>
                   <p className="text-muted-foreground mb-4">
                     Create department officers to see departments here
                   </p>
@@ -774,20 +901,35 @@ const AdminDashboard: React.FC = () => {
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div>
-                        <Label className="text-sm font-medium">Assigned Officer</Label>
-                        <p className="text-sm text-muted-foreground">{officer.name}</p>
-                        <p className="text-xs text-muted-foreground">{officer.role}</p>
-                      </div>
-                      <div>
-                        <Label className="text-sm font-medium">Pending Applications</Label>
+                        <Label className="text-sm font-medium">
+                          Assigned Officer
+                        </Label>
                         <p className="text-sm text-muted-foreground">
-                          {applications.filter(app =>
-                            app.progress[officer.department.toLowerCase() as keyof typeof app.progress] === 'pending'
-                          ).length}
+                          {officer.name}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {officer.role}
                         </p>
                       </div>
                       <div>
-                        <Label className="text-sm font-medium">Officer Status</Label>
+                        <Label className="text-sm font-medium">
+                          Pending Applications
+                        </Label>
+                        <p className="text-sm text-muted-foreground">
+                          {
+                            applications.filter(
+                              (app) =>
+                                app.progress[
+                                  officer.department.toLowerCase() as keyof typeof app.progress
+                                ] === "pending",
+                            ).length
+                          }
+                        </p>
+                      </div>
+                      <div>
+                        <Label className="text-sm font-medium">
+                          Officer Status
+                        </Label>
                         <div className="mt-1">
                           {getStatusBadge(officer.status)}
                         </div>
@@ -814,12 +956,16 @@ const AdminDashboard: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-2xl font-bold">Application Management</h2>
-                <p className="text-muted-foreground">View and manage all student applications</p>
+                <p className="text-muted-foreground">
+                  View and manage all student applications
+                </p>
               </div>
               <div className="flex space-x-2">
                 <Button
                   variant="outline"
-                  onClick={() => exportApplicationsCSV(getFilteredApplications())}
+                  onClick={() =>
+                    exportApplicationsCSV(getFilteredApplications())
+                  }
                   disabled={loading}
                 >
                   <Download className="h-4 w-4 mr-2" />
@@ -841,7 +987,10 @@ const AdminDashboard: React.FC = () => {
                     value={applicationSearchTerm}
                     onChange={(e) => setApplicationSearchTerm(e.target.value)}
                   />
-                  <Select value={applicationFilter} onValueChange={setApplicationFilter}>
+                  <Select
+                    value={applicationFilter}
+                    onValueChange={setApplicationFilter}
+                  >
                     <SelectTrigger className="w-32">
                       <SelectValue placeholder="Status" />
                     </SelectTrigger>
@@ -857,8 +1006,8 @@ const AdminDashboard: React.FC = () => {
                     variant="outline"
                     size="sm"
                     onClick={() => {
-                      setApplicationSearchTerm('');
-                      setApplicationFilter('all');
+                      setApplicationSearchTerm("");
+                      setApplicationFilter("all");
                     }}
                   >
                     Clear
@@ -883,29 +1032,41 @@ const AdminDashboard: React.FC = () => {
                       const filteredApps = getFilteredApplications();
                       return filteredApps.length === 0 ? (
                         <TableRow>
-                          <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
-                            {applications.length === 0 ? 'No applications submitted yet' : 'No applications match your search criteria'}
+                          <TableCell
+                            colSpan={7}
+                            className="text-center py-8 text-muted-foreground"
+                          >
+                            {applications.length === 0
+                              ? "No applications submitted yet"
+                              : "No applications match your search criteria"}
                           </TableCell>
                         </TableRow>
                       ) : (
                         filteredApps.map((app) => (
                           <TableRow key={app.id}>
-                            <TableCell className="font-medium">{app.studentName}</TableCell>
+                            <TableCell className="font-medium">
+                              {app.studentName}
+                            </TableCell>
                             <TableCell>{app.rollNumber}</TableCell>
                             <TableCell>{app.department}</TableCell>
                             <TableCell>{app.submissionDate}</TableCell>
                             <TableCell>
                               <div className="flex space-x-1">
-                                {Object.entries(app.progress).map(([dept, status]) => (
-                                  <div
-                                    key={dept}
-                                    className={`w-3 h-3 rounded-full ${
-                                      status === 'approved' ? 'bg-green-500' :
-                                      status === 'rejected' ? 'bg-red-500' : 'bg-yellow-500'
-                                    }`}
-                                    title={`${dept}: ${status}`}
-                                  />
-                                ))}
+                                {Object.entries(app.progress).map(
+                                  ([dept, status]) => (
+                                    <div
+                                      key={dept}
+                                      className={`w-3 h-3 rounded-full ${
+                                        status === "approved"
+                                          ? "bg-green-500"
+                                          : status === "rejected"
+                                            ? "bg-red-500"
+                                            : "bg-yellow-500"
+                                      }`}
+                                      title={`${dept}: ${status}`}
+                                    />
+                                  ),
+                                )}
                               </div>
                             </TableCell>
                             <TableCell>{getStatusBadge(app.status)}</TableCell>
@@ -915,7 +1076,9 @@ const AdminDashboard: React.FC = () => {
                                   size="sm"
                                   variant="outline"
                                   onClick={() => {
-                                    alert(`Viewing Application #${app.id}\n\nStudent: ${app.studentName}\nRoll Number: ${app.rollNumber}\nDepartment: ${app.department}\nStatus: ${app.status}\nSubmission Date: ${app.submissionDate}\n\nDepartment Progress:\n- Library: ${app.progress.library}\n- Hostel: ${app.progress.hostel}\n- Accounts: ${app.progress.accounts}\n- Lab: ${app.progress.lab}\n- Sports: ${app.progress.sports}`);
+                                    alert(
+                                      `Viewing Application #${app.id}\n\nStudent: ${app.studentName}\nRoll Number: ${app.rollNumber}\nDepartment: ${app.department}\nStatus: ${app.status}\nSubmission Date: ${app.submissionDate}\n\nDepartment Progress:\n- Library: ${app.progress.library}\n- Hostel: ${app.progress.hostel}\n- Accounts: ${app.progress.accounts}\n- Lab: ${app.progress.lab}\n- Sports: ${app.progress.sports}`,
+                                    );
                                   }}
                                 >
                                   <Eye className="h-4 w-4" />
@@ -924,17 +1087,26 @@ const AdminDashboard: React.FC = () => {
                                   size="sm"
                                   variant="outline"
                                   onClick={() => {
-                                    if (confirm(`Override status for Application #${app.id}?\n\nThis will mark all departments as approved.`)) {
-                                      applicationStore.updateApplicationStatus(app.id, {
-                                        library: 'approved',
-                                        hostel: 'approved',
-                                        accounts: 'approved',
-                                        lab: 'approved',
-                                        sports: 'approved'
-                                      });
+                                    if (
+                                      confirm(
+                                        `Override status for Application #${app.id}?\n\nThis will mark all departments as approved.`,
+                                      )
+                                    ) {
+                                      applicationStore.updateApplicationStatus(
+                                        app.id,
+                                        {
+                                          library: "approved",
+                                          hostel: "approved",
+                                          accounts: "approved",
+                                          lab: "approved",
+                                          sports: "approved",
+                                        },
+                                      );
                                       refreshData();
-                                      setSuccess('Application status overridden successfully!');
-                                      setTimeout(() => setSuccess(''), 3000);
+                                      setSuccess(
+                                        "Application status overridden successfully!",
+                                      );
+                                      setTimeout(() => setSuccess(""), 3000);
                                     }
                                   }}
                                 >
@@ -957,7 +1129,9 @@ const AdminDashboard: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-2xl font-bold">Audit Trail</h2>
-                <p className="text-muted-foreground">Track all system activities and changes</p>
+                <p className="text-muted-foreground">
+                  Track all system activities and changes
+                </p>
               </div>
               <Button
                 variant="outline"
@@ -978,7 +1152,10 @@ const AdminDashboard: React.FC = () => {
                     value={auditSearchTerm}
                     onChange={(e) => setAuditSearchTerm(e.target.value)}
                   />
-                  <Select value={auditLogFilter} onValueChange={setAuditLogFilter}>
+                  <Select
+                    value={auditLogFilter}
+                    onValueChange={setAuditLogFilter}
+                  >
                     <SelectTrigger className="w-32">
                       <SelectValue placeholder="Action" />
                     </SelectTrigger>
@@ -994,8 +1171,8 @@ const AdminDashboard: React.FC = () => {
                     variant="outline"
                     size="sm"
                     onClick={() => {
-                      setAuditSearchTerm('');
-                      setAuditLogFilter('all');
+                      setAuditSearchTerm("");
+                      setAuditLogFilter("all");
                     }}
                   >
                     Clear
@@ -1019,22 +1196,34 @@ const AdminDashboard: React.FC = () => {
                       const filteredLogs = getFilteredAuditLogs();
                       return filteredLogs.length === 0 ? (
                         <TableRow>
-                          <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
-                            {auditLogs.length === 0 ? 'No audit logs available yet' : 'No logs match your search criteria'}
+                          <TableCell
+                            colSpan={6}
+                            className="text-center py-8 text-muted-foreground"
+                          >
+                            {auditLogs.length === 0
+                              ? "No audit logs available yet"
+                              : "No logs match your search criteria"}
                           </TableCell>
                         </TableRow>
                       ) : (
                         filteredLogs.slice(0, 20).map((log) => (
                           <TableRow key={log.id}>
-                            <TableCell>{new Date(log.timestamp).toLocaleString()}</TableCell>
+                            <TableCell>
+                              {new Date(log.timestamp).toLocaleString()}
+                            </TableCell>
                             <TableCell>{log.userName}</TableCell>
                             <TableCell>
-                              <Badge className={
-                                log.action.includes('Approved') ? 'bg-green-100 text-green-800' :
-                                log.action.includes('Created') ? 'bg-blue-100 text-blue-800' :
-                                log.action.includes('Submitted') ? 'bg-yellow-100 text-yellow-800' :
-                                'bg-gray-100 text-gray-800'
-                              }>
+                              <Badge
+                                className={
+                                  log.action.includes("Approved")
+                                    ? "bg-green-100 text-green-800"
+                                    : log.action.includes("Created")
+                                      ? "bg-blue-100 text-blue-800"
+                                      : log.action.includes("Submitted")
+                                        ? "bg-yellow-100 text-yellow-800"
+                                        : "bg-gray-100 text-gray-800"
+                                }
+                              >
                                 {log.action}
                               </Badge>
                             </TableCell>
@@ -1055,7 +1244,9 @@ const AdminDashboard: React.FC = () => {
           <TabsContent value="settings" className="space-y-6">
             <div>
               <h2 className="text-2xl font-bold">System Settings</h2>
-              <p className="text-muted-foreground">Configure system-wide settings and preferences</p>
+              <p className="text-muted-foreground">
+                Configure system-wide settings and preferences
+              </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1139,7 +1330,9 @@ const AdminDashboard: React.FC = () => {
                         <SelectValue placeholder="Default Template" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="default">Default Template</SelectItem>
+                        <SelectItem value="default">
+                          Default Template
+                        </SelectItem>
                         <SelectItem value="formal">Formal Template</SelectItem>
                         <SelectItem value="modern">Modern Template</SelectItem>
                       </SelectContent>
@@ -1162,7 +1355,9 @@ const AdminDashboard: React.FC = () => {
                 <div className="flex justify-between items-center">
                   <div>
                     <h3 className="font-semibold">Save Settings</h3>
-                    <p className="text-sm text-muted-foreground">Save all configuration changes</p>
+                    <p className="text-sm text-muted-foreground">
+                      Save all configuration changes
+                    </p>
                   </div>
                   <Button>
                     <Settings className="h-4 w-4 mr-2" />
