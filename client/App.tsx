@@ -103,6 +103,9 @@ const AppRoutes: React.FC = () => {
         </PublicRoute>
       } />
 
+      {/* Certificate verification - public route */}
+      <Route path="/verify/:applicationId" element={<CertificateVerification />} />
+
       {/* Protected Routes */}
       <Route path="/student/dashboard" element={
         <ProtectedRoute allowedRoles={['student']}>
