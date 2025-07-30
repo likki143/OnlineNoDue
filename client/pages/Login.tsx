@@ -40,13 +40,22 @@ const Login: React.FC = () => {
     setError('');
   };
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent, retryCount = 0) => {
     e.preventDefault();
     setLoading(true);
     setError('');
 
     try {
       console.log('Attempting login with:', formData.email);
+
+      // Test Firebase connection first if this is the first attempt
+      if (retryCount === 0) {
+        const connectionTest = await testFirebaseConnection();
+        if (!connectionTest) {
+          throw new Error('Unable to connect to Firebase services. Please check your internet connection.');
+        }
+      }
+
       const { user, profile } = await signInUser(formData.email, formData.password);
       console.log('Login successful:', { user: user.uid, profile: profile.role });
 
@@ -71,6 +80,16 @@ const Login: React.FC = () => {
     } catch (err: any) {
       console.error('Login error:', err);
 
+      // Retry once for network errors
+      if (err.message?.includes('network') && retryCount === 0) {
+        console.log('Network error detected, retrying...');
+        setError('Network issue detected. Retrying...');
+        setTimeout(() => {
+          handleLogin(e, 1);
+        }, 2000);
+        return;
+      }
+
       // Provide more specific error messages
       let errorMessage = err.message || 'Failed to login';
 
@@ -80,12 +99,15 @@ const Login: React.FC = () => {
         errorMessage = 'Incorrect password';
       } else if (errorMessage.includes('too-many-requests')) {
         errorMessage = 'Too many failed attempts. Please try again later';
-      } else if (errorMessage.includes('email')) {
+      } else if (errorMessage.includes('email') && !errorMessage.includes('network')) {
         errorMessage = 'Please verify your email before logging in';
       }
 
       setError(errorMessage);
-    } finally {
+      setLoading(false);
+    }
+
+    if (retryCount === 0) {
       setLoading(false);
     }
   };
