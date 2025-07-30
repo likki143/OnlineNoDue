@@ -10,6 +10,7 @@ import StudentDashboard from '@/pages/StudentDashboard';
 import DepartmentDashboard from '@/pages/DepartmentDashboard';
 import AdminDashboard from '@/pages/AdminDashboard';
 import AdminSetup from '@/pages/AdminSetup';
+import NoDueForm from '@/pages/NoDueForm';
 import NotFound from '@/pages/NotFound';
 
 // Protected Route Component
