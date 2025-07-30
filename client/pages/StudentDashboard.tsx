@@ -49,6 +49,13 @@ const StudentDashboard: React.FC = () => {
     if (userProfile?.uid) {
       const studentApplications = applicationStore.getApplicationsByStudentId(userProfile.uid);
       setApplications(studentApplications);
+
+      // Update application eligibility and status
+      const canStudentApply = applicationStore.canStudentApply(userProfile.uid);
+      setCanApply(canStudentApply);
+
+      const status = applicationStore.getStudentApplicationStatus(userProfile.uid);
+      setApplicationStatus(status);
     }
   };
 
