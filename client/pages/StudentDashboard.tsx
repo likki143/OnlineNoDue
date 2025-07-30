@@ -32,6 +32,15 @@ const StudentDashboard: React.FC = () => {
       // Load applications for current student
       const studentApplications = applicationStore.getApplicationsByStudentId(userProfile.uid);
       setApplications(studentApplications);
+
+      // Check if student can apply
+      const canStudentApply = applicationStore.canStudentApply(userProfile.uid);
+      setCanApply(canStudentApply);
+
+      // Get application status
+      const status = applicationStore.getStudentApplicationStatus(userProfile.uid);
+      setApplicationStatus(status);
+
       setLoading(false);
     }
   }, [userProfile]);
