@@ -284,6 +284,7 @@ const Index: React.FC = () => {
                 <div className="text-muted-foreground">Help Center</div>
                 <div className="text-muted-foreground">Contact Support</div>
                 <div className="text-muted-foreground">System Status</div>
+                <div><Link to="/admin/setup" className="text-muted-foreground hover:text-primary">Admin Setup</Link></div>
               </div>
             </div>
           </div>
