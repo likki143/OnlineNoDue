@@ -61,30 +61,66 @@ export const registerStudent = async (
 
 export const signInUser = async (email: string, password: string) => {
   try {
+    console.log('Attempting to sign in user:', email);
+
+    // Test Firebase connection first
+    if (!auth) {
+      throw new Error('Firebase Auth not initialized');
+    }
+
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
-    
+    console.log('Firebase auth successful for user:', user.uid);
+
     // Get user profile from database
+    console.log('Fetching user profile from database...');
     const profileSnapshot = await get(ref(database, `users/${user.uid}`));
     const profile = profileSnapshot.val() as UserProfile;
-    
+
     if (!profile) {
-      throw new Error('User profile not found');
+      console.error('User profile not found in database for UID:', user.uid);
+      throw new Error('User profile not found. Please contact support.');
     }
-    
+
+    console.log('User profile found:', { role: profile.role, emailVerified: profile.emailVerified });
+
     // Check email verification for students
     if (profile.role === 'student' && !user.emailVerified) {
-      throw new Error('Please verify your email before logging in');
+      console.log('Student email not verified');
+      throw new Error('Please verify your email before logging in. Check your inbox for the verification link.');
     }
 
     // Update email verification status in profile if it changed
     if (profile.role === 'student' && user.emailVerified && !profile.emailVerified) {
+      console.log('Updating email verification status in profile');
       profile.emailVerified = true;
       await set(ref(database, `users/${user.uid}/emailVerified`), true);
     }
 
+    console.log('Sign in successful');
     return { user, profile };
-  } catch (error) {
+  } catch (error: any) {
+    console.error('Sign in error details:', {
+      code: error.code,
+      message: error.message,
+      stack: error.stack
+    });
+
+    // Provide more user-friendly error messages
+    if (error.code === 'auth/network-request-failed') {
+      throw new Error('Network connection failed. Please check your internet connection and try again.');
+    } else if (error.code === 'auth/user-not-found') {
+      throw new Error('No account found with this email address.');
+    } else if (error.code === 'auth/wrong-password') {
+      throw new Error('Incorrect password.');
+    } else if (error.code === 'auth/invalid-email') {
+      throw new Error('Invalid email address format.');
+    } else if (error.code === 'auth/user-disabled') {
+      throw new Error('This account has been disabled.');
+    } else if (error.code === 'auth/too-many-requests') {
+      throw new Error('Too many failed login attempts. Please try again later.');
+    }
+
     throw error;
   }
 };
