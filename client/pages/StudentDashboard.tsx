@@ -232,12 +232,19 @@ ${userProfile?.fullName}`;
                       Track the status of your no due form submissions
                     </CardDescription>
                   </div>
-                  <Link to="/student/apply">
-                    <Button>
+                  {canApply ? (
+                    <Link to="/student/apply">
+                      <Button>
+                        <Plus className="h-4 w-4 mr-2" />
+                        New Application
+                      </Button>
+                    </Link>
+                  ) : (
+                    <Button disabled>
                       <Plus className="h-4 w-4 mr-2" />
-                      New Application
+                      Application Submitted
                     </Button>
-                  </Link>
+                  )}
                 </div>
               </CardHeader>
               <CardContent>
