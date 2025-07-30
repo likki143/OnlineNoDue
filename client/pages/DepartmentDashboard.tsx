@@ -1,9 +1,11 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/contexts/AuthContext';
 import { signOutUser } from '@/lib/auth';
+import { isDemoMode, disableDemoMode } from '@/lib/demo-auth';
 import { 
   Shield, 
   FileText, 
