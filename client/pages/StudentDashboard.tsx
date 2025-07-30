@@ -179,8 +179,8 @@ const StudentDashboard: React.FC = () => {
                 </div>
                 <div>
                   <p className="text-sm font-medium">Email Status</p>
-                  {userProfile?.emailVerified ? (
-                    <Badge className="bg-green-100 text-green-800">
+                  {userProfile?.emailVerified || isDemoMode() ? (
+                    <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
                       <CheckCircle className="h-3 w-3 mr-1" />
                       Verified
                     </Badge>
