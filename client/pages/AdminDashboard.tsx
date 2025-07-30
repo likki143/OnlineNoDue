@@ -12,6 +12,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useAuth } from '@/contexts/AuthContext';
 import { signOutUser, createDepartmentOfficer } from '@/lib/auth';
 import { isDemoMode, disableDemoMode } from '@/lib/demo-auth';
+import { applicationStore, Application, Student, DepartmentOfficer, AuditLog } from '@/lib/applicationStore';
 import { 
   Shield, 
   Users, 
