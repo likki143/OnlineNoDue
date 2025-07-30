@@ -748,41 +748,61 @@ const AdminDashboard: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {['Library', 'Hostel', 'Accounts', 'Lab / Department', 'Sports'].map((dept) => (
-                <Card key={dept}>
-                  <CardHeader>
-                    <CardTitle className="flex items-center justify-between">
-                      <span>{dept}</span>
-                      <Building2 className="h-5 w-5 text-muted-foreground" />
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div>
-                      <Label className="text-sm font-medium">Assigned Officer</Label>
-                      <p className="text-sm text-muted-foreground">
-                        {dept === 'Library' ? 'Dr. Alice Brown' : 
-                         dept === 'Accounts' ? 'Ms. Emma Davis' : 'Not Assigned'}
-                      </p>
-                    </div>
-                    <div>
-                      <Label className="text-sm font-medium">Pending Applications</Label>
-                      <p className="text-sm text-muted-foreground">
-                        {Math.floor(Math.random() * 20) + 5}
-                      </p>
-                    </div>
-                    <div className="flex space-x-2">
-                      <Button size="sm" variant="outline" className="flex-1">
-                        <Settings className="h-4 w-4 mr-1" />
-                        Configure
-                      </Button>
-                      <Button size="sm" variant="outline" className="flex-1">
-                        <UserPlus className="h-4 w-4 mr-1" />
-                        Assign
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+              {officers.length === 0 ? (
+                <div className="col-span-full text-center py-8">
+                  <Building2 className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <h3 className="font-semibold mb-2">No Departments with Officers</h3>
+                  <p className="text-muted-foreground mb-4">
+                    Create department officers to see departments here
+                  </p>
+                  <Button onClick={() => setShowOfficerForm(true)}>
+                    <UserPlus className="h-4 w-4 mr-2" />
+                    Add First Officer
+                  </Button>
+                </div>
+              ) : (
+                officers.map((officer) => (
+                  <Card key={officer.id}>
+                    <CardHeader>
+                      <CardTitle className="flex items-center justify-between">
+                        <span>{officer.department}</span>
+                        <Building2 className="h-5 w-5 text-muted-foreground" />
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div>
+                        <Label className="text-sm font-medium">Assigned Officer</Label>
+                        <p className="text-sm text-muted-foreground">{officer.name}</p>
+                        <p className="text-xs text-muted-foreground">{officer.role}</p>
+                      </div>
+                      <div>
+                        <Label className="text-sm font-medium">Pending Applications</Label>
+                        <p className="text-sm text-muted-foreground">
+                          {applications.filter(app =>
+                            app.progress[officer.department.toLowerCase() as keyof typeof app.progress] === 'pending'
+                          ).length}
+                        </p>
+                      </div>
+                      <div>
+                        <Label className="text-sm font-medium">Officer Status</Label>
+                        <div className="mt-1">
+                          {getStatusBadge(officer.status)}
+                        </div>
+                      </div>
+                      <div className="flex space-x-2">
+                        <Button size="sm" variant="outline" className="flex-1">
+                          <Settings className="h-4 w-4 mr-1" />
+                          Configure
+                        </Button>
+                        <Button size="sm" variant="outline" className="flex-1">
+                          <Edit className="h-4 w-4 mr-1" />
+                          Edit
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))
+              )}
             </div>
           </TabsContent>
 
