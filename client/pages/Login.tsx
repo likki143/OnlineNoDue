@@ -110,12 +110,170 @@ const Login: React.FC = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Tabs defaultValue="login" className="space-y-4">
-              <TabsList className="grid w-full grid-cols-1">
-                <TabsTrigger value="login">Login</TabsTrigger>
+            <Tabs defaultValue="student" className="space-y-4">
+              <TabsList className="grid w-full grid-cols-3">
+                <TabsTrigger value="student">Student</TabsTrigger>
+                <TabsTrigger value="department">Department</TabsTrigger>
+                <TabsTrigger value="admin">Admin</TabsTrigger>
               </TabsList>
-              
-              <TabsContent value="login" className="space-y-4">
+
+              <TabsContent value="student" className="space-y-4">
+                <form onSubmit={handleLogin} className="space-y-4">
+                  {error && (
+                    <Alert variant="destructive">
+                      <AlertCircle className="h-4 w-4" />
+                      <AlertDescription>{error}</AlertDescription>
+                    </Alert>
+                  )}
+
+                  {success && (
+                    <Alert className="border-green-200 bg-green-50 text-green-800 dark:border-green-800 dark:bg-green-900 dark:text-green-200">
+                      <AlertCircle className="h-4 w-4" />
+                      <AlertDescription>{success}</AlertDescription>
+                    </Alert>
+                  )}
+
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email Address</Label>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        id="email"
+                        name="email"
+                        type="email"
+                        placeholder="Enter your student email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        className="pl-9"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="password">Password</Label>
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        id="password"
+                        name="password"
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Enter your password"
+                        value={formData.password}
+                        onChange={handleInputChange}
+                        className="pl-9 pr-9"
+                        required
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-3 text-muted-foreground hover:text-foreground"
+                      >
+                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <Button
+                      type="button"
+                      variant="link"
+                      className="p-0 h-auto text-sm"
+                      onClick={handleForgotPassword}
+                      disabled={resetEmailSent}
+                    >
+                      {resetEmailSent ? 'Email Sent!' : 'Forgot Password?'}
+                    </Button>
+                  </div>
+
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={loading}
+                  >
+                    {loading ? 'Signing In...' : 'Sign In as Student'}
+                  </Button>
+                </form>
+
+                <div className="text-center space-y-2">
+                  <div className="text-sm text-muted-foreground">
+                    Don't have a student account?
+                  </div>
+                  <Link to="/register">
+                    <Button variant="outline" className="w-full">
+                      Create Student Account
+                    </Button>
+                  </Link>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="department" className="space-y-4">
+                <form onSubmit={handleLogin} className="space-y-4">
+                  {error && (
+                    <Alert variant="destructive">
+                      <AlertCircle className="h-4 w-4" />
+                      <AlertDescription>{error}</AlertDescription>
+                    </Alert>
+                  )}
+
+                  <div className="space-y-2">
+                    <Label htmlFor="dept-email">Department Officer Email</Label>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        id="dept-email"
+                        name="email"
+                        type="email"
+                        placeholder="Enter your department email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        className="pl-9"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="dept-password">Password</Label>
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        id="dept-password"
+                        name="password"
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Enter your password"
+                        value={formData.password}
+                        onChange={handleInputChange}
+                        className="pl-9 pr-9"
+                        required
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-3 text-muted-foreground hover:text-foreground"
+                      >
+                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={loading}
+                  >
+                    {loading ? 'Signing In...' : 'Sign In as Department Officer'}
+                  </Button>
+                </form>
+
+                <div className="bg-muted/50 p-4 rounded-lg">
+                  <p className="text-xs text-muted-foreground text-center">
+                    Department Officer credentials are provided by the system administrator
+                  </p>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="admin" className="space-y-4">
                 <form onSubmit={handleLogin} className="space-y-4">
                   {error && (
                     <Alert variant="destructive">
