@@ -835,8 +835,10 @@ const AdminDashboard: React.FC = () => {
                   <Input
                     placeholder="Search applications..."
                     className="max-w-sm"
+                    value={applicationSearchTerm}
+                    onChange={(e) => setApplicationSearchTerm(e.target.value)}
                   />
-                  <Select>
+                  <Select value={applicationFilter} onValueChange={setApplicationFilter}>
                     <SelectTrigger className="w-32">
                       <SelectValue placeholder="Status" />
                     </SelectTrigger>
@@ -848,6 +850,16 @@ const AdminDashboard: React.FC = () => {
                       <SelectItem value="rejected">Rejected</SelectItem>
                     </SelectContent>
                   </Select>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setApplicationSearchTerm('');
+                      setApplicationFilter('all');
+                    }}
+                  >
+                    Clear
+                  </Button>
                 </div>
               </CardHeader>
               <CardContent>
