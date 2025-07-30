@@ -450,7 +450,7 @@ const Login: React.FC = () => {
                 </p>
                 <div className="space-y-2 text-xs text-yellow-600 dark:text-yellow-400">
                   <div><strong>Student:</strong> student@demo.com | Password: demo123</div>
-                  <div><strong>Admin:</strong> admin@demo.com | Password: demo123</div>
+                  <div><strong>Admin:</strong> Admin@nodue.com | Password: Admin@123</div>
                   <div><strong>Department:</strong> dept@demo.com | Password: demo123</div>
                 </div>
                 <Button
