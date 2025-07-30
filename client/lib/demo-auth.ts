@@ -44,8 +44,10 @@ export const demoSignIn = async (email: string, password: string): Promise<DemoU
   }
   
   // Simple password check (for demo purposes)
-  if (password !== 'demo123') {
-    throw new Error('Incorrect password (use: demo123)');
+  const expectedPassword = user.email === 'Admin@nodue.com' ? 'Admin@123' : 'demo123';
+  if (password !== expectedPassword) {
+    const hint = user.email === 'Admin@nodue.com' ? 'Admin@123' : 'demo123';
+    throw new Error(`Incorrect password (use: ${hint})`);
   }
   
   return user;
