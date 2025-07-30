@@ -814,13 +814,17 @@ const AdminDashboard: React.FC = () => {
                 <p className="text-muted-foreground">View and manage all student applications</p>
               </div>
               <div className="flex space-x-2">
-                <Button variant="outline">
+                <Button
+                  variant="outline"
+                  onClick={() => exportApplicationsCSV(getFilteredApplications())}
+                  disabled={loading}
+                >
                   <Download className="h-4 w-4 mr-2" />
                   Export
                 </Button>
                 <Button variant="outline">
                   <Filter className="h-4 w-4 mr-2" />
-                  Filter
+                  Filter: {applicationFilter}
                 </Button>
               </div>
             </div>
