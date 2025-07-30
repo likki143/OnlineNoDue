@@ -60,7 +60,11 @@ const StudentDashboard: React.FC = () => {
   };
 
   const handleDownloadForms = () => {
-    downloadSampleForms();
+    try {
+      generateSampleFormsPDF();
+    } catch (error) {
+      alert('Failed to generate forms PDF. Please try again.');
+    }
   };
 
   const handleContactSupport = () => {
