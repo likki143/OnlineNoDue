@@ -282,22 +282,15 @@ const Login: React.FC = () => {
                     </Alert>
                   )}
 
-                  {success && (
-                    <Alert className="border-green-200 bg-green-50 text-green-800 dark:border-green-800 dark:bg-green-900 dark:text-green-200">
-                      <AlertCircle className="h-4 w-4" />
-                      <AlertDescription>{success}</AlertDescription>
-                    </Alert>
-                  )}
-
                   <div className="space-y-2">
-                    <Label htmlFor="email">Email Address</Label>
+                    <Label htmlFor="admin-email">Administrator Email</Label>
                     <div className="relative">
                       <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                       <Input
-                        id="email"
+                        id="admin-email"
                         name="email"
                         type="email"
-                        placeholder="Enter your email"
+                        placeholder="Enter your admin email"
                         value={formData.email}
                         onChange={handleInputChange}
                         className="pl-9"
@@ -307,11 +300,11 @@ const Login: React.FC = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="password">Password</Label>
+                    <Label htmlFor="admin-password">Password</Label>
                     <div className="relative">
                       <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                       <Input
-                        id="password"
+                        id="admin-password"
                         name="password"
                         type={showPassword ? "text" : "password"}
                         placeholder="Enter your password"
@@ -347,27 +340,16 @@ const Login: React.FC = () => {
                     className="w-full"
                     disabled={loading}
                   >
-                    {loading ? 'Signing In...' : 'Sign In'}
+                    {loading ? 'Signing In...' : 'Sign In as Administrator'}
                   </Button>
                 </form>
 
-                <div className="text-center space-y-2">
-                  <div className="text-sm text-muted-foreground">
-                    Don't have a student account?
-                  </div>
-                  <Link to="/register">
-                    <Button variant="outline" className="w-full">
-                      Create Student Account
-                    </Button>
-                  </Link>
-                </div>
-
                 <div className="bg-muted/50 p-4 rounded-lg">
                   <p className="text-xs text-muted-foreground text-center mb-2">
-                    <strong>For Department Officers & Admins:</strong>
+                    <strong>Administrator Access</strong>
                   </p>
                   <p className="text-xs text-muted-foreground text-center">
-                    Use credentials provided by your system administrator
+                    Only authorized system administrators can access this portal
                   </p>
                 </div>
               </TabsContent>
