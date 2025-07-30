@@ -140,7 +140,7 @@ export const generateCertificatePDF = async (application: Application): Promise<
     pdf.setFontSize(8);
     pdf.setFont('helvetica', 'italic');
     pdf.setTextColor(108, 117, 125);
-    const verificationText = `This is a digitally generated certificate. Verify authenticity at: ${verificationURL}`;
+    const verificationText = `This is a digitally generated certificate. Verify authenticity by scanning QR code or visit: ${verificationURL}`;
     pdf.text(verificationText, pageWidth / 2, pageHeight - 20, { align: 'center', maxWidth: pageWidth - 40 });
 
     // Download the PDF
