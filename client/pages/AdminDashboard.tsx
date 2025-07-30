@@ -13,6 +13,17 @@ import { useAuth } from '@/contexts/AuthContext';
 import { signOutUser, createDepartmentOfficer } from '@/lib/auth';
 import { isDemoMode, disableDemoMode } from '@/lib/demo-auth';
 import { applicationStore, Application, Student, DepartmentOfficer, AuditLog } from '@/lib/applicationStore';
+import {
+  exportApplicationsCSV,
+  exportStudentsCSV,
+  exportOfficersCSV,
+  exportAuditLogsCSV,
+  generateCertificate,
+  filterApplicationsByStatus,
+  searchApplications,
+  filterAuditLogsByAction,
+  searchAuditLogs
+} from '@/lib/utils/dataExport';
 import { 
   Shield, 
   Users, 
