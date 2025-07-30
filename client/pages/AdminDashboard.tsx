@@ -541,26 +541,34 @@ const AdminDashboard: React.FC = () => {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {students.map((student) => (
-                          <TableRow key={student.id}>
-                            <TableCell className="font-medium">{student.name}</TableCell>
-                            <TableCell>{student.email}</TableCell>
-                            <TableCell>{student.rollNumber}</TableCell>
-                            <TableCell>{student.department}</TableCell>
-                            <TableCell>{student.registrationDate}</TableCell>
-                            <TableCell>{getStatusBadge(student.status)}</TableCell>
-                            <TableCell>
-                              <div className="flex space-x-2">
-                                <Button size="sm" variant="outline">
-                                  <Eye className="h-4 w-4" />
-                                </Button>
-                                <Button size="sm" variant="outline">
-                                  <Edit className="h-4 w-4" />
-                                </Button>
-                              </div>
+                        {students.length === 0 ? (
+                          <TableRow>
+                            <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
+                              No students registered yet
                             </TableCell>
                           </TableRow>
-                        ))}
+                        ) : (
+                          students.map((student) => (
+                            <TableRow key={student.id}>
+                              <TableCell className="font-medium">{student.name}</TableCell>
+                              <TableCell>{student.email}</TableCell>
+                              <TableCell>{student.rollNumber}</TableCell>
+                              <TableCell>{student.department}</TableCell>
+                              <TableCell>{student.registrationDate}</TableCell>
+                              <TableCell>{getStatusBadge(student.status)}</TableCell>
+                              <TableCell>
+                                <div className="flex space-x-2">
+                                  <Button size="sm" variant="outline">
+                                    <Eye className="h-4 w-4" />
+                                  </Button>
+                                  <Button size="sm" variant="outline">
+                                    <Edit className="h-4 w-4" />
+                                  </Button>
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          ))
+                        )}
                       </TableBody>
                     </Table>
                   </CardContent>
