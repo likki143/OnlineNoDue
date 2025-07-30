@@ -79,6 +79,17 @@ class ApplicationStore {
     return this.getAllApplications().filter(app => app.studentId === studentId);
   }
 
+  canStudentApply(studentId: string): boolean {
+    const applications = this.getAllApplications();
+    return !applications.some(app => app.studentId === studentId);
+  }
+
+  getStudentApplicationStatus(studentId: string): 'none' | 'pending' | 'in_progress' | 'approved' | 'rejected' {
+    const applications = this.getAllApplications();
+    const studentApp = applications.find(app => app.studentId === studentId);
+    return studentApp ? studentApp.status : 'none';
+  }
+
   submitApplication(application: Omit<Application, 'id' | 'submissionDate' | 'status' | 'progress'>): Application {
     const applications = this.getAllApplications();
 
