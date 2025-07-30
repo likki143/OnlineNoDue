@@ -26,8 +26,9 @@ export const generateCertificatePDF = async (application: Application): Promise<
     const pageWidth = pdf.internal.pageSize.getWidth();
     const pageHeight = pdf.internal.pageSize.getHeight();
 
-    // Certificate verification URL (in production this would be a real verification URL)
-    const verificationURL = `https://university.edu/verify/${application.id}`;
+    // Certificate verification URL - use current domain
+    const currentDomain = window.location.origin;
+    const verificationURL = `${currentDomain}/verify/${application.id}`;
     const qrCodeDataURL = await generateQRCode(verificationURL);
 
     // Set up fonts and colors
