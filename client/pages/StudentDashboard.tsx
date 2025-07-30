@@ -1,0 +1,205 @@
+import React from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { useAuth } from '@/contexts/AuthContext';
+import { signOutUser } from '@/lib/auth';
+import { 
+  GraduationCap, 
+  FileText, 
+  Clock, 
+  CheckCircle, 
+  AlertCircle,
+  LogOut,
+  Plus
+} from 'lucide-react';
+
+const StudentDashboard: React.FC = () => {
+  const { userProfile } = useAuth();
+
+  const handleSignOut = async () => {
+    try {
+      await signOutUser();
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      {/* Header */}
+      <header className="border-b bg-white/80 backdrop-blur-md dark:bg-gray-900/80">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <GraduationCap className="h-6 w-6 text-primary" />
+              <span className="font-bold">Student Dashboard</span>
+            </div>
+            <div className="flex items-center space-x-4">
+              <div className="text-sm">
+                <div className="font-medium">{userProfile?.fullName}</div>
+                <div className="text-muted-foreground">{userProfile?.rollNumber}</div>
+              </div>
+              <Button variant="outline" size="sm" onClick={handleSignOut}>
+                <LogOut className="h-4 w-4 mr-2" />
+                Sign Out
+              </Button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div className="container mx-auto px-4 py-8">
+        {/* Welcome Section */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold mb-2">Welcome back, {userProfile?.fullName}!</h1>
+          <p className="text-muted-foreground">
+            Track your no due applications and manage your clearance process
+          </p>
+        </div>
+
+        {/* Quick Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center space-x-2">
+                <FileText className="h-5 w-5 text-primary" />
+                <div>
+                  <p className="text-sm font-medium">Applications</p>
+                  <p className="text-2xl font-bold">0</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center space-x-2">
+                <Clock className="h-5 w-5 text-warning" />
+                <div>
+                  <p className="text-sm font-medium">Pending</p>
+                  <p className="text-2xl font-bold">0</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center space-x-2">
+                <CheckCircle className="h-5 w-5 text-success" />
+                <div>
+                  <p className="text-sm font-medium">Approved</p>
+                  <p className="text-2xl font-bold">0</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center space-x-2">
+                <AlertCircle className="h-5 w-5 text-destructive" />
+                <div>
+                  <p className="text-sm font-medium">Rejected</p>
+                  <p className="text-2xl font-bold">0</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Main Content */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Applications */}
+          <div className="lg:col-span-2">
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle>My Applications</CardTitle>
+                    <CardDescription>
+                      Track the status of your no due form submissions
+                    </CardDescription>
+                  </div>
+                  <Button>
+                    <Plus className="h-4 w-4 mr-2" />
+                    New Application
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="text-center py-8">
+                  <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <h3 className="font-semibold mb-2">No Applications Yet</h3>
+                  <p className="text-muted-foreground mb-4">
+                    Submit your first no due form to get started with the clearance process
+                  </p>
+                  <Button>Submit New Application</Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Profile & Quick Actions */}
+          <div className="space-y-6">
+            {/* Profile Card */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Profile Information</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div>
+                  <p className="text-sm font-medium">Department</p>
+                  <p className="text-muted-foreground">{userProfile?.department}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium">Email</p>
+                  <p className="text-muted-foreground">{userProfile?.email}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium">Phone</p>
+                  <p className="text-muted-foreground">{userProfile?.phoneNumber}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium">Email Status</p>
+                  {userProfile?.emailVerified ? (
+                    <Badge className="bg-green-100 text-green-800">
+                      <CheckCircle className="h-3 w-3 mr-1" />
+                      Verified
+                    </Badge>
+                  ) : (
+                    <Badge variant="destructive">
+                      <AlertCircle className="h-3 w-3 mr-1" />
+                      Not Verified
+                    </Badge>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Quick Actions */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Quick Actions</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <Button className="w-full" variant="outline">
+                  Download Forms
+                </Button>
+                <Button className="w-full" variant="outline">
+                  Contact Support
+                </Button>
+                <Button className="w-full" variant="outline">
+                  View Guidelines
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default StudentDashboard;
