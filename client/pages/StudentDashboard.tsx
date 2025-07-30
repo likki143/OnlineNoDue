@@ -394,13 +394,13 @@ For more information, contact: support@university.edu
                 <CardTitle>Quick Actions</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <Button className="w-full" variant="outline">
+                <Button className="w-full" variant="outline" onClick={handleDownloadForms}>
                   Download Forms
                 </Button>
-                <Button className="w-full" variant="outline">
+                <Button className="w-full" variant="outline" onClick={handleContactSupport}>
                   Contact Support
                 </Button>
-                <Button className="w-full" variant="outline">
+                <Button className="w-full" variant="outline" onClick={handleViewGuidelines}>
                   View Guidelines
                 </Button>
               </CardContent>
