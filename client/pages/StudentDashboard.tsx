@@ -24,6 +24,8 @@ const StudentDashboard: React.FC = () => {
   const navigate = useNavigate();
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
+  const [canApply, setCanApply] = useState(true);
+  const [applicationStatus, setApplicationStatus] = useState<'none' | 'pending' | 'in_progress' | 'approved' | 'rejected'>('none');
 
   useEffect(() => {
     if (userProfile?.uid) {
