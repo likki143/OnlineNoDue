@@ -18,12 +18,12 @@ import {
   exportStudentsCSV,
   exportOfficersCSV,
   exportAuditLogsCSV,
-  generateCertificate,
   filterApplicationsByStatus,
   searchApplications,
   filterAuditLogsByAction,
   searchAuditLogs
 } from '@/lib/utils/dataExport';
+import { generateCertificatePDF } from '@/lib/utils/pdfGenerator';
 import { 
   Shield, 
   Users, 
