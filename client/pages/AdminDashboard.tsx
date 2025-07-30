@@ -827,36 +827,33 @@ const AdminDashboard: React.FC = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    <TableRow>
-                      <TableCell>2024-01-28 14:30:22</TableCell>
-                      <TableCell>Dr. Alice Brown</TableCell>
-                      <TableCell>
-                        <Badge className="bg-green-100 text-green-800">Approved</Badge>
-                      </TableCell>
-                      <TableCell>Application #001</TableCell>
-                      <TableCell>Library clearance approved for John Smith</TableCell>
-                      <TableCell>192.168.1.45</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>2024-01-28 14:25:15</TableCell>
-                      <TableCell>System Admin</TableCell>
-                      <TableCell>
-                        <Badge className="bg-blue-100 text-blue-800">Created</Badge>
-                      </TableCell>
-                      <TableCell>Department Officer</TableCell>
-                      <TableCell>New officer account created for Prof. David Lee</TableCell>
-                      <TableCell>192.168.1.10</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>2024-01-28 14:20:08</TableCell>
-                      <TableCell>John Smith</TableCell>
-                      <TableCell>
-                        <Badge className="bg-yellow-100 text-yellow-800">Submitted</Badge>
-                      </TableCell>
-                      <TableCell>Application #001</TableCell>
-                      <TableCell>No due application submitted</TableCell>
-                      <TableCell>192.168.1.78</TableCell>
-                    </TableRow>
+                    {auditLogs.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                          No audit logs available yet
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      auditLogs.slice(0, 10).map((log) => (
+                        <TableRow key={log.id}>
+                          <TableCell>{new Date(log.timestamp).toLocaleString()}</TableCell>
+                          <TableCell>{log.userName}</TableCell>
+                          <TableCell>
+                            <Badge className={
+                              log.action.includes('Approved') ? 'bg-green-100 text-green-800' :
+                              log.action.includes('Created') ? 'bg-blue-100 text-blue-800' :
+                              log.action.includes('Submitted') ? 'bg-yellow-100 text-yellow-800' :
+                              'bg-gray-100 text-gray-800'
+                            }>
+                              {log.action}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>{log.target}</TableCell>
+                          <TableCell>{log.details}</TableCell>
+                          <TableCell>{log.ipAddress}</TableCell>
+                        </TableRow>
+                      ))
+                    )}
                   </TableBody>
                 </Table>
               </CardContent>
