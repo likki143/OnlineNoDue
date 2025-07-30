@@ -242,12 +242,21 @@ const Index: React.FC = () => {
                 <p className="text-muted-foreground mb-6">
                   Join hundreds of educational institutions already using our platform to streamline their processes.
                 </p>
-                <Link to="/register">
-                  <Button size="lg" className="w-full sm:w-auto">
-                    Create Student Account
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </Link>
+                <div className="space-y-3">
+                  <Link to="/register">
+                    <Button size="lg" className="w-full sm:w-auto mr-2">
+                      Create Student Account
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </Link>
+                  <div className="text-sm text-muted-foreground">or</div>
+                  <Link to="/admin/setup">
+                    <Button size="sm" variant="outline" className="w-full sm:w-auto">
+                      <Shield className="mr-2 h-4 w-4" />
+                      Setup Admin Account
+                    </Button>
+                  </Link>
+                </div>
                 <p className="text-xs text-muted-foreground mt-4">
                   No setup fees • Instant verification • 24/7 support
                 </p>
