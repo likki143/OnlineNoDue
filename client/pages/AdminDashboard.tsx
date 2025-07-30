@@ -243,7 +243,7 @@ const AdminDashboard: React.FC = () => {
                     <Users className="h-8 w-8 text-primary" />
                     <div>
                       <p className="text-sm font-medium text-muted-foreground">Total Students</p>
-                      <p className="text-2xl font-bold">{demoData.totalStudents}</p>
+                      <p className="text-2xl font-bold">{statistics.totalStudents}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -255,7 +255,7 @@ const AdminDashboard: React.FC = () => {
                     <FileText className="h-8 w-8 text-blue-600" />
                     <div>
                       <p className="text-sm font-medium text-muted-foreground">Total Applications</p>
-                      <p className="text-2xl font-bold">{demoData.totalApplications}</p>
+                      <p className="text-2xl font-bold">{statistics.totalApplications}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -267,7 +267,7 @@ const AdminDashboard: React.FC = () => {
                     <Clock className="h-8 w-8 text-yellow-600" />
                     <div>
                       <p className="text-sm font-medium text-muted-foreground">Pending</p>
-                      <p className="text-2xl font-bold">{demoData.pendingApplications}</p>
+                      <p className="text-2xl font-bold">{statistics.pendingApplications}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -279,7 +279,7 @@ const AdminDashboard: React.FC = () => {
                     <CheckCircle className="h-8 w-8 text-green-600" />
                     <div>
                       <p className="text-sm font-medium text-muted-foreground">Approved</p>
-                      <p className="text-2xl font-bold">{demoData.approvedApplications}</p>
+                      <p className="text-2xl font-bold">{statistics.approvedApplications}</p>
                     </div>
                   </div>
                 </CardContent>
