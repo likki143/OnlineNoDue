@@ -11,6 +11,7 @@ import DepartmentDashboard from '@/pages/DepartmentDashboard';
 import AdminDashboard from '@/pages/AdminDashboard';
 import AdminSetup from '@/pages/AdminSetup';
 import NoDueForm from '@/pages/NoDueForm';
+import CertificateVerification from '@/pages/CertificateVerification';
 import NotFound from '@/pages/NotFound';
 
 // Protected Route Component
