@@ -193,7 +193,7 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
-  const handleGenerateCertificate = () => {
+  const handleGenerateCertificate = async () => {
     // For demo purposes, generate certificate for first approved application
     const approvedApp = applications.find(app => app.status === 'approved');
 
@@ -205,7 +205,7 @@ const AdminDashboard: React.FC = () => {
 
     setLoading(true);
     try {
-      generateCertificate(approvedApp.id, approvedApp.studentName);
+      await generateCertificatePDF(approvedApp);
       setSuccess('Certificate generated and downloaded successfully!');
       setTimeout(() => setSuccess(''), 3000);
     } catch (error) {
