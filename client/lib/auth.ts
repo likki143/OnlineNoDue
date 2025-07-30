@@ -141,6 +141,19 @@ export const resetPassword = async (email: string) => {
   }
 };
 
+export const createDefaultAdmin = async () => {
+  try {
+    // Check if default admin already exists
+    const defaultAdminEmail = 'Admin@nodue.com';
+    const defaultAdminPassword = 'Admin@123';
+
+    return await createAdmin(defaultAdminEmail, defaultAdminPassword, 'System Administrator');
+  } catch (error) {
+    console.log('Default admin may already exist or creation failed:', error);
+    throw error;
+  }
+};
+
 export const createAdmin = async (
   email: string,
   password: string,
