@@ -18,17 +18,21 @@ import {
 
 const StudentDashboard: React.FC = () => {
   const { userProfile } = useAuth();
+  const navigate = useNavigate();
 
   const handleSignOut = async () => {
     try {
       if (isDemoMode()) {
         disableDemoMode();
-        window.location.href = '/';
+        navigate('/');
       } else {
         await signOutUser();
+        navigate('/');
       }
     } catch (error) {
       console.error('Error signing out:', error);
+      // Even if sign out fails, redirect to home
+      navigate('/');
     }
   };
 
