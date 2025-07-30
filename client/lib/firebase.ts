@@ -14,13 +14,31 @@ const firebaseConfig = {
   measurementId: "G-ZMH4T254TS"
 };
 
+console.log('Initializing Firebase with config:', {
+  projectId: firebaseConfig.projectId,
+  authDomain: firebaseConfig.authDomain
+});
+
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+let app;
+try {
+  app = initializeApp(firebaseConfig);
+  console.log('Firebase app initialized successfully');
+} catch (error) {
+  console.error('Firebase initialization error:', error);
+  throw error;
+}
 
 // Initialize Firebase services
 export const auth = getAuth(app);
 export const database = getDatabase(app);
 export const storage = getStorage(app);
+
+console.log('Firebase services initialized:', {
+  auth: !!auth,
+  database: !!database,
+  storage: !!storage
+});
 
 // Export the app
 export default app;
