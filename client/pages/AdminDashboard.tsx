@@ -431,6 +431,78 @@ const AdminDashboard: React.FC = () => {
               </Button>
             </div>
 
+            {/* Officer Creation Form */}
+            {showOfficerForm && (
+              <Card className="border-primary">
+                <CardHeader>
+                  <CardTitle>Create New Department Officer</CardTitle>
+                  <CardDescription>Add a new department officer account</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="officerName">Full Name *</Label>
+                      <Input
+                        id="officerName"
+                        value={newOfficer.name}
+                        onChange={(e) => setNewOfficer({...newOfficer, name: e.target.value})}
+                        placeholder="Enter full name"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="officerEmail">Email *</Label>
+                      <Input
+                        id="officerEmail"
+                        type="email"
+                        value={newOfficer.email}
+                        onChange={(e) => setNewOfficer({...newOfficer, email: e.target.value})}
+                        placeholder="Enter email address"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Department *</Label>
+                      <Select onValueChange={(value) => setNewOfficer({...newOfficer, department: value})}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select department" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Library">Library</SelectItem>
+                          <SelectItem value="Hostel">Hostel</SelectItem>
+                          <SelectItem value="Accounts">Accounts</SelectItem>
+                          <SelectItem value="Lab">Lab / Department</SelectItem>
+                          <SelectItem value="Sports">Sports</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="officerRole">Role *</Label>
+                      <Input
+                        id="officerRole"
+                        value={newOfficer.role}
+                        onChange={(e) => setNewOfficer({...newOfficer, role: e.target.value})}
+                        placeholder="e.g., Head Librarian, HOD"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex space-x-2">
+                    <Button onClick={handleCreateOfficer} disabled={loading}>
+                      {loading ? 'Creating...' : 'Create Officer'}
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setShowOfficerForm(false);
+                        setNewOfficer({ name: '', email: '', department: '', role: '' });
+                        setError('');
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
             <Tabs defaultValue="students" className="space-y-4">
               <TabsList>
                 <TabsTrigger value="students">Students ({students.length})</TabsTrigger>
