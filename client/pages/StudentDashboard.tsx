@@ -20,7 +20,12 @@ const StudentDashboard: React.FC = () => {
 
   const handleSignOut = async () => {
     try {
-      await signOutUser();
+      if (isDemoMode()) {
+        disableDemoMode();
+        window.location.href = '/';
+      } else {
+        await signOutUser();
+      }
     } catch (error) {
       console.error('Error signing out:', error);
     }
