@@ -30,6 +30,7 @@ const NoDueForm: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const [canApply, setCanApply] = useState(true);
 
   const [formData, setFormData] = useState({
     fullName: userProfile?.fullName || '',
