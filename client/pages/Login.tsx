@@ -443,7 +443,7 @@ const Login: React.FC = () => {
             </Tabs>
 
             {/* Demo Mode Section */}
-            {error?.includes('network') && (
+            {(error?.includes('network') || error?.includes('invalid-credential') || error?.includes('user-not-found')) && (
               <div className="mt-6 border rounded-lg p-4 bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800">
                 <h3 className="font-semibold text-yellow-800 dark:text-yellow-200 mb-2">
                   🚧 Firebase Connection Issue Detected
