@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/contexts/AuthContext';
 import { signOutUser } from '@/lib/auth';
+import { isDemoMode, disableDemoMode } from '@/lib/demo-auth';
 import { 
   GraduationCap, 
   FileText, 
