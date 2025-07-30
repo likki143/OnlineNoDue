@@ -27,6 +27,7 @@ const Login: React.FC = () => {
   const [success, setSuccess] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [resetEmailSent, setResetEmailSent] = useState(false);
+  const [demoMode, setDemoMode] = useState(isDemoMode());
 
   const [formData, setFormData] = useState({
     email: '',
