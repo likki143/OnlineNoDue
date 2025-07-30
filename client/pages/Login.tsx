@@ -92,9 +92,12 @@ const Login: React.FC = () => {
         return;
       }
 
-      // If Firebase is completely unavailable, suggest demo mode
-      if (err.message?.includes('network') || err.message?.includes('Firebase')) {
-        setError(err.message + ' | Try demo mode below if Firebase is unavailable.');
+      // If Firebase is completely unavailable or invalid credentials, suggest demo mode
+      if (err.message?.includes('network') ||
+          err.message?.includes('Firebase') ||
+          err.message?.includes('invalid-credential') ||
+          err.message?.includes('user-not-found')) {
+        setError(err.message + ' | Try demo mode below if you need to test the application.');
         setLoading(false);
         return;
       }
