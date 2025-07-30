@@ -15,12 +15,20 @@ import {
 
 const AdminDashboard: React.FC = () => {
   const { userProfile } = useAuth();
+  const navigate = useNavigate();
 
   const handleSignOut = async () => {
     try {
-      await signOutUser();
+      if (isDemoMode()) {
+        disableDemoMode();
+        navigate('/');
+      } else {
+        await signOutUser();
+        navigate('/');
+      }
     } catch (error) {
       console.error('Error signing out:', error);
+      navigate('/');
     }
   };
 
