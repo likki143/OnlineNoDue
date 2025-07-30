@@ -40,6 +40,11 @@ const StudentDashboard: React.FC = () => {
             <div className="flex items-center space-x-2">
               <GraduationCap className="h-6 w-6 text-primary" />
               <span className="font-bold">Student Dashboard</span>
+              {isDemoMode() && (
+                <Badge variant="outline" className="bg-yellow-100 text-yellow-800 border-yellow-300">
+                  Demo Mode
+                </Badge>
+              )}
             </div>
             <div className="flex items-center space-x-4">
               <div className="text-sm">
