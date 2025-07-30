@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useAuth } from '@/contexts/AuthContext';
 import { signOutUser } from '@/lib/auth';
 import { isDemoMode, disableDemoMode } from '@/lib/demo-auth';
+import { applicationStore, Application } from '@/lib/applicationStore';
 import { 
   GraduationCap, 
   FileText, 
