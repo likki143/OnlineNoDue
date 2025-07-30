@@ -8,7 +8,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { signOutUser } from '@/lib/auth';
 import { isDemoMode, disableDemoMode } from '@/lib/demo-auth';
 import { applicationStore, Application } from '@/lib/applicationStore';
-import { downloadSampleForms } from '@/lib/utils/dataExport';
+import { generateCertificatePDF, generateSampleFormsPDF, generateGuidelinesPDF } from '@/lib/utils/pdfGenerator';
 import { 
   GraduationCap, 
   FileText, 
