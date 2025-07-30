@@ -216,7 +216,7 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
-  const handleBulkCertificateGeneration = () => {
+  const handleBulkCertificateGeneration = async () => {
     const approvedApps = applications.filter(app => app.status === 'approved');
 
     if (approvedApps.length === 0) {
@@ -227,9 +227,12 @@ const AdminDashboard: React.FC = () => {
 
     setLoading(true);
     try {
-      approvedApps.forEach(app => {
-        generateCertificate(app.id, app.studentName);
-      });
+      // Generate certificates one by one with a small delay to prevent browser blocking
+      for (const app of approvedApps) {
+        await generateCertificatePDF(app);
+        // Small delay between downloads
+        await new Promise(resolve => setTimeout(resolve, 500));
+      }
       setSuccess(`${approvedApps.length} certificates generated and downloaded successfully!`);
       setTimeout(() => setSuccess(''), 3000);
     } catch (error) {
