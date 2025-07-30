@@ -149,7 +149,9 @@ const StudentDashboard: React.FC = () => {
                   <p className="text-muted-foreground mb-4">
                     Submit your first no due form to get started with the clearance process
                   </p>
-                  <Button>Submit New Application</Button>
+                  <Link to="/student/apply">
+                    <Button>Submit New Application</Button>
+                  </Link>
                 </div>
               </CardContent>
             </Card>
