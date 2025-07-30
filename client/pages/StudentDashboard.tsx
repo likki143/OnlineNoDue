@@ -9,14 +9,15 @@ import { signOutUser } from '@/lib/auth';
 import { isDemoMode, disableDemoMode } from '@/lib/demo-auth';
 import { applicationStore, Application } from '@/lib/applicationStore';
 import { generateCertificatePDF, generateSampleFormsPDF, generateGuidelinesPDF } from '@/lib/utils/pdfGenerator';
-import { 
-  GraduationCap, 
-  FileText, 
-  Clock, 
-  CheckCircle, 
+import {
+  GraduationCap,
+  FileText,
+  Clock,
+  CheckCircle,
   AlertCircle,
   LogOut,
-  Plus
+  Plus,
+  Award
 } from 'lucide-react';
 
 const StudentDashboard: React.FC = () => {
