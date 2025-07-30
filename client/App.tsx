@@ -95,6 +95,12 @@ const AppRoutes: React.FC = () => {
         </PublicRoute>
       } />
 
+      <Route path="/admin/setup" element={
+        <PublicRoute>
+          <AdminSetup />
+        </PublicRoute>
+      } />
+
       {/* Protected Routes */}
       <Route path="/student/dashboard" element={
         <ProtectedRoute allowedRoles={['student']}>
