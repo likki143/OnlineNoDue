@@ -134,10 +134,12 @@ const StudentDashboard: React.FC = () => {
                       Track the status of your no due form submissions
                     </CardDescription>
                   </div>
-                  <Button>
-                    <Plus className="h-4 w-4 mr-2" />
-                    New Application
-                  </Button>
+                  <Link to="/student/apply">
+                    <Button>
+                      <Plus className="h-4 w-4 mr-2" />
+                      New Application
+                    </Button>
+                  </Link>
                 </div>
               </CardHeader>
               <CardContent>
