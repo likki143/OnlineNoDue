@@ -81,9 +81,33 @@ const NoDueForm: React.FC = () => {
     setError('');
 
     try {
-      // Here you would normally submit to Firebase
-      // For now, just simulate success
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      if (!userProfile) {
+        throw new Error('User profile not found');
+      }
+
+      // Validate required fields
+      if (!formData.year || !formData.course) {
+        throw new Error('Please fill in all required fields');
+      }
+
+      // Submit application to store
+      const application = applicationStore.submitApplication({
+        studentId: userProfile.uid,
+        studentName: formData.fullName,
+        rollNumber: formData.rollNumber,
+        email: formData.email,
+        department: formData.department,
+        course: formData.course,
+        year: formData.year,
+        reason: formData.reason,
+        collegeName: formData.collegeName,
+        documents: {
+          idCard: formData.idCardFile?.name,
+          supportingDocs: formData.documentsFile?.name
+        }
+      });
+
+      console.log('Application submitted:', application);
       setSuccess(true);
     } catch (err: any) {
       setError(err.message || 'Failed to submit application');
