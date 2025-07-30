@@ -193,6 +193,67 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
+  const handleGenerateCertificate = () => {
+    // For demo purposes, generate certificate for first approved application
+    const approvedApp = applications.find(app => app.status === 'approved');
+
+    if (!approvedApp) {
+      setError('No approved applications found for certificate generation');
+      setTimeout(() => setError(''), 3000);
+      return;
+    }
+
+    setLoading(true);
+    try {
+      generateCertificate(approvedApp.id, approvedApp.studentName);
+      setSuccess('Certificate generated and downloaded successfully!');
+      setTimeout(() => setSuccess(''), 3000);
+    } catch (error) {
+      setError('Failed to generate certificate');
+      setTimeout(() => setError(''), 3000);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleBulkCertificateGeneration = () => {
+    const approvedApps = applications.filter(app => app.status === 'approved');
+
+    if (approvedApps.length === 0) {
+      setError('No approved applications found for bulk certificate generation');
+      setTimeout(() => setError(''), 3000);
+      return;
+    }
+
+    setLoading(true);
+    try {
+      approvedApps.forEach(app => {
+        generateCertificate(app.id, app.studentName);
+      });
+      setSuccess(`${approvedApps.length} certificates generated and downloaded successfully!`);
+      setTimeout(() => setSuccess(''), 3000);
+    } catch (error) {
+      setError('Failed to generate bulk certificates');
+      setTimeout(() => setError(''), 3000);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Get filtered applications
+  const getFilteredApplications = () => {
+    let filtered = filterApplicationsByStatus(applications, applicationFilter);
+    filtered = searchApplications(filtered, applicationSearchTerm);
+    return filtered;
+  };
+
+  // Get filtered audit logs
+  const getFilteredAuditLogs = () => {
+    let filtered = filterAuditLogsByAction(auditLogs, auditLogFilter);
+    filtered = searchAuditLogs(filtered, auditSearchTerm);
+    return filtered;
+  };
+
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'approved':
