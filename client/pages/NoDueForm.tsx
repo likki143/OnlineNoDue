@@ -193,12 +193,22 @@ const NoDueForm: React.FC = () => {
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-6">
-                {error && (
-                  <Alert variant="destructive">
-                    <AlertCircle className="h-4 w-4" />
-                    <AlertDescription>{error}</AlertDescription>
-                  </Alert>
-                )}
+              {error && (
+                <Alert variant="destructive">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              )}
+
+              {!canApply && (
+                <Alert className="border-yellow-200 bg-yellow-50 text-yellow-800 dark:border-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription>
+                    You have already submitted an application. Only one application per student is allowed.
+                    Please check your dashboard to track your existing application status.
+                  </AlertDescription>
+                </Alert>
+              )}
 
                 {/* Personal Information */}
                 <div className="space-y-4">
