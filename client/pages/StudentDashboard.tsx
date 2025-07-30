@@ -21,6 +21,24 @@ import {
 const StudentDashboard: React.FC = () => {
   const { userProfile } = useAuth();
   const navigate = useNavigate();
+  const [applications, setApplications] = useState<Application[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (userProfile?.uid) {
+      // Load applications for current student
+      const studentApplications = applicationStore.getApplicationsByStudentId(userProfile.uid);
+      setApplications(studentApplications);
+      setLoading(false);
+    }
+  }, [userProfile]);
+
+  const refreshApplications = () => {
+    if (userProfile?.uid) {
+      const studentApplications = applicationStore.getApplicationsByStudentId(userProfile.uid);
+      setApplications(studentApplications);
+    }
+  };
 
   const handleSignOut = async () => {
     try {
