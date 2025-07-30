@@ -48,11 +48,22 @@ const NoDueForm: React.FC = () => {
 
   const departments = [
     'Library',
-    'Hostel', 
+    'Hostel',
     'Accounts',
     'Lab / Department',
     'Sports'
   ];
+
+  useEffect(() => {
+    if (userProfile?.uid) {
+      const canStudentApply = applicationStore.canStudentApply(userProfile.uid);
+      setCanApply(canStudentApply);
+
+      if (!canStudentApply) {
+        setError('You have already submitted an application. Only one application per student is allowed.');
+      }
+    }
+  }, [userProfile]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
