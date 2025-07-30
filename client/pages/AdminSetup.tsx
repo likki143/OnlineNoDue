@@ -29,10 +29,10 @@ const AdminSetup: React.FC = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    confirmPassword: '',
-    fullName: '',
+    email: 'Admin@nodue.com',
+    password: 'Admin@123',
+    confirmPassword: 'Admin@123',
+    fullName: 'System Administrator',
     setupKey: ''
   });
 
