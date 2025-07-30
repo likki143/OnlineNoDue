@@ -425,7 +425,7 @@ const AdminDashboard: React.FC = () => {
                 <h2 className="text-2xl font-bold">User Management</h2>
                 <p className="text-muted-foreground">Manage students and department officers</p>
               </div>
-              <Button onClick={handleCreateOfficer} disabled={loading}>
+              <Button onClick={() => setShowOfficerForm(true)} disabled={loading}>
                 <UserPlus className="h-4 w-4 mr-2" />
                 Add Department Officer
               </Button>
