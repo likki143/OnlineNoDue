@@ -41,52 +41,11 @@ import {
   QrCode
 } from 'lucide-react';
 
-interface DemoData {
-  totalStudents: number;
-  totalApplications: number;
-  pendingApplications: number;
-  approvedApplications: number;
-  rejectedApplications: number;
-  totalDepartments: number;
-  activeOfficers: number;
-}
-
-interface Student {
-  id: string;
-  name: string;
-  email: string;
-  rollNumber: string;
-  department: string;
-  course: string;
-  registrationDate: string;
-  emailVerified: boolean;
-  status: 'active' | 'inactive';
-}
-
-interface DepartmentOfficer {
-  id: string;
+interface NewOfficerForm {
   name: string;
   email: string;
   department: string;
   role: string;
-  lastLogin: string;
-  status: 'active' | 'inactive';
-}
-
-interface Application {
-  id: string;
-  studentName: string;
-  rollNumber: string;
-  department: string;
-  submissionDate: string;
-  status: 'pending' | 'in_progress' | 'approved' | 'rejected';
-  progress: {
-    library: 'pending' | 'approved' | 'rejected';
-    hostel: 'pending' | 'approved' | 'rejected';
-    accounts: 'pending' | 'approved' | 'rejected';
-    lab: 'pending' | 'approved' | 'rejected';
-    sports: 'pending' | 'approved' | 'rejected';
-  };
 }
 
 const AdminDashboard: React.FC = () => {
