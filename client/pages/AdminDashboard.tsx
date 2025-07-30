@@ -472,14 +472,24 @@ const AdminDashboard: React.FC = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <Button className="w-full" variant="outline">
+                  <Button
+                    className="w-full"
+                    variant="outline"
+                    onClick={handleGenerateCertificate}
+                    disabled={loading}
+                  >
                     <QrCode className="h-4 w-4 mr-2" />
                     Generate Certificate
                   </Button>
                   <Button className="w-full" variant="outline">
                     View Certificate Templates
                   </Button>
-                  <Button className="w-full" variant="outline">
+                  <Button
+                    className="w-full"
+                    variant="outline"
+                    onClick={handleBulkCertificateGeneration}
+                    disabled={loading}
+                  >
                     Bulk Certificate Generation
                   </Button>
                 </CardContent>
