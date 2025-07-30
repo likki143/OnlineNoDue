@@ -22,9 +22,11 @@ import {
 
 const CertificateVerification: React.FC = () => {
   const { applicationId } = useParams<{ applicationId: string }>();
+  const navigate = useNavigate();
   const [application, setApplication] = useState<Application | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [manualLookupId, setManualLookupId] = useState('');
 
   useEffect(() => {
     if (applicationId) {
