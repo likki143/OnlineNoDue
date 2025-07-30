@@ -69,9 +69,9 @@ const AdminSetup: React.FC = () => {
 
   const handleCreateAdmin = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
-    
+
     setLoading(true);
     setError('');
 
@@ -81,10 +81,15 @@ const AdminSetup: React.FC = () => {
         formData.password,
         formData.fullName
       );
-      
+
       setSuccess(true);
     } catch (err: any) {
-      setError(err.message || 'Failed to create admin account');
+      // If the user already exists, that's actually okay for our use case
+      if (err.message?.includes('email-already-in-use')) {
+        setSuccess(true);
+      } else {
+        setError(err.message || 'Failed to create admin account');
+      }
     } finally {
       setLoading(false);
     }
