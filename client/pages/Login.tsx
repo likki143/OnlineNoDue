@@ -432,6 +432,8 @@ const Login: React.FC = () => {
                   </Button>
                 </form>
 
+                <AdminInstructions />
+
                 <div className="bg-muted/50 p-4 rounded-lg">
                   <p className="text-xs text-muted-foreground text-center mb-2">
                     <strong>Administrator Access</strong>
