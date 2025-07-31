@@ -167,7 +167,23 @@ const DepartmentDashboard: React.FC = () => {
         ipAddress: "192.168.1.100",
       });
 
-      setSuccess(`Application ${action}d successfully!`);
+      // Send email notification to student
+      try {
+        await sendStudentNotificationEmail({
+          studentName: application.studentName,
+          studentEmail: application.email,
+          applicationId: application.id,
+          department: userProfile?.department || userDepartment,
+          action: action,
+          comments: comment,
+          officerName: userProfile?.fullName || "Department Officer",
+        });
+      } catch (emailError) {
+        console.log("Email notification failed:", emailError);
+        // Don't fail the main action if email fails
+      }
+
+      setSuccess(`Application ${action}d successfully! Student has been notified via email.`);
       refreshData();
       setShowDialog(false);
       setSelectedApplication(null);
