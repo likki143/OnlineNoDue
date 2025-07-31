@@ -1,6 +1,7 @@
 import jsPDF from "jspdf";
 import QRCode from "qrcode";
 import { Application } from "../applicationStore";
+import { settingsStore } from "../settingsStore";
 
 // Generate QR Code as data URL
 const generateQRCode = async (text: string): Promise<string> => {
@@ -194,7 +195,7 @@ export const generateSampleFormsPDF = (): void => {
       "• Roll Number/Student ID: _______________",
       "• Email Address: ________________________",
       "• Phone Number: ________________________",
-      "• Department/Branch: ____________________",
+      "��� Department/Branch: ____________________",
       "• Course (B.Tech/MBA/etc.): ______________",
       "• Year/Semester: _______________________",
       "",
