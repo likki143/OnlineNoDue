@@ -233,6 +233,31 @@ class ApplicationStore {
     return newOfficer;
   }
 
+  deleteOfficer(officerId: string): boolean {
+    const officers = this.getAllOfficers();
+    const officerIndex = officers.findIndex(officer => officer.id === officerId);
+
+    if (officerIndex === -1) {
+      return false;
+    }
+
+    const deletedOfficer = officers[officerIndex];
+    officers.splice(officerIndex, 1);
+    localStorage.setItem(this.OFFICERS_KEY, JSON.stringify(officers));
+
+    // Log the action
+    this.addAuditLog({
+      userId: "admin",
+      userName: "System Administrator",
+      action: "Officer Deleted",
+      target: `Officer Account`,
+      details: `Department officer deleted: ${deletedOfficer.name} from ${deletedOfficer.department}`,
+      ipAddress: "192.168.1.10",
+    });
+
+    return true;
+  }
+
   // Audit Logs
   getAllAuditLogs(): AuditLog[] {
     const data = localStorage.getItem(this.AUDIT_KEY);
