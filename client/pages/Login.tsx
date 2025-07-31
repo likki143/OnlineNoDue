@@ -345,6 +345,18 @@ const Login: React.FC = () => {
                     </div>
                   </div>
 
+                  <div className="flex items-center justify-between">
+                    <Button
+                      type="button"
+                      variant="link"
+                      className="p-0 h-auto text-sm"
+                      onClick={handleForgotPassword}
+                      disabled={resetEmailSent}
+                    >
+                      {resetEmailSent ? 'Email Sent!' : 'Forgot Password?'}
+                    </Button>
+                  </div>
+
                   <Button
                     type="submit"
                     className="w-full"
