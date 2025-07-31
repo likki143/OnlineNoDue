@@ -68,6 +68,11 @@ const PublicRoute: React.FC<PublicRouteProps> = ({ children }) => {
   }
 
   if (currentUser && userProfile) {
+    // Check if user needs to set up password first
+    if (userProfile.passwordSetupRequired) {
+      return <Navigate to="/password-setup" replace />;
+    }
+
     // Redirect based on role
     switch (userProfile.role) {
       case "student":
