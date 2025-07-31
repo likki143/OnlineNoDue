@@ -193,6 +193,32 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
+  const handleDeleteOfficer = async (officer: DepartmentOfficer) => {
+    const confirmMessage = `Are you sure you want to delete the department officer "${officer.name}" from ${officer.department} department?\n\nThis action cannot be undone.`;
+
+    if (!confirm(confirmMessage)) return;
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const deleted = applicationStore.deleteOfficer(officer.id);
+
+      if (deleted) {
+        setSuccess(`Department officer "${officer.name}" deleted successfully!`);
+        refreshData();
+        setTimeout(() => setSuccess(""), 3000);
+      } else {
+        throw new Error("Officer not found");
+      }
+    } catch (err: any) {
+      setError(err.message || "Failed to delete department officer");
+      setTimeout(() => setError(""), 3000);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleCreateOfficer = async () => {
     if (
       !newOfficer.name ||
