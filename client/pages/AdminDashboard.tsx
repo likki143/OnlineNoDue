@@ -49,7 +49,7 @@ import {
   searchAuditLogs,
 } from "@/lib/utils/dataExport";
 import { generateCertificatePDF } from "@/lib/utils/pdfGenerator";
-import { sendDepartmentOfficerSetupEmail } from "@/lib/utils/emailService";
+import { sendDepartmentOfficerSetupEmail, getSentEmails } from "@/lib/utils/emailService";
 import { settingsStore, SystemSettings } from "@/lib/settingsStore";
 import {
   Shield,
