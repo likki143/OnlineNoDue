@@ -216,6 +216,30 @@ export const createDepartmentOfficer = async (
   }
 };
 
+export const changePassword = async (newPassword: string) => {
+  try {
+    if (!auth.currentUser) {
+      throw new Error('No user is currently signed in');
+    }
+
+    // Update password in Firebase Auth
+    await updatePassword(auth.currentUser, newPassword);
+
+    // Update user profile to remove password setup requirement
+    const updates = {
+      passwordSetupRequired: false,
+      temporaryPassword: null
+    };
+
+    await set(ref(database, `users/${auth.currentUser.uid}/passwordSetupRequired`), false);
+    await set(ref(database, `users/${auth.currentUser.uid}/temporaryPassword`), null);
+
+    return true;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getUserProfile = async (uid: string): Promise<UserProfile | null> => {
   try {
     const snapshot = await get(ref(database, `users/${uid}`));
