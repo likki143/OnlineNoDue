@@ -1,6 +1,8 @@
 // Simple application state management using localStorage
 // In production, this would be replaced with Firebase Realtime Database
 
+import { sendCertificateReadyEmail } from './utils/emailService';
+
 export interface Application {
   id: string;
   studentId: string;
