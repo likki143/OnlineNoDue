@@ -1304,6 +1304,109 @@ const AdminDashboard: React.FC = () => {
             </Card>
           </TabsContent>
 
+          {/* Notifications Tab */}
+          <TabsContent value="notifications" className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-2xl font-bold">Email Notifications</h2>
+                <p className="text-muted-foreground">
+                  View all system-generated email notifications
+                </p>
+              </div>
+              <Button
+                variant="outline"
+                onClick={refreshData}
+                disabled={loading}
+              >
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Refresh
+              </Button>
+            </div>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Recent Email Notifications</CardTitle>
+                <CardDescription>
+                  System-generated emails sent to students and officers
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Timestamp</TableHead>
+                      <TableHead>Recipient</TableHead>
+                      <TableHead>Subject</TableHead>
+                      <TableHead>Type</TableHead>
+                      <TableHead>Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {sentEmails.length === 0 ? (
+                      <TableRow>
+                        <TableCell
+                          colSpan={5}
+                          className="text-center py-8 text-muted-foreground"
+                        >
+                          No email notifications sent yet
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      sentEmails.slice(0, 50).map((email) => (
+                        <TableRow key={email.id}>
+                          <TableCell>
+                            {new Date(email.timestamp).toLocaleString()}
+                          </TableCell>
+                          <TableCell>{email.to}</TableCell>
+                          <TableCell className="max-w-xs truncate">
+                            {email.subject}
+                          </TableCell>
+                          <TableCell>
+                            <Badge
+                              className={
+                                email.subject.includes('Setup')
+                                  ? "bg-blue-100 text-blue-800"
+                                  : email.subject.includes('Approved')
+                                    ? "bg-green-100 text-green-800"
+                                    : email.subject.includes('Rejected')
+                                      ? "bg-red-100 text-red-800"
+                                      : email.subject.includes('Certificate')
+                                        ? "bg-purple-100 text-purple-800"
+                                        : "bg-gray-100 text-gray-800"
+                              }
+                            >
+                              {email.subject.includes('Setup')
+                                ? 'Officer Setup'
+                                : email.subject.includes('Approved')
+                                  ? 'Application Approved'
+                                  : email.subject.includes('Rejected')
+                                    ? 'Application Rejected'
+                                    : email.subject.includes('Certificate')
+                                      ? 'Certificate Ready'
+                                      : 'Other'
+                              }
+                            </Badge>
+                          </TableCell>
+                          <TableCell>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => {
+                                alert(`Email Details:\n\nTo: ${email.to}\nSubject: ${email.subject}\nSent: ${new Date(email.timestamp).toLocaleString()}\n\nContent:\n${email.textContent.substring(0, 500)}...`);
+                              }}
+                            >
+                              <Eye className="h-4 w-4" />
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    )}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
           {/* Audit Logs Tab */}
           <TabsContent value="audit" className="space-y-6">
             <div className="flex items-center justify-between">
