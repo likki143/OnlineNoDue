@@ -1503,12 +1503,18 @@ const AdminDashboard: React.FC = () => {
                   <Button
                     onClick={() => {
                       setLoading(true);
-                      // Simulate saving settings
-                      setTimeout(() => {
+                      try {
+                        // Save settings to store
+                        const updatedSettings = settingsStore.updateSettings(settings);
+                        setSettings(updatedSettings);
+                        setSuccess("Settings saved successfully! Changes will apply to new certificates.");
+                        setTimeout(() => setSuccess(""), 4000);
+                      } catch (error) {
+                        setError("Failed to save settings. Please try again.");
+                        setTimeout(() => setError(""), 3000);
+                      } finally {
                         setLoading(false);
-                        setSuccess("Settings saved successfully!");
-                        setTimeout(() => setSuccess(""), 3000);
-                      }, 1000);
+                      }
                     }}
                     disabled={loading}
                   >
