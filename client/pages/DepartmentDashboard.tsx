@@ -45,6 +45,7 @@ import {
   Application,
   AuditLog,
 } from '@/lib/applicationStore';
+import { sendStudentNotificationEmail } from '@/lib/utils/emailService';
 import {
   Shield,
   FileText,
