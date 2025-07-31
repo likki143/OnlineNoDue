@@ -46,7 +46,12 @@ const PasswordSetup: React.FC = () => {
       hasLowercase,
       hasNumbers,
       hasSpecialChar,
-      isValid: minLength && hasUppercase && hasLowercase && hasNumbers && hasSpecialChar
+      isValid:
+        minLength &&
+        hasUppercase &&
+        hasLowercase &&
+        hasNumbers &&
+        hasSpecialChar,
     };
   };
 
@@ -74,11 +79,12 @@ const PasswordSetup: React.FC = () => {
 
       // Force page reload to refresh user profile and trigger proper redirect
       // This ensures the passwordSetupRequired flag is properly updated in the UI
-      window.location.href = userProfile?.role === "department_officer"
-        ? "/department/dashboard"
-        : userProfile?.role === "admin"
-        ? "/admin/dashboard"
-        : "/";
+      window.location.href =
+        userProfile?.role === "department_officer"
+          ? "/department/dashboard"
+          : userProfile?.role === "admin"
+            ? "/admin/dashboard"
+            : "/";
     } catch (err: any) {
       setError(err.message || "Failed to update password");
       setLoading(false);
@@ -94,10 +100,11 @@ const PasswordSetup: React.FC = () => {
           </div>
           <CardTitle className="text-2xl">Set Up Your Password</CardTitle>
           <CardDescription>
-            Welcome, {userProfile?.fullName}! Please create a new secure password to complete your account setup.
+            Welcome, {userProfile?.fullName}! Please create a new secure
+            password to complete your account setup.
           </CardDescription>
         </CardHeader>
-        
+
         <CardContent>
           {error && (
             <Alert variant="destructive" className="mb-6">
@@ -165,31 +172,57 @@ const PasswordSetup: React.FC = () => {
 
             {/* Password Requirements */}
             <div className="space-y-2">
-              <Label className="text-sm font-medium">Password Requirements:</Label>
+              <Label className="text-sm font-medium">
+                Password Requirements:
+              </Label>
               <div className="space-y-1 text-sm">
-                <div className={`flex items-center space-x-2 ${passwordCriteria.minLength ? 'text-green-600' : 'text-gray-500'}`}>
-                  <CheckCircle className={`h-3 w-3 ${passwordCriteria.minLength ? 'text-green-600' : 'text-gray-400'}`} />
+                <div
+                  className={`flex items-center space-x-2 ${passwordCriteria.minLength ? "text-green-600" : "text-gray-500"}`}
+                >
+                  <CheckCircle
+                    className={`h-3 w-3 ${passwordCriteria.minLength ? "text-green-600" : "text-gray-400"}`}
+                  />
                   <span>At least 8 characters</span>
                 </div>
-                <div className={`flex items-center space-x-2 ${passwordCriteria.hasUppercase ? 'text-green-600' : 'text-gray-500'}`}>
-                  <CheckCircle className={`h-3 w-3 ${passwordCriteria.hasUppercase ? 'text-green-600' : 'text-gray-400'}`} />
+                <div
+                  className={`flex items-center space-x-2 ${passwordCriteria.hasUppercase ? "text-green-600" : "text-gray-500"}`}
+                >
+                  <CheckCircle
+                    className={`h-3 w-3 ${passwordCriteria.hasUppercase ? "text-green-600" : "text-gray-400"}`}
+                  />
                   <span>One uppercase letter</span>
                 </div>
-                <div className={`flex items-center space-x-2 ${passwordCriteria.hasLowercase ? 'text-green-600' : 'text-gray-500'}`}>
-                  <CheckCircle className={`h-3 w-3 ${passwordCriteria.hasLowercase ? 'text-green-600' : 'text-gray-400'}`} />
+                <div
+                  className={`flex items-center space-x-2 ${passwordCriteria.hasLowercase ? "text-green-600" : "text-gray-500"}`}
+                >
+                  <CheckCircle
+                    className={`h-3 w-3 ${passwordCriteria.hasLowercase ? "text-green-600" : "text-gray-400"}`}
+                  />
                   <span>One lowercase letter</span>
                 </div>
-                <div className={`flex items-center space-x-2 ${passwordCriteria.hasNumbers ? 'text-green-600' : 'text-gray-500'}`}>
-                  <CheckCircle className={`h-3 w-3 ${passwordCriteria.hasNumbers ? 'text-green-600' : 'text-gray-400'}`} />
+                <div
+                  className={`flex items-center space-x-2 ${passwordCriteria.hasNumbers ? "text-green-600" : "text-gray-500"}`}
+                >
+                  <CheckCircle
+                    className={`h-3 w-3 ${passwordCriteria.hasNumbers ? "text-green-600" : "text-gray-400"}`}
+                  />
                   <span>One number</span>
                 </div>
-                <div className={`flex items-center space-x-2 ${passwordCriteria.hasSpecialChar ? 'text-green-600' : 'text-gray-500'}`}>
-                  <CheckCircle className={`h-3 w-3 ${passwordCriteria.hasSpecialChar ? 'text-green-600' : 'text-gray-400'}`} />
+                <div
+                  className={`flex items-center space-x-2 ${passwordCriteria.hasSpecialChar ? "text-green-600" : "text-gray-500"}`}
+                >
+                  <CheckCircle
+                    className={`h-3 w-3 ${passwordCriteria.hasSpecialChar ? "text-green-600" : "text-gray-400"}`}
+                  />
                   <span>One special character</span>
                 </div>
                 {confirmPassword && (
-                  <div className={`flex items-center space-x-2 ${passwordsMatch ? 'text-green-600' : 'text-red-600'}`}>
-                    <CheckCircle className={`h-3 w-3 ${passwordsMatch ? 'text-green-600' : 'text-red-400'}`} />
+                  <div
+                    className={`flex items-center space-x-2 ${passwordsMatch ? "text-green-600" : "text-red-600"}`}
+                  >
+                    <CheckCircle
+                      className={`h-3 w-3 ${passwordsMatch ? "text-green-600" : "text-red-400"}`}
+                    />
                     <span>Passwords match</span>
                   </div>
                 )}
@@ -209,8 +242,9 @@ const PasswordSetup: React.FC = () => {
             <Alert className="border-blue-200 bg-blue-50 text-blue-800 dark:border-blue-800 dark:bg-blue-900 dark:text-blue-200">
               <Shield className="h-4 w-4" />
               <AlertDescription>
-                <strong>Security Notice:</strong> This is a one-time password setup. 
-                Your new password will replace the temporary password sent to your email.
+                <strong>Security Notice:</strong> This is a one-time password
+                setup. Your new password will replace the temporary password
+                sent to your email.
               </AlertDescription>
             </Alert>
           </div>

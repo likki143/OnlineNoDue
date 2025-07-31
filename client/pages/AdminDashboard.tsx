@@ -49,7 +49,10 @@ import {
   searchAuditLogs,
 } from "@/lib/utils/dataExport";
 import { generateCertificatePDF } from "@/lib/utils/pdfGenerator";
-import { sendDepartmentOfficerSetupEmail, getSentEmails } from "@/lib/utils/emailService";
+import {
+  sendDepartmentOfficerSetupEmail,
+  getSentEmails,
+} from "@/lib/utils/emailService";
 import { settingsStore, SystemSettings } from "@/lib/settingsStore";
 import {
   Shield,
@@ -103,11 +106,14 @@ const AdminDashboard: React.FC = () => {
   const [auditSearchTerm, setAuditSearchTerm] = useState("");
 
   // Department management states
-  const [selectedDepartment, setSelectedDepartment] = useState<DepartmentOfficer | null>(null);
+  const [selectedDepartment, setSelectedDepartment] =
+    useState<DepartmentOfficer | null>(null);
   const [showConfigureModal, setShowConfigureModal] = useState(false);
 
   // Settings states - initialize from settings store
-  const [settings, setSettings] = useState<SystemSettings>(settingsStore.getSettings());
+  const [settings, setSettings] = useState<SystemSettings>(
+    settingsStore.getSettings(),
+  );
 
   // Real data from application store
   const [applications, setApplications] = useState<Application[]>([]);
@@ -208,7 +214,9 @@ const AdminDashboard: React.FC = () => {
       const deleted = applicationStore.deleteOfficer(officer.id);
 
       if (deleted) {
-        setSuccess(`Department officer "${officer.name}" deleted successfully!`);
+        setSuccess(
+          `Department officer "${officer.name}" deleted successfully!`,
+        );
         refreshData();
         setTimeout(() => setSuccess(""), 3000);
       } else {
@@ -254,7 +262,7 @@ const AdminDashboard: React.FC = () => {
         newOfficer.email,
         emailResult.temporaryPassword,
         newOfficer.name,
-        newOfficer.department
+        newOfficer.department,
       );
 
       // Add to application store with email info
@@ -685,7 +693,9 @@ const AdminDashboard: React.FC = () => {
             {showConfigureModal && selectedDepartment && (
               <Card className="border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-900/20">
                 <CardHeader>
-                  <CardTitle>Configure {selectedDepartment.department} Department</CardTitle>
+                  <CardTitle>
+                    Configure {selectedDepartment.department} Department
+                  </CardTitle>
                   <CardDescription>
                     Manage department settings and officer permissions
                   </CardDescription>
@@ -713,19 +723,39 @@ const AdminDashboard: React.FC = () => {
                     <Label>Department Permissions</Label>
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
-                        <Label className="text-sm">Can approve applications</Label>
-                        <input type="checkbox" defaultChecked className="rounded" />
+                        <Label className="text-sm">
+                          Can approve applications
+                        </Label>
+                        <input
+                          type="checkbox"
+                          defaultChecked
+                          className="rounded"
+                        />
                       </div>
                       <div className="flex items-center justify-between">
-                        <Label className="text-sm">Can reject applications</Label>
-                        <input type="checkbox" defaultChecked className="rounded" />
+                        <Label className="text-sm">
+                          Can reject applications
+                        </Label>
+                        <input
+                          type="checkbox"
+                          defaultChecked
+                          className="rounded"
+                        />
                       </div>
                       <div className="flex items-center justify-between">
-                        <Label className="text-sm">Receive email notifications</Label>
-                        <input type="checkbox" defaultChecked className="rounded" />
+                        <Label className="text-sm">
+                          Receive email notifications
+                        </Label>
+                        <input
+                          type="checkbox"
+                          defaultChecked
+                          className="rounded"
+                        />
                       </div>
                       <div className="flex items-center justify-between">
-                        <Label className="text-sm">Can bulk process applications</Label>
+                        <Label className="text-sm">
+                          Can bulk process applications
+                        </Label>
                         <input type="checkbox" className="rounded" />
                       </div>
                     </div>
@@ -733,7 +763,9 @@ const AdminDashboard: React.FC = () => {
                   <div className="flex space-x-2">
                     <Button
                       onClick={() => {
-                        setSuccess(`${selectedDepartment.department} department configured successfully!`);
+                        setSuccess(
+                          `${selectedDepartment.department} department configured successfully!`,
+                        );
                         setShowConfigureModal(false);
                         setTimeout(() => setSuccess(""), 3000);
                       }}
@@ -978,7 +1010,10 @@ const AdminDashboard: React.FC = () => {
                                     </Badge>
                                   )}
                                   {officer.passwordSetupRequired && (
-                                    <Badge variant="outline" className="text-xs">
+                                    <Badge
+                                      variant="outline"
+                                      className="text-xs"
+                                    >
                                       Setup Required
                                     </Badge>
                                   )}
@@ -991,9 +1026,13 @@ const AdminDashboard: React.FC = () => {
                                     variant="outline"
                                     onClick={() => {
                                       if (officer.temporaryPassword) {
-                                        alert(`Temporary Password: ${officer.temporaryPassword}\n\nNote: This password should be changed on first login.`);
+                                        alert(
+                                          `Temporary Password: ${officer.temporaryPassword}\n\nNote: This password should be changed on first login.`,
+                                        );
                                       } else {
-                                        alert('No temporary password available.');
+                                        alert(
+                                          "No temporary password available.",
+                                        );
                                       }
                                     }}
                                     title="View temporary password"
@@ -1118,7 +1157,9 @@ const AdminDashboard: React.FC = () => {
                           variant="outline"
                           className="flex-1"
                           onClick={() => {
-                            alert(`Edit Department Officer:\n\nName: ${officer.name}\nEmail: ${officer.email}\nDepartment: ${officer.department}\nRole: ${officer.role}\n\nNote: Full edit functionality would be implemented here.`);
+                            alert(
+                              `Edit Department Officer:\n\nName: ${officer.name}\nEmail: ${officer.email}\nDepartment: ${officer.department}\nRole: ${officer.role}\n\nNote: Full edit functionality would be implemented here.`,
+                            );
                           }}
                         >
                           <Edit className="h-4 w-4 mr-1" />
@@ -1365,27 +1406,26 @@ const AdminDashboard: React.FC = () => {
                           <TableCell>
                             <Badge
                               className={
-                                email.subject.includes('Setup')
+                                email.subject.includes("Setup")
                                   ? "bg-blue-100 text-blue-800"
-                                  : email.subject.includes('Approved')
+                                  : email.subject.includes("Approved")
                                     ? "bg-green-100 text-green-800"
-                                    : email.subject.includes('Rejected')
+                                    : email.subject.includes("Rejected")
                                       ? "bg-red-100 text-red-800"
-                                      : email.subject.includes('Certificate')
+                                      : email.subject.includes("Certificate")
                                         ? "bg-purple-100 text-purple-800"
                                         : "bg-gray-100 text-gray-800"
                               }
                             >
-                              {email.subject.includes('Setup')
-                                ? 'Officer Setup'
-                                : email.subject.includes('Approved')
-                                  ? 'Application Approved'
-                                  : email.subject.includes('Rejected')
-                                    ? 'Application Rejected'
-                                    : email.subject.includes('Certificate')
-                                      ? 'Certificate Ready'
-                                      : 'Other'
-                              }
+                              {email.subject.includes("Setup")
+                                ? "Officer Setup"
+                                : email.subject.includes("Approved")
+                                  ? "Application Approved"
+                                  : email.subject.includes("Rejected")
+                                    ? "Application Rejected"
+                                    : email.subject.includes("Certificate")
+                                      ? "Certificate Ready"
+                                      : "Other"}
                             </Badge>
                           </TableCell>
                           <TableCell>
@@ -1393,7 +1433,9 @@ const AdminDashboard: React.FC = () => {
                               size="sm"
                               variant="outline"
                               onClick={() => {
-                                alert(`Email Details:\n\nTo: ${email.to}\nSubject: ${email.subject}\nSent: ${new Date(email.timestamp).toLocaleString()}\n\nContent:\n${email.textContent.substring(0, 500)}...`);
+                                alert(
+                                  `Email Details:\n\nTo: ${email.to}\nSubject: ${email.subject}\nSent: ${new Date(email.timestamp).toLocaleString()}\n\nContent:\n${email.textContent.substring(0, 500)}...`,
+                                );
                               }}
                             >
                               <Eye className="h-4 w-4" />
@@ -1648,9 +1690,12 @@ const AdminDashboard: React.FC = () => {
                       setLoading(true);
                       try {
                         // Save settings to store
-                        const updatedSettings = settingsStore.updateSettings(settings);
+                        const updatedSettings =
+                          settingsStore.updateSettings(settings);
                         setSettings(updatedSettings);
-                        setSuccess("Settings saved successfully! Changes will apply to new certificates.");
+                        setSuccess(
+                          "Settings saved successfully! Changes will apply to new certificates.",
+                        );
                         setTimeout(() => setSuccess(""), 4000);
                       } catch (error) {
                         setError("Failed to save settings. Please try again.");

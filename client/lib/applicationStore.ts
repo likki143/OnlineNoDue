@@ -1,7 +1,7 @@
 // Simple application state management using localStorage
 // In production, this would be replaced with Firebase Realtime Database
 
-import { sendCertificateReadyEmail } from './utils/emailService';
+import { sendCertificateReadyEmail } from "./utils/emailService";
 
 export interface Application {
   id: string;
@@ -252,7 +252,9 @@ class ApplicationStore {
 
   deleteOfficer(officerId: string): boolean {
     const officers = this.getAllOfficers();
-    const officerIndex = officers.findIndex(officer => officer.id === officerId);
+    const officerIndex = officers.findIndex(
+      (officer) => officer.id === officerId,
+    );
 
     if (officerIndex === -1) {
       return false;

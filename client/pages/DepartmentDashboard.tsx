@@ -1,25 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -27,7 +27,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from "@/components/ui/table";
 import {
   Dialog,
   DialogContent,
@@ -35,17 +35,17 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { useAuth } from '@/contexts/AuthContext';
-import { signOutUser } from '@/lib/auth';
-import { isDemoMode, disableDemoMode } from '@/lib/demo-auth';
+} from "@/components/ui/dialog";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useAuth } from "@/contexts/AuthContext";
+import { signOutUser } from "@/lib/auth";
+import { isDemoMode, disableDemoMode } from "@/lib/demo-auth";
 import {
   applicationStore,
   Application,
   AuditLog,
-} from '@/lib/applicationStore';
-import { sendStudentNotificationEmail } from '@/lib/utils/emailService';
+} from "@/lib/applicationStore";
+import { sendStudentNotificationEmail } from "@/lib/utils/emailService";
 import {
   Shield,
   FileText,
@@ -67,19 +67,22 @@ import {
   Settings,
   Bell,
   RefreshCw,
-} from 'lucide-react';
+} from "lucide-react";
 
 const DepartmentDashboard: React.FC = () => {
   const { userProfile } = useAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("pending");
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedApplication, setSelectedApplication] = useState<Application | null>(null);
+  const [selectedApplication, setSelectedApplication] =
+    useState<Application | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [showDialog, setShowDialog] = useState(false);
-  const [actionType, setActionType] = useState<"approve" | "reject" | null>(null);
+  const [actionType, setActionType] = useState<"approve" | "reject" | null>(
+    null,
+  );
   const [comments, setComments] = useState("");
 
   // Data states
@@ -103,10 +106,10 @@ const DepartmentDashboard: React.FC = () => {
     if (!userDepartment) return;
 
     const allApplications = applicationStore.getAllApplications();
-    
+
     // Filter applications that need review from this department
-    const departmentApplications = allApplications.filter(app => 
-      app.progress.hasOwnProperty(userDepartment)
+    const departmentApplications = allApplications.filter((app) =>
+      app.progress.hasOwnProperty(userDepartment),
     );
 
     setApplications(departmentApplications);
@@ -114,9 +117,21 @@ const DepartmentDashboard: React.FC = () => {
     // Calculate department statistics
     const stats = {
       total: departmentApplications.length,
-      pending: departmentApplications.filter(app => app.progress[userDepartment as keyof typeof app.progress] === "pending").length,
-      approved: departmentApplications.filter(app => app.progress[userDepartment as keyof typeof app.progress] === "approved").length,
-      rejected: departmentApplications.filter(app => app.progress[userDepartment as keyof typeof app.progress] === "rejected").length,
+      pending: departmentApplications.filter(
+        (app) =>
+          app.progress[userDepartment as keyof typeof app.progress] ===
+          "pending",
+      ).length,
+      approved: departmentApplications.filter(
+        (app) =>
+          app.progress[userDepartment as keyof typeof app.progress] ===
+          "approved",
+      ).length,
+      rejected: departmentApplications.filter(
+        (app) =>
+          app.progress[userDepartment as keyof typeof app.progress] ===
+          "rejected",
+      ).length,
       avgProcessingTime: 2.5, // Mock data - in real app would calculate from timestamps
     };
 
@@ -128,40 +143,53 @@ const DepartmentDashboard: React.FC = () => {
 
     // Filter by tab
     if (activeTab !== "all") {
-      filtered = filtered.filter(app => 
-        app.progress[userDepartment as keyof typeof app.progress] === activeTab
+      filtered = filtered.filter(
+        (app) =>
+          app.progress[userDepartment as keyof typeof app.progress] ===
+          activeTab,
       );
     }
 
     // Filter by search term
     if (searchTerm) {
-      filtered = filtered.filter(app =>
-        app.studentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        app.rollNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        app.email.toLowerCase().includes(searchTerm.toLowerCase())
+      filtered = filtered.filter(
+        (app) =>
+          app.studentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          app.rollNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          app.email.toLowerCase().includes(searchTerm.toLowerCase()),
       );
     }
 
     return filtered;
   };
 
-  const handleApplicationAction = async (application: Application, action: "approve" | "reject", comment?: string) => {
+  const handleApplicationAction = async (
+    application: Application,
+    action: "approve" | "reject",
+    comment?: string,
+  ) => {
     setLoading(true);
     setError("");
 
     try {
       // Update application progress for this department
       const departmentUpdate = {
-        [userDepartment]: action === "approve" ? "approved" : "rejected"
+        [userDepartment]: action === "approve" ? "approved" : "rejected",
       };
 
-      applicationStore.updateApplicationStatus(application.id, departmentUpdate);
+      applicationStore.updateApplicationStatus(
+        application.id,
+        departmentUpdate,
+      );
 
       // Add audit log
       applicationStore.addAuditLog({
         userId: userProfile?.uid || "",
         userName: userProfile?.fullName || "",
-        action: action === "approve" ? "Application Approved" : "Application Rejected",
+        action:
+          action === "approve"
+            ? "Application Approved"
+            : "Application Rejected",
         target: `Application #${application.id}`,
         details: `${userProfile?.department} department ${action}d application${comment ? ` with comment: ${comment}` : ""}`,
         ipAddress: "192.168.1.100",
@@ -183,7 +211,9 @@ const DepartmentDashboard: React.FC = () => {
         // Don't fail the main action if email fails
       }
 
-      setSuccess(`Application ${action}d successfully! Student has been notified via email.`);
+      setSuccess(
+        `Application ${action}d successfully! Student has been notified via email.`,
+      );
       refreshData();
       setShowDialog(false);
       setSelectedApplication(null);
@@ -197,7 +227,10 @@ const DepartmentDashboard: React.FC = () => {
     }
   };
 
-  const openActionDialog = (application: Application, action: "approve" | "reject") => {
+  const openActionDialog = (
+    application: Application,
+    action: "approve" | "reject",
+  ) => {
     setSelectedApplication(application);
     setActionType(action);
     setShowDialog(true);
@@ -205,8 +238,9 @@ const DepartmentDashboard: React.FC = () => {
   };
 
   const handleBulkAction = async (action: "approve" | "reject") => {
-    const pendingApplications = getFilteredApplications().filter(app => 
-      app.progress[userDepartment as keyof typeof app.progress] === "pending"
+    const pendingApplications = getFilteredApplications().filter(
+      (app) =>
+        app.progress[userDepartment as keyof typeof app.progress] === "pending",
     );
 
     if (pendingApplications.length === 0) {
@@ -221,9 +255,15 @@ const DepartmentDashboard: React.FC = () => {
     setLoading(true);
     try {
       for (const app of pendingApplications) {
-        await handleApplicationAction(app, action, `Bulk ${action} by ${userProfile?.fullName}`);
+        await handleApplicationAction(
+          app,
+          action,
+          `Bulk ${action} by ${userProfile?.fullName}`,
+        );
       }
-      setSuccess(`Bulk ${action} completed for ${pendingApplications.length} applications!`);
+      setSuccess(
+        `Bulk ${action} completed for ${pendingApplications.length} applications!`,
+      );
       setTimeout(() => setSuccess(""), 3000);
     } catch (err: any) {
       setError(`Failed to complete bulk ${action}`);
@@ -237,14 +277,14 @@ const DepartmentDashboard: React.FC = () => {
     try {
       if (isDemoMode()) {
         disableDemoMode();
-        navigate('/');
+        navigate("/");
       } else {
         await signOutUser();
-        navigate('/');
+        navigate("/");
       }
     } catch (error) {
-      console.error('Error signing out:', error);
-      navigate('/');
+      console.error("Error signing out:", error);
+      navigate("/");
     }
   };
 
@@ -332,7 +372,8 @@ const DepartmentDashboard: React.FC = () => {
             Welcome back, {userProfile?.fullName}!
           </h1>
           <p className="text-muted-foreground">
-            Review and manage no due applications for the {userProfile?.department} department
+            Review and manage no due applications for the{" "}
+            {userProfile?.department} department
           </p>
         </div>
 
@@ -360,7 +401,9 @@ const DepartmentDashboard: React.FC = () => {
                   <p className="text-sm font-medium text-muted-foreground">
                     Pending Review
                   </p>
-                  <p className="text-2xl font-bold">{departmentStats.pending}</p>
+                  <p className="text-2xl font-bold">
+                    {departmentStats.pending}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -374,7 +417,9 @@ const DepartmentDashboard: React.FC = () => {
                   <p className="text-sm font-medium text-muted-foreground">
                     Approved
                   </p>
-                  <p className="text-2xl font-bold">{departmentStats.approved}</p>
+                  <p className="text-2xl font-bold">
+                    {departmentStats.approved}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -388,7 +433,9 @@ const DepartmentDashboard: React.FC = () => {
                   <p className="text-sm font-medium text-muted-foreground">
                     Avg. Processing (days)
                   </p>
-                  <p className="text-2xl font-bold">{departmentStats.avgProcessingTime}</p>
+                  <p className="text-2xl font-bold">
+                    {departmentStats.avgProcessingTime}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -451,7 +498,11 @@ const DepartmentDashboard: React.FC = () => {
             </div>
 
             {/* Tabs */}
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+            <Tabs
+              value={activeTab}
+              onValueChange={setActiveTab}
+              className="space-y-4"
+            >
               <TabsList>
                 <TabsTrigger value="pending">
                   Pending ({departmentStats.pending})
@@ -471,10 +522,12 @@ const DepartmentDashboard: React.FC = () => {
                 {getFilteredApplications().length === 0 ? (
                   <div className="text-center py-8">
                     <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                    <h3 className="font-semibold mb-2">No Applications Found</h3>
+                    <h3 className="font-semibold mb-2">
+                      No Applications Found
+                    </h3>
                     <p className="text-muted-foreground">
-                      {searchTerm 
-                        ? "No applications match your search criteria" 
+                      {searchTerm
+                        ? "No applications match your search criteria"
                         : `No ${activeTab === "all" ? "" : activeTab + " "}applications for your department`}
                     </p>
                   </div>
@@ -500,7 +553,11 @@ const DepartmentDashboard: React.FC = () => {
                           <TableCell>{app.department}</TableCell>
                           <TableCell>{app.submissionDate}</TableCell>
                           <TableCell>
-                            {getStatusBadge(app.progress[userDepartment as keyof typeof app.progress])}
+                            {getStatusBadge(
+                              app.progress[
+                                userDepartment as keyof typeof app.progress
+                              ],
+                            )}
                           </TableCell>
                           <TableCell>
                             <div className="flex space-x-2">
@@ -513,66 +570,104 @@ const DepartmentDashboard: React.FC = () => {
                                 </DialogTrigger>
                                 <DialogContent className="max-w-2xl">
                                   <DialogHeader>
-                                    <DialogTitle>Application Details</DialogTitle>
+                                    <DialogTitle>
+                                      Application Details
+                                    </DialogTitle>
                                     <DialogDescription>
-                                      Review application information and take action
+                                      Review application information and take
+                                      action
                                     </DialogDescription>
                                   </DialogHeader>
                                   <div className="space-y-4">
                                     <div className="grid grid-cols-2 gap-4">
                                       <div>
-                                        <Label className="font-medium">Student Name</Label>
+                                        <Label className="font-medium">
+                                          Student Name
+                                        </Label>
                                         <p>{app.studentName}</p>
                                       </div>
                                       <div>
-                                        <Label className="font-medium">Roll Number</Label>
+                                        <Label className="font-medium">
+                                          Roll Number
+                                        </Label>
                                         <p>{app.rollNumber}</p>
                                       </div>
                                       <div>
-                                        <Label className="font-medium">Email</Label>
+                                        <Label className="font-medium">
+                                          Email
+                                        </Label>
                                         <p>{app.email}</p>
                                       </div>
                                       <div>
-                                        <Label className="font-medium">Department</Label>
+                                        <Label className="font-medium">
+                                          Department
+                                        </Label>
                                         <p>{app.department}</p>
                                       </div>
                                       <div>
-                                        <Label className="font-medium">Course</Label>
-                                        <p>{app.course} - {app.year}</p>
+                                        <Label className="font-medium">
+                                          Course
+                                        </Label>
+                                        <p>
+                                          {app.course} - {app.year}
+                                        </p>
                                       </div>
                                       <div>
-                                        <Label className="font-medium">Submission Date</Label>
+                                        <Label className="font-medium">
+                                          Submission Date
+                                        </Label>
                                         <p>{app.submissionDate}</p>
                                       </div>
                                     </div>
                                     {app.reason && (
                                       <div>
-                                        <Label className="font-medium">Application Reason</Label>
-                                        <p className="text-muted-foreground">{app.reason}</p>
+                                        <Label className="font-medium">
+                                          Application Reason
+                                        </Label>
+                                        <p className="text-muted-foreground">
+                                          {app.reason}
+                                        </p>
                                       </div>
                                     )}
                                     <div>
-                                      <Label className="font-medium">Department Progress</Label>
+                                      <Label className="font-medium">
+                                        Department Progress
+                                      </Label>
                                       <div className="grid grid-cols-3 gap-2 mt-2">
-                                        {Object.entries(app.progress).map(([dept, status]) => (
-                                          <div key={dept} className="flex items-center justify-between p-2 border rounded">
-                                            <span className="text-sm capitalize">{dept === "lab" ? "Lab/Department" : dept}</span>
-                                            {getStatusBadge(status)}
-                                          </div>
-                                        ))}
+                                        {Object.entries(app.progress).map(
+                                          ([dept, status]) => (
+                                            <div
+                                              key={dept}
+                                              className="flex items-center justify-between p-2 border rounded"
+                                            >
+                                              <span className="text-sm capitalize">
+                                                {dept === "lab"
+                                                  ? "Lab/Department"
+                                                  : dept}
+                                              </span>
+                                              {getStatusBadge(status)}
+                                            </div>
+                                          ),
+                                        )}
                                       </div>
                                     </div>
-                                    {app.progress[userDepartment as keyof typeof app.progress] === "pending" && (
+                                    {app.progress[
+                                      userDepartment as keyof typeof app.progress
+                                    ] === "pending" && (
                                       <div className="flex space-x-2 pt-4">
                                         <Button
-                                          onClick={() => openActionDialog(app, "approve")}
+                                          onClick={() =>
+                                            openActionDialog(app, "approve")
+                                          }
                                           className="bg-green-600 hover:bg-green-700"
                                         >
                                           <Check className="h-4 w-4 mr-2" />
                                           Approve
                                         </Button>
                                         <Button
-                                          onClick={() => openActionDialog(app, "reject")}
+                                          onClick={() =>
+                                            openActionDialog(app, "reject")
+                                          }
                                           variant="destructive"
                                         >
                                           <X className="h-4 w-4 mr-2" />
@@ -583,19 +678,25 @@ const DepartmentDashboard: React.FC = () => {
                                   </div>
                                 </DialogContent>
                               </Dialog>
-                              
-                              {app.progress[userDepartment as keyof typeof app.progress] === "pending" && (
+
+                              {app.progress[
+                                userDepartment as keyof typeof app.progress
+                              ] === "pending" && (
                                 <>
                                   <Button
                                     size="sm"
-                                    onClick={() => openActionDialog(app, "approve")}
+                                    onClick={() =>
+                                      openActionDialog(app, "approve")
+                                    }
                                     className="bg-green-600 hover:bg-green-700 text-white"
                                   >
                                     <Check className="h-4 w-4" />
                                   </Button>
                                   <Button
                                     size="sm"
-                                    onClick={() => openActionDialog(app, "reject")}
+                                    onClick={() =>
+                                      openActionDialog(app, "reject")
+                                    }
                                     variant="destructive"
                                   >
                                     <X className="h-4 w-4" />
@@ -622,28 +723,38 @@ const DepartmentDashboard: React.FC = () => {
                 {actionType === "approve" ? "Approve" : "Reject"} Application
               </DialogTitle>
               <DialogDescription>
-                {actionType === "approve" 
-                  ? "Confirm approval for this no due application" 
+                {actionType === "approve"
+                  ? "Confirm approval for this no due application"
                   : "Provide reason for rejecting this application"}
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4">
               {selectedApplication && (
                 <div className="space-y-2">
-                  <p><strong>Student:</strong> {selectedApplication.studentName}</p>
-                  <p><strong>Roll Number:</strong> {selectedApplication.rollNumber}</p>
-                  <p><strong>Department:</strong> {selectedApplication.department}</p>
+                  <p>
+                    <strong>Student:</strong> {selectedApplication.studentName}
+                  </p>
+                  <p>
+                    <strong>Roll Number:</strong>{" "}
+                    {selectedApplication.rollNumber}
+                  </p>
+                  <p>
+                    <strong>Department:</strong>{" "}
+                    {selectedApplication.department}
+                  </p>
                 </div>
               )}
               <div className="space-y-2">
                 <Label htmlFor="comments">
-                  {actionType === "approve" ? "Comments (Optional)" : "Reason for Rejection *"}
+                  {actionType === "approve"
+                    ? "Comments (Optional)"
+                    : "Reason for Rejection *"}
                 </Label>
                 <Textarea
                   id="comments"
                   placeholder={
-                    actionType === "approve" 
-                      ? "Add any comments about the approval..." 
+                    actionType === "approve"
+                      ? "Add any comments about the approval..."
                       : "Please provide a clear reason for rejection..."
                   }
                   value={comments}
@@ -655,14 +766,28 @@ const DepartmentDashboard: React.FC = () => {
                 <Button
                   onClick={() => {
                     if (selectedApplication && actionType) {
-                      handleApplicationAction(selectedApplication, actionType, comments);
+                      handleApplicationAction(
+                        selectedApplication,
+                        actionType,
+                        comments,
+                      );
                     }
                   }}
-                  disabled={loading || (actionType === "reject" && !comments.trim())}
-                  className={actionType === "approve" ? "bg-green-600 hover:bg-green-700" : ""}
+                  disabled={
+                    loading || (actionType === "reject" && !comments.trim())
+                  }
+                  className={
+                    actionType === "approve"
+                      ? "bg-green-600 hover:bg-green-700"
+                      : ""
+                  }
                   variant={actionType === "reject" ? "destructive" : "default"}
                 >
-                  {loading ? "Processing..." : actionType === "approve" ? "Approve Application" : "Reject Application"}
+                  {loading
+                    ? "Processing..."
+                    : actionType === "approve"
+                      ? "Approve Application"
+                      : "Reject Application"}
                 </Button>
                 <Button
                   variant="outline"
