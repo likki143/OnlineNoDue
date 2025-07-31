@@ -49,6 +49,9 @@ export interface DepartmentOfficer {
   createdDate: string;
   lastLogin?: string;
   status: "active" | "inactive";
+  temporaryPassword?: string;
+  passwordSetupRequired?: boolean;
+  emailSent?: boolean;
 }
 
 export interface AuditLog {
@@ -210,6 +213,8 @@ class ApplicationStore {
       id: Date.now().toString(),
       createdDate: new Date().toISOString().split("T")[0],
       status: "active",
+      passwordSetupRequired: true,
+      emailSent: false,
     };
 
     officers.push(newOfficer);
