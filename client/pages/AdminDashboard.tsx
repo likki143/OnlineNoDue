@@ -100,6 +100,26 @@ const AdminDashboard: React.FC = () => {
   const [applicationSearchTerm, setApplicationSearchTerm] = useState("");
   const [auditSearchTerm, setAuditSearchTerm] = useState("");
 
+  // Department management states
+  const [selectedDepartment, setSelectedDepartment] = useState<DepartmentOfficer | null>(null);
+  const [showConfigureModal, setShowConfigureModal] = useState(false);
+
+  // Settings states
+  const [settings, setSettings] = useState({
+    institutionName: "Sample University",
+    academicYear: "2023-2024",
+    applicationDeadline: 30,
+    emailNotifications: true,
+    smsNotifications: false,
+    autoApprovalAlerts: true,
+    sessionTimeout: 30,
+    forcePasswordReset: false,
+    twoFactorAuth: false,
+    certificateTemplate: "default",
+    includeQrCode: true,
+    digitalSignature: true
+  });
+
   // Real data from application store
   const [applications, setApplications] = useState<Application[]>([]);
   const [students, setStudents] = useState<Student[]>([]);
