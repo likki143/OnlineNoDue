@@ -1507,9 +1507,20 @@ const AdminDashboard: React.FC = () => {
                       Save all configuration changes
                     </p>
                   </div>
-                  <Button>
+                  <Button
+                    onClick={() => {
+                      setLoading(true);
+                      // Simulate saving settings
+                      setTimeout(() => {
+                        setLoading(false);
+                        setSuccess("Settings saved successfully!");
+                        setTimeout(() => setSuccess(""), 3000);
+                      }, 1000);
+                    }}
+                    disabled={loading}
+                  >
                     <Settings className="h-4 w-4 mr-2" />
-                    Save Changes
+                    {loading ? "Saving..." : "Save Changes"}
                   </Button>
                 </div>
               </CardContent>
