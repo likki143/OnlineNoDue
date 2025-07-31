@@ -658,6 +658,79 @@ const AdminDashboard: React.FC = () => {
               </Button>
             </div>
 
+            {/* Department Configuration Modal */}
+            {showConfigureModal && selectedDepartment && (
+              <Card className="border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-900/20">
+                <CardHeader>
+                  <CardTitle>Configure {selectedDepartment.department} Department</CardTitle>
+                  <CardDescription>
+                    Manage department settings and officer permissions
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label>Department Officer</Label>
+                      <Input value={selectedDepartment.name} disabled />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Department Email</Label>
+                      <Input value={selectedDepartment.email} disabled />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Auto-Approval Threshold (days)</Label>
+                      <Input type="number" defaultValue="7" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Maximum Processing Time (days)</Label>
+                      <Input type="number" defaultValue="15" />
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <Label>Department Permissions</Label>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <Label className="text-sm">Can approve applications</Label>
+                        <input type="checkbox" defaultChecked className="rounded" />
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <Label className="text-sm">Can reject applications</Label>
+                        <input type="checkbox" defaultChecked className="rounded" />
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <Label className="text-sm">Receive email notifications</Label>
+                        <input type="checkbox" defaultChecked className="rounded" />
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <Label className="text-sm">Can bulk process applications</Label>
+                        <input type="checkbox" className="rounded" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex space-x-2">
+                    <Button
+                      onClick={() => {
+                        setSuccess(`${selectedDepartment.department} department configured successfully!`);
+                        setShowConfigureModal(false);
+                        setTimeout(() => setSuccess(""), 3000);
+                      }}
+                    >
+                      Save Configuration
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setShowConfigureModal(false);
+                        setSelectedDepartment(null);
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
             {/* Officer Creation Form */}
             {showOfficerForm && (
               <Card className="border-primary">
