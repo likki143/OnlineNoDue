@@ -22,6 +22,8 @@ export interface UserProfile {
   phoneNumber?: string;
   emailVerified: boolean;
   createdAt: string;
+  passwordSetupRequired?: boolean;
+  temporaryPassword?: string;
 }
 
 export const registerStudent = async (
