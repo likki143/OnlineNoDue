@@ -49,6 +49,7 @@ import {
   searchAuditLogs,
 } from "@/lib/utils/dataExport";
 import { generateCertificatePDF } from "@/lib/utils/pdfGenerator";
+import { sendDepartmentOfficerSetupEmail } from "@/lib/utils/emailService";
 import {
   Shield,
   Users,
@@ -199,27 +200,43 @@ const AdminDashboard: React.FC = () => {
     setError("");
 
     try {
-      // Add to application store
-      applicationStore.addOfficer({
+      // Send setup email first
+      const emailResult = await sendDepartmentOfficerSetupEmail({
         name: newOfficer.name,
         email: newOfficer.email,
         department: newOfficer.department,
         role: newOfficer.role,
       });
 
+      if (!emailResult.success) {
+        throw new Error(emailResult.error || "Failed to send setup email");
+      }
+
+      // Add to application store with email info
+      const createdOfficer = applicationStore.addOfficer({
+        name: newOfficer.name,
+        email: newOfficer.email,
+        department: newOfficer.department,
+        role: newOfficer.role,
+        temporaryPassword: emailResult.temporaryPassword,
+        emailSent: true,
+        passwordSetupRequired: true,
+      });
+
       // In production, you would also create Firebase user here
-      // await createDepartmentOfficer(newOfficer.email, 'temp_password', newOfficer.name, newOfficer.department);
+      // await createDepartmentOfficer(newOfficer.email, emailResult.temporaryPassword, newOfficer.name, newOfficer.department);
 
       setSuccess(
-        `Department officer "${newOfficer.name}" created successfully!`,
+        `Department officer "${newOfficer.name}" created successfully! Setup email sent to ${newOfficer.email}`,
       );
       setNewOfficer({ name: "", email: "", department: "", role: "" });
       setShowOfficerForm(false);
       refreshData(); // Refresh the data
 
-      setTimeout(() => setSuccess(""), 3000);
+      setTimeout(() => setSuccess(""), 5000);
     } catch (err: any) {
       setError(err.message || "Failed to create department officer");
+      setTimeout(() => setError(""), 5000);
     } finally {
       setLoading(false);
     }
@@ -837,11 +854,34 @@ const AdminDashboard: React.FC = () => {
                                 {officer.lastLogin || "Never"}
                               </TableCell>
                               <TableCell>
-                                {getStatusBadge(officer.status)}
+                                <div className="flex flex-col space-y-1">
+                                  {getStatusBadge(officer.status)}
+                                  {officer.emailSent && (
+                                    <Badge className="bg-blue-100 text-blue-800 text-xs">
+                                      Email Sent
+                                    </Badge>
+                                  )}
+                                  {officer.passwordSetupRequired && (
+                                    <Badge variant="outline" className="text-xs">
+                                      Setup Required
+                                    </Badge>
+                                  )}
+                                </div>
                               </TableCell>
                               <TableCell>
                                 <div className="flex space-x-2">
-                                  <Button size="sm" variant="outline">
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => {
+                                      if (officer.temporaryPassword) {
+                                        alert(`Temporary Password: ${officer.temporaryPassword}\n\nNote: This password should be changed on first login.`);
+                                      } else {
+                                        alert('No temporary password available.');
+                                      }
+                                    }}
+                                    title="View temporary password"
+                                  >
                                     <Key className="h-4 w-4" />
                                   </Button>
                                   <Button size="sm" variant="outline">
