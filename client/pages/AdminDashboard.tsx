@@ -151,6 +151,7 @@ const AdminDashboard: React.FC = () => {
     setOfficers(offs);
     setAuditLogs(logs);
     setStatistics(stats);
+    setSentEmails(getSentEmails());
   };
 
   const handleSignOut = async () => {
