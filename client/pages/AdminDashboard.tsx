@@ -232,6 +232,14 @@ const AdminDashboard: React.FC = () => {
         throw new Error(emailResult.error || "Failed to send setup email");
       }
 
+      // Create Firebase user with temporary password
+      await createDepartmentOfficer(
+        newOfficer.email,
+        emailResult.temporaryPassword,
+        newOfficer.name,
+        newOfficer.department
+      );
+
       // Add to application store with email info
       const createdOfficer = applicationStore.addOfficer({
         name: newOfficer.name,
@@ -242,9 +250,6 @@ const AdminDashboard: React.FC = () => {
         emailSent: true,
         passwordSetupRequired: true,
       });
-
-      // In production, you would also create Firebase user here
-      // await createDepartmentOfficer(newOfficer.email, emailResult.temporaryPassword, newOfficer.name, newOfficer.department);
 
       setSuccess(
         `Department officer "${newOfficer.name}" created successfully! Setup email sent to ${newOfficer.email}`,
