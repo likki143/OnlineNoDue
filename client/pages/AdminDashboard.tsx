@@ -77,6 +77,7 @@ import {
   TrendingUp,
   Award,
   QrCode,
+  RefreshCw,
 } from "lucide-react";
 
 interface NewOfficerForm {
