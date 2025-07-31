@@ -71,18 +71,16 @@ const PasswordSetup: React.FC = () => {
 
     try {
       await changePassword(newPassword);
-      
-      // Redirect based on role
-      if (userProfile?.role === "department_officer") {
-        navigate("/department/dashboard");
-      } else if (userProfile?.role === "admin") {
-        navigate("/admin/dashboard");
-      } else {
-        navigate("/");
-      }
+
+      // Force page reload to refresh user profile and trigger proper redirect
+      // This ensures the passwordSetupRequired flag is properly updated in the UI
+      window.location.href = userProfile?.role === "department_officer"
+        ? "/department/dashboard"
+        : userProfile?.role === "admin"
+        ? "/admin/dashboard"
+        : "/";
     } catch (err: any) {
       setError(err.message || "Failed to update password");
-    } finally {
       setLoading(false);
     }
   };
