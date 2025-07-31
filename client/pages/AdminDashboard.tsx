@@ -1007,7 +1007,14 @@ const AdminDashboard: React.FC = () => {
                           <Settings className="h-4 w-4 mr-1" />
                           Configure
                         </Button>
-                        <Button size="sm" variant="outline" className="flex-1">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="flex-1"
+                          onClick={() => {
+                            alert(`Edit Department Officer:\n\nName: ${officer.name}\nEmail: ${officer.email}\nDepartment: ${officer.department}\nRole: ${officer.role}\n\nNote: Full edit functionality would be implemented here.`);
+                          }}
+                        >
                           <Edit className="h-4 w-4 mr-1" />
                           Edit
                         </Button>
