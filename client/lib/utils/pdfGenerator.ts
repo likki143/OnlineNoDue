@@ -146,7 +146,7 @@ export const generateCertificatePDF = async (
     pdf.setFont("helvetica", "bold");
     pdf.setTextColor(33, 37, 41);
     pdf.text("Registrar", 40, 280);
-    pdf.text("Sample University", 40, 288);
+    pdf.text(settings.institutionName, 40, 288);
 
     // Verification notice
     pdf.setFontSize(8);
@@ -323,7 +323,7 @@ export const generateGuidelinesPDF = (): void => {
       "",
       "LABORATORY/ACADEMIC:",
       "• Return all lab equipment",
-      "��� Submit pending assignments/projects",
+      "• Submit pending assignments/projects",
       "• Clear any breakage charges",
       "",
       "SPORTS DEPARTMENT:",
