@@ -34,14 +34,17 @@ export const generateCertificatePDF = async (
     const verificationURL = `${currentDomain}/verify/${application.id}`;
     const qrCodeDataURL = await generateQRCode(verificationURL);
 
+    // Get current settings
+    const settings = settingsStore.getSettings();
+
     // Set up fonts and colors
     pdf.setFont("helvetica");
 
-    // Header - Institution Name
+    // Header - Institution Name from settings
     pdf.setFontSize(24);
     pdf.setFont("helvetica", "bold");
     pdf.setTextColor(33, 37, 41); // Dark color
-    pdf.text("SAMPLE UNIVERSITY", pageWidth / 2, 30, { align: "center" });
+    pdf.text(settings.institutionName.toUpperCase(), pageWidth / 2, 30, { align: "center" });
 
     // Subtitle
     pdf.setFontSize(16);
@@ -195,7 +198,7 @@ export const generateSampleFormsPDF = (): void => {
       "• Roll Number/Student ID: _______________",
       "• Email Address: ________________________",
       "• Phone Number: ________________________",
-      "��� Department/Branch: ____________________",
+      "• Department/Branch: ____________________",
       "• Course (B.Tech/MBA/etc.): ______________",
       "• Year/Semester: _______________________",
       "",
@@ -320,7 +323,7 @@ export const generateGuidelinesPDF = (): void => {
       "",
       "LABORATORY/ACADEMIC:",
       "• Return all lab equipment",
-      "• Submit pending assignments/projects",
+      "��� Submit pending assignments/projects",
       "• Clear any breakage charges",
       "",
       "SPORTS DEPARTMENT:",
