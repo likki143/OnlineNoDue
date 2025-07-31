@@ -435,11 +435,12 @@ const AdminDashboard: React.FC = () => {
           onValueChange={setActiveTab}
           className="space-y-6"
         >
-          <TabsList className="grid w-full grid-cols-6">
+          <TabsList className="grid w-full grid-cols-7">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="users">Users</TabsTrigger>
             <TabsTrigger value="departments">Departments</TabsTrigger>
             <TabsTrigger value="applications">Applications</TabsTrigger>
+            <TabsTrigger value="notifications">Notifications</TabsTrigger>
             <TabsTrigger value="audit">Audit Logs</TabsTrigger>
             <TabsTrigger value="settings">Settings</TabsTrigger>
           </TabsList>
