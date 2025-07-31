@@ -129,6 +129,9 @@ const AppRoutes: React.FC = () => {
         }
       />
 
+      {/* Password setup route */}
+      <Route path="/password-setup" element={<PasswordSetup />} />
+
       {/* Certificate verification - public routes */}
       <Route
         path="/verify/:applicationId"
