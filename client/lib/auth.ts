@@ -188,7 +188,8 @@ export const createDepartmentOfficer = async (
   email: string,
   password: string,
   fullName: string,
-  department: string
+  department: string,
+  isTemporaryPassword: boolean = true
 ) => {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -202,7 +203,9 @@ export const createDepartmentOfficer = async (
       fullName,
       department,
       emailVerified: true, // Department officers don't need email verification
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
+      passwordSetupRequired: isTemporaryPassword,
+      temporaryPassword: isTemporaryPassword ? password : undefined
     };
 
     await set(ref(database, `users/${user.uid}`), userProfile);
