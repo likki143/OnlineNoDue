@@ -995,7 +995,15 @@ const AdminDashboard: React.FC = () => {
                         </div>
                       </div>
                       <div className="flex space-x-2">
-                        <Button size="sm" variant="outline" className="flex-1">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="flex-1"
+                          onClick={() => {
+                            setSelectedDepartment(officer);
+                            setShowConfigureModal(true);
+                          }}
+                        >
                           <Settings className="h-4 w-4 mr-1" />
                           Configure
                         </Button>
