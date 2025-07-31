@@ -113,6 +113,7 @@ const AdminDashboard: React.FC = () => {
   const [students, setStudents] = useState<Student[]>([]);
   const [officers, setOfficers] = useState<DepartmentOfficer[]>([]);
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
+  const [sentEmails, setSentEmails] = useState<any[]>([]);
   const [statistics, setStatistics] = useState({
     totalStudents: 0,
     totalApplications: 0,
