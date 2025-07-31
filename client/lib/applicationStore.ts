@@ -164,8 +164,23 @@ class ApplicationStore {
       const progress = applications[appIndex].progress;
       const statuses = Object.values(progress);
 
+      const wasFullyApproved = applications[appIndex].status === "approved";
+
       if (statuses.every((status) => status === "approved")) {
         applications[appIndex].status = "approved";
+
+        // Send certificate ready email if this is the first time it's fully approved
+        if (!wasFullyApproved) {
+          try {
+            sendCertificateReadyEmail({
+              studentName: applications[appIndex].studentName,
+              studentEmail: applications[appIndex].email,
+              applicationId: applications[appIndex].id,
+            });
+          } catch (emailError) {
+            console.log("Certificate ready email failed:", emailError);
+          }
+        }
       } else if (statuses.some((status) => status === "rejected")) {
         applications[appIndex].status = "rejected";
       } else if (statuses.some((status) => status === "approved")) {
