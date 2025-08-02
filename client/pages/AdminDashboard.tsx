@@ -37,7 +37,7 @@ import {
 } from "@/components/ui/table";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useAuth } from "@/contexts/AuthContext";
-import { signOutUser, createDepartmentOfficer } from "@/lib/auth";
+import { signOutUser, createDepartmentOfficer, resetPassword } from "@/lib/auth";
 import { isDemoMode, disableDemoMode } from "@/lib/demo-auth";
 import {
   applicationStore,
