@@ -208,8 +208,8 @@ export const createDepartmentOfficer = async (
       fullName,
       department,
       emailVerified: true, // Department officers don't need email verification
-      createdAt: new Date().toISOString(),
-      passwordSetupRequired: true
+      createdAt: new Date().toISOString()
+      // passwordSetupRequired is not needed since officers set password via email reset
     };
 
     await set(ref(database, `users/${newUser.uid}`), userProfile);
