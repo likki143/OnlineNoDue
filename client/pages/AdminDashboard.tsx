@@ -1158,14 +1158,6 @@ const AdminDashboard: React.FC = () => {
                                       Email Sent
                                     </Badge>
                                   )}
-                                  {officer.passwordSetupRequired && (
-                                    <Badge
-                                      variant="outline"
-                                      className="text-xs"
-                                    >
-                                      Setup Required
-                                    </Badge>
-                                  )}
                                 </div>
                               </TableCell>
                               <TableCell>
