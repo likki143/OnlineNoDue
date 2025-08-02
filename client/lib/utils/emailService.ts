@@ -149,16 +149,17 @@ Dear ${name},
 
 Welcome to the Online No Due Form System! You have been assigned as a ${role} for the ${department} department.
 
-LOGIN CREDENTIALS:
+ACCOUNT SETUP REQUIRED:
 Email: ${email}
-Temporary Password: ${temporaryPassword}
 Login URL: ${loginUrl}
+Password Setup URL: ${passwordResetUrl}
 
-IMPORTANT SECURITY NOTICE:
-- This is a temporary password for your first login
-- You will be required to change your password after logging in
-- Do not share these credentials with anyone
-- Please delete this email after setting up your account
+SETUP INSTRUCTIONS:
+1. Visit the Password Setup URL above
+2. Enter your email address (${email})
+3. Check your email for password reset instructions
+4. Create a secure password
+5. Login to your account and start managing applications
 
 YOUR RESPONSIBILITIES:
 - Review and process no due applications for the ${department} department
