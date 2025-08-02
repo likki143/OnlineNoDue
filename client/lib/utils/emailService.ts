@@ -168,9 +168,9 @@ YOUR RESPONSIBILITIES:
 - Maintain accurate records of all decisions
 
 GETTING STARTED:
-1. Visit the login URL: ${loginUrl}
-2. Sign in using your email and temporary password
-3. Set up a new secure password
+1. Click the Password Setup URL to create your secure password: ${passwordResetUrl}
+2. Complete the password reset process
+3. Login using your email and new password: ${loginUrl}
 4. Complete your profile information
 5. Start reviewing pending applications
 
