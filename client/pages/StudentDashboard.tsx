@@ -23,6 +23,14 @@ import { isDemoMode, disableDemoMode } from "@/lib/demo-auth";
 import { firebaseApplicationService } from "@/lib/firebaseApplicationService";
 import { Application } from "@/lib/applicationStore";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
   generateCertificatePDF,
   generateSampleFormsPDF,
   generateGuidelinesPDF,
