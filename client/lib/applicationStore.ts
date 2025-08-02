@@ -240,7 +240,7 @@ class ApplicationStore {
       id: Date.now().toString(),
       createdDate: new Date().toISOString().split("T")[0],
       status: "active",
-      passwordSetupRequired: true,
+      passwordSetupRequired: false, // Officers set password via email reset flow
       emailSent: false,
     };
 
