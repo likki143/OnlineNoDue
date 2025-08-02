@@ -1,0 +1,81 @@
+{
+  "rules": {
+    "applications": {
+      "$uid": {
+        ".read": "auth != null && auth.uid == $uid",
+        ".write": "auth != null && auth.uid == $uid",
+        "$applicationId": {
+          ".validate": "newData.hasChildren(['studentId', 'studentName', 'rollNumber', 'email', 'department', 'course', 'year', 'submissionDate', 'status', 'progress'])",
+          "studentId": {
+            ".validate": "newData.isString() && newData.val() == $uid"
+          },
+          "studentName": {
+            ".validate": "newData.isString() && newData.val().length > 0"
+          },
+          "rollNumber": {
+            ".validate": "newData.isString() && newData.val().length > 0"
+          },
+          "email": {
+            ".validate": "newData.isString() && newData.val().matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/)"
+          },
+          "department": {
+            ".validate": "newData.isString() && newData.val().length > 0"
+          },
+          "course": {
+            ".validate": "newData.isString() && newData.val().length > 0"
+          },
+          "year": {
+            ".validate": "newData.isString() && newData.val().length > 0"
+          },
+          "submissionDate": {
+            ".validate": "newData.isString()"
+          },
+          "status": {
+            ".validate": "newData.isString() && (newData.val() == 'pending' || newData.val() == 'in_progress' || newData.val() == 'approved' || newData.val() == 'rejected')"
+          },
+          "progress": {
+            ".validate": "newData.hasChildren(['library', 'hostel', 'accounts', 'lab', 'sports'])",
+            "library": {
+              ".validate": "newData.isString() && (newData.val() == 'pending' || newData.val() == 'approved' || newData.val() == 'rejected')"
+            },
+            "hostel": {
+              ".validate": "newData.isString() && (newData.val() == 'pending' || newData.val() == 'approved' || newData.val() == 'rejected')"
+            },
+            "accounts": {
+              ".validate": "newData.isString() && (newData.val() == 'pending' || newData.val() == 'approved' || newData.val() == 'rejected')"
+            },
+            "lab": {
+              ".validate": "newData.isString() && (newData.val() == 'pending' || newData.val() == 'approved' || newData.val() == 'rejected')"
+            },
+            "sports": {
+              ".validate": "newData.isString() && (newData.val() == 'pending' || newData.val() == 'approved' || newData.val() == 'rejected')"
+            }
+          },
+          "reason": {
+            ".validate": "newData.isString()"
+          },
+          "collegeName": {
+            ".validate": "newData.isString()"
+          },
+          "documents": {
+            ".validate": "newData.hasChildren()",
+            "idCard": {
+              ".validate": "newData.isString()"
+            },
+            "supportingDocs": {
+              ".validate": "newData.isString()"
+            }
+          }
+        }
+      }
+    },
+    "users": {
+      "$uid": {
+        ".read": "auth != null && (auth.uid == $uid || root.child('users').child(auth.uid).child('role').val() == 'admin')",
+        ".write": "auth != null && (auth.uid == $uid || root.child('users').child(auth.uid).child('role').val() == 'admin')"
+      }
+    },
+    ".read": "false",
+    ".write": "false"
+  }
+}
