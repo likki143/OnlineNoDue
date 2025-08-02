@@ -103,40 +103,53 @@ const DepartmentDashboard: React.FC = () => {
     refreshData();
   }, [userDepartment]);
 
-  const refreshData = () => {
+  const refreshData = async () => {
     if (!userDepartment) return;
 
-    const allApplications = applicationStore.getAllApplications();
+    try {
+      const allApplications = await firebaseApplicationService.getAllApplications();
 
-    // Filter applications that need review from this department
-    const departmentApplications = allApplications.filter((app) =>
-      app.progress.hasOwnProperty(userDepartment),
-    );
+      // Filter applications that need review from this department
+      const departmentApplications = allApplications.filter((app) =>
+        app.progress.hasOwnProperty(userDepartment),
+      );
 
-    setApplications(departmentApplications);
+      setApplications(departmentApplications);
 
-    // Calculate department statistics
-    const stats = {
-      total: departmentApplications.length,
-      pending: departmentApplications.filter(
-        (app) =>
-          app.progress[userDepartment as keyof typeof app.progress] ===
-          "pending",
-      ).length,
-      approved: departmentApplications.filter(
-        (app) =>
-          app.progress[userDepartment as keyof typeof app.progress] ===
-          "approved",
-      ).length,
-      rejected: departmentApplications.filter(
-        (app) =>
-          app.progress[userDepartment as keyof typeof app.progress] ===
-          "rejected",
-      ).length,
-      avgProcessingTime: 2.5, // Mock data - in real app would calculate from timestamps
-    };
+      // Calculate department statistics
+      const stats = {
+        total: departmentApplications.length,
+        pending: departmentApplications.filter(
+          (app) =>
+            app.progress[userDepartment as keyof typeof app.progress] ===
+            "pending",
+        ).length,
+        approved: departmentApplications.filter(
+          (app) =>
+            app.progress[userDepartment as keyof typeof app.progress] ===
+            "approved",
+        ).length,
+        rejected: departmentApplications.filter(
+          (app) =>
+            app.progress[userDepartment as keyof typeof app.progress] ===
+            "rejected",
+        ).length,
+        avgProcessingTime: 2.5, // Mock data - in real app would calculate from timestamps
+      };
 
-    setDepartmentStats(stats);
+      setDepartmentStats(stats);
+    } catch (error) {
+      console.error("Error refreshing department data:", error);
+      // Set empty state on error
+      setApplications([]);
+      setDepartmentStats({
+        total: 0,
+        pending: 0,
+        approved: 0,
+        rejected: 0,
+        avgProcessingTime: 0,
+      });
+    }
   };
 
   const getFilteredApplications = () => {
