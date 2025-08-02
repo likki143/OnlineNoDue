@@ -58,7 +58,7 @@
             ".validate": "newData.isString()"
           },
           "documents": {
-            ".validate": "newData.hasChildren()",
+            ".validate": "!newData.exists() || newData.hasChildren()",
             "idCard": {
               ".validate": "newData.isString()"
             },
