@@ -20,7 +20,8 @@ import {
 import { useAuth } from "@/contexts/AuthContext";
 import { signOutUser } from "@/lib/auth";
 import { isDemoMode, disableDemoMode } from "@/lib/demo-auth";
-import { applicationStore, Application } from "@/lib/applicationStore";
+import { firebaseApplicationService } from "@/lib/firebaseApplicationService";
+import { Application } from "@/lib/applicationStore";
 import {
   generateCertificatePDF,
   generateSampleFormsPDF,
