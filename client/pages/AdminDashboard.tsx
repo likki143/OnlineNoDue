@@ -147,19 +147,35 @@ const AdminDashboard: React.FC = () => {
     refreshData();
   }, [activeTab]);
 
-  const refreshData = () => {
-    const apps = applicationStore.getAllApplications();
-    const studs = applicationStore.getAllStudents();
-    const offs = applicationStore.getAllOfficers();
-    const logs = applicationStore.getAllAuditLogs();
-    const stats = applicationStore.getStatistics();
+  const refreshData = async () => {
+    try {
+      const apps = await firebaseApplicationService.getAllApplications();
+      const studs = applicationStore.getAllStudents();
+      const offs = applicationStore.getAllOfficers();
+      const logs = applicationStore.getAllAuditLogs();
+      const stats = applicationStore.getStatistics();
 
-    setApplications(apps);
-    setStudents(studs);
-    setOfficers(offs);
-    setAuditLogs(logs);
-    setStatistics(stats);
-    setSentEmails(getSentEmails());
+      setApplications(apps);
+      setStudents(studs);
+      setOfficers(offs);
+      setAuditLogs(logs);
+      setStatistics(stats);
+      setSentEmails(getSentEmails());
+    } catch (error) {
+      console.error("Error refreshing admin data:", error);
+      // Set empty applications on error but keep other data
+      setApplications([]);
+      const studs = applicationStore.getAllStudents();
+      const offs = applicationStore.getAllOfficers();
+      const logs = applicationStore.getAllAuditLogs();
+      const stats = applicationStore.getStatistics();
+
+      setStudents(studs);
+      setOfficers(offs);
+      setAuditLogs(logs);
+      setStatistics(stats);
+      setSentEmails(getSentEmails());
+    }
   };
 
   const handleSignOut = async () => {
