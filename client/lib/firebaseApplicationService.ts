@@ -63,11 +63,13 @@ export class FirebaseApplicationService {
           lab: "pending",
           sports: "pending",
         },
-        // Only include documents if they have valid values
-        documents: application.documents ? {
-          ...(application.documents.idCard && { idCard: application.documents.idCard }),
-          ...(application.documents.supportingDocs && { supportingDocs: application.documents.supportingDocs }),
-        } : undefined,
+        // Only include documents if they exist and have valid values
+        ...(application.documents && Object.keys(application.documents).length > 0 && {
+          documents: {
+            ...(application.documents.idCard && { idCard: application.documents.idCard }),
+            ...(application.documents.supportingDocs && { supportingDocs: application.documents.supportingDocs }),
+          }
+        }),
       };
 
       // Use push to generate a unique key and store under user's UID
