@@ -196,6 +196,12 @@ const DepartmentDashboard: React.FC = () => {
         application.id,
         departmentUpdate,
         application.studentId,
+        {
+          department: userDepartment,
+          action: action === "approve" ? "approved" : "rejected",
+          reason: comment,
+          officerName: userProfile?.fullName || "Department Officer",
+        },
       );
 
       // Add audit log
