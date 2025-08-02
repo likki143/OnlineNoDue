@@ -1331,7 +1331,7 @@ const AdminDashboard: React.FC = () => {
                                         `Override status for Application #${app.id}?\n\nThis will mark all departments as approved.`,
                                       )
                                     ) {
-                                      applicationStore.updateApplicationStatus(
+                                      await firebaseApplicationService.updateApplicationStatus(
                                         app.id,
                                         {
                                           library: "approved",
@@ -1340,6 +1340,7 @@ const AdminDashboard: React.FC = () => {
                                           lab: "approved",
                                           sports: "approved",
                                         },
+                                        app.studentId,
                                       );
                                       refreshData();
                                       setSuccess(
