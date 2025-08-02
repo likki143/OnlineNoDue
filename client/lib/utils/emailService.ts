@@ -549,23 +549,22 @@ export const sendDepartmentOfficerSetupEmail = async (officerData: {
   role: string;
 }): Promise<{
   success: boolean;
-  temporaryPassword?: string;
   error?: string;
 }> => {
   try {
-    const temporaryPassword = generateTemporaryPassword();
     const loginUrl = `${window.location.origin}/login`;
+    const passwordResetUrl = `${window.location.origin}/reset-password`;
 
     const emailTemplate = createDepartmentOfficerSetupEmail({
       ...officerData,
-      temporaryPassword,
+      passwordResetUrl,
       loginUrl,
     });
 
     const emailSent = await sendEmail(emailTemplate);
 
     if (emailSent) {
-      return { success: true, temporaryPassword };
+      return { success: true };
     } else {
       return { success: false, error: "Failed to send setup email" };
     }
