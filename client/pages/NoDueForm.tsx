@@ -67,16 +67,25 @@ const NoDueForm: React.FC = () => {
   ];
 
   useEffect(() => {
-    if (userProfile?.uid) {
-      const canStudentApply = applicationStore.canStudentApply(userProfile.uid);
-      setCanApply(canStudentApply);
+    const checkCanApply = async () => {
+      if (userProfile?.uid) {
+        try {
+          const canStudentApply = await firebaseApplicationService.canStudentApply(userProfile.uid);
+          setCanApply(canStudentApply);
 
-      if (!canStudentApply) {
-        setError(
-          "You have already submitted an application. Only one application per student is allowed.",
-        );
+          if (!canStudentApply) {
+            setError(
+              "You have already submitted an application. Only one application per student is allowed.",
+            );
+          }
+        } catch (error) {
+          console.error("Error checking application eligibility:", error);
+          setError("Failed to check application eligibility. Please try again.");
+        }
       }
-    }
+    };
+
+    checkCanApply();
   }, [userProfile]);
 
   const handleInputChange = (
