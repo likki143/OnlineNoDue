@@ -13,7 +13,7 @@ export interface Application {
   course: string;
   year: string;
   submissionDate: string;
-  status: "pending" | "in_progress" | "approved" | "rejected";
+  status: "pending" | "in_progress" | "approved" | "rejected" | "partially_rejected";
   progress: {
     library: "pending" | "approved" | "rejected";
     hostel: "pending" | "approved" | "rejected";
@@ -21,12 +21,22 @@ export interface Application {
     lab: "pending" | "approved" | "rejected";
     sports: "pending" | "approved" | "rejected";
   };
+  // Track rejection reasons and approval details by department
+  departmentFeedback?: {
+    library?: { status: "approved" | "rejected"; reason?: string; officerName?: string; date?: string };
+    hostel?: { status: "approved" | "rejected"; reason?: string; officerName?: string; date?: string };
+    accounts?: { status: "approved" | "rejected"; reason?: string; officerName?: string; date?: string };
+    lab?: { status: "approved" | "rejected"; reason?: string; officerName?: string; date?: string };
+    sports?: { status: "approved" | "rejected"; reason?: string; officerName?: string; date?: string };
+  };
   reason?: string;
   collegeName?: string;
   documents?: {
     idCard?: string;
     supportingDocs?: string;
   };
+  canReApply?: boolean;
+  lastReApplyDate?: string;
 }
 
 export interface Student {
