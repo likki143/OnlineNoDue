@@ -38,6 +38,7 @@ import {
   DepartmentOfficer,
   AuditLog,
 } from "@/lib/applicationStore";
+import { firebaseApplicationService } from "@/lib/firebaseApplicationService";
 import {
   exportApplicationsCSV,
   exportStudentsCSV,
