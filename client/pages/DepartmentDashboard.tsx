@@ -45,6 +45,7 @@ import {
   Application,
   AuditLog,
 } from "@/lib/applicationStore";
+import { firebaseApplicationService } from "@/lib/firebaseApplicationService";
 import { sendStudentNotificationEmail } from "@/lib/utils/emailService";
 import {
   Shield,
