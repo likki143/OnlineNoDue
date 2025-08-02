@@ -217,7 +217,7 @@ const DepartmentDashboard: React.FC = () => {
           studentEmail: application.email,
           applicationId: application.id,
           department: userProfile?.department || userDepartment,
-          action: action,
+          action: action === "approve" ? "approved" : "rejected",
           comments: comment,
           officerName: userProfile?.fullName || "Department Officer",
         });
