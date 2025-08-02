@@ -160,11 +160,17 @@ export class FirebaseApplicationService {
     }
   }
 
-  // Update application status (for department officers and admins)
+  // Update application status with department feedback (for department officers and admins)
   async updateApplicationStatus(
     applicationId: string,
     departmentStatus: Partial<Application["progress"]>,
     studentId?: string,
+    feedback?: {
+      department: string;
+      action: "approved" | "rejected";
+      reason?: string;
+      officerName?: string;
+    },
   ): Promise<void> {
     try {
       const userUid = studentId || this.getCurrentUserUid();
