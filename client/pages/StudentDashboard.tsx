@@ -547,7 +547,7 @@ ${userProfile?.fullName}`;
                                   </Button>
                                 )}
 
-                                {app.status === "partially_rejected" && app.canReApply && (
+                                {(app.status === "partially_rejected" || app.status === "rejected") && app.canReApply && (
                                   <Button
                                     size="sm"
                                     className="bg-blue-600 hover:bg-blue-700 text-white"
