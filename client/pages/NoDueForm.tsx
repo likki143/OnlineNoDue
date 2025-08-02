@@ -130,8 +130,8 @@ const NoDueForm: React.FC = () => {
         throw new Error("Please fill in all required fields");
       }
 
-      // Submit application to store
-      const application = applicationStore.submitApplication({
+      // Submit application to Firebase
+      const application = await firebaseApplicationService.submitApplication({
         studentId: userProfile.uid,
         studentName: formData.fullName,
         rollNumber: formData.rollNumber,
