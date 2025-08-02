@@ -186,31 +186,46 @@ export const createAdmin = async (
 
 export const createDepartmentOfficer = async (
   email: string,
-  password: string,
   fullName: string,
   department: string,
-  isTemporaryPassword: boolean = true
+  currentUserEmail?: string,
+  currentUserPassword?: string
 ) => {
   try {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    const user = userCredential.user;
+    // Store current user before creating new user
+    const currentUser = auth.currentUser;
+
+    // Create new user account with a random password (they'll reset it via email)
+    const randomPassword = Math.random().toString(36).slice(-12) + 'A1!'; // Random secure password
+    const userCredential = await createUserWithEmailAndPassword(auth, email, randomPassword);
+    const newUser = userCredential.user;
 
     // Create department officer profile in database
     const userProfile: UserProfile = {
-      uid: user.uid,
-      email: user.email!,
+      uid: newUser.uid,
+      email: newUser.email!,
       role: 'department_officer',
       fullName,
       department,
       emailVerified: true, // Department officers don't need email verification
       createdAt: new Date().toISOString(),
-      passwordSetupRequired: isTemporaryPassword,
-      temporaryPassword: isTemporaryPassword ? password : undefined
+      passwordSetupRequired: true
     };
 
-    await set(ref(database, `users/${user.uid}`), userProfile);
+    await set(ref(database, `users/${newUser.uid}`), userProfile);
 
-    return { user, profile: userProfile };
+    // Re-authenticate the original admin user to prevent logout
+    if (currentUser && currentUserEmail && currentUserPassword) {
+      try {
+        await signOut(auth); // Sign out the newly created user
+        await signInWithEmailAndPassword(auth, currentUserEmail, currentUserPassword);
+      } catch (reAuthError) {
+        console.warn('Failed to re-authenticate admin user:', reAuthError);
+        // The department officer was still created successfully
+      }
+    }
+
+    return { user: newUser, profile: userProfile };
   } catch (error) {
     throw error;
   }
