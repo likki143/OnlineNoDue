@@ -103,7 +103,7 @@ class ApplicationStore {
 
   getStudentApplicationStatus(
     studentId: string,
-  ): "none" | "pending" | "in_progress" | "approved" | "rejected" {
+  ): "none" | "pending" | "in_progress" | "approved" | "rejected" | "partially_rejected" {
     const applications = this.getAllApplications();
     const studentApp = applications.find((app) => app.studentId === studentId);
     return studentApp ? studentApp.status : "none";
