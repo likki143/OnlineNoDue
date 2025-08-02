@@ -305,7 +305,7 @@ ${userProfile?.fullName}`;
                   <p className="text-sm font-medium">Rejected</p>
                   <p className="text-2xl font-bold">
                     {
-                      applications.filter((app) => app.status === "rejected")
+                      applications.filter((app) => app.status === "rejected" || app.status === "partially_rejected")
                         .length
                     }
                   </p>
