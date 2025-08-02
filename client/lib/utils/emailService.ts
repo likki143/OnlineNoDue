@@ -152,14 +152,14 @@ Welcome to the Online No Due Form System! You have been assigned as a ${role} fo
 ACCOUNT SETUP REQUIRED:
 Email: ${email}
 Login URL: ${loginUrl}
-Password Setup URL: ${passwordResetUrl}
 
 SETUP INSTRUCTIONS:
-1. Visit the Password Setup URL above
-2. Enter your email address (${email})
-3. Check your email for password reset instructions
-4. Create a secure password
-5. Login to your account and start managing applications
+1. Visit the login page using the URL above
+2. Click "Forgot Password?" link
+3. Enter your email address (${email})
+4. Check your email for password reset instructions
+5. Create a secure password and complete the reset
+6. Return to login page and sign in with your new password
 
 YOUR RESPONSIBILITIES:
 - Review and process no due applications for the ${department} department
