@@ -50,7 +50,7 @@ export class FirebaseApplicationService {
         );
       }
 
-      // Create the new application
+      // Create the new application - filter out undefined values
       const newApplication: Application = {
         ...application,
         id: Date.now().toString(),
@@ -63,6 +63,11 @@ export class FirebaseApplicationService {
           lab: "pending",
           sports: "pending",
         },
+        // Only include documents if they have valid values
+        documents: application.documents ? {
+          ...(application.documents.idCard && { idCard: application.documents.idCard }),
+          ...(application.documents.supportingDocs && { supportingDocs: application.documents.supportingDocs }),
+        } : undefined,
       };
 
       // Use push to generate a unique key and store under user's UID
