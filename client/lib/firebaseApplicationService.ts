@@ -230,11 +230,31 @@ export class FirebaseApplicationService {
         newStatus = "pending";
       }
 
-      // Update in Firebase
-      await update(applicationRef, {
+      // Prepare update object
+      const updateData: any = {
         progress: updatedProgress,
         status: newStatus,
-      });
+      };
+
+      // Add department feedback if provided
+      if (feedback) {
+        const departmentFeedback = currentApp.departmentFeedback || {};
+        departmentFeedback[feedback.department as keyof typeof departmentFeedback] = {
+          status: feedback.action,
+          reason: feedback.reason,
+          officerName: feedback.officerName,
+          date: new Date().toISOString(),
+        };
+        updateData.departmentFeedback = departmentFeedback;
+
+        // Enable re-apply if status is partially rejected
+        if (newStatus === "partially_rejected") {
+          updateData.canReApply = true;
+        }
+      }
+
+      // Update in Firebase
+      await update(applicationRef, updateData);
 
       console.log("Application status updated in Firebase");
     } catch (error) {
