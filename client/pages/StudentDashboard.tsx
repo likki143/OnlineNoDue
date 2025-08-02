@@ -82,21 +82,25 @@ const StudentDashboard: React.FC = () => {
     loadStudentData();
   }, [userProfile]);
 
-  const refreshApplications = () => {
+  const refreshApplications = async () => {
     if (userProfile?.uid) {
-      const studentApplications = applicationStore.getApplicationsByStudentId(
-        userProfile.uid,
-      );
-      setApplications(studentApplications);
+      try {
+        const studentApplications = await firebaseApplicationService.getApplicationsByStudentId(
+          userProfile.uid,
+        );
+        setApplications(studentApplications);
 
-      // Update application eligibility and status
-      const canStudentApply = applicationStore.canStudentApply(userProfile.uid);
-      setCanApply(canStudentApply);
+        // Update application eligibility and status
+        const canStudentApply = await firebaseApplicationService.canStudentApply(userProfile.uid);
+        setCanApply(canStudentApply);
 
-      const status = applicationStore.getStudentApplicationStatus(
-        userProfile.uid,
-      );
-      setApplicationStatus(status);
+        const status = await firebaseApplicationService.getStudentApplicationStatus(
+          userProfile.uid,
+        );
+        setApplicationStatus(status);
+      } catch (error) {
+        console.error("Error refreshing applications:", error);
+      }
     }
   };
 
