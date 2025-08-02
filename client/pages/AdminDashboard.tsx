@@ -270,7 +270,26 @@ const AdminDashboard: React.FC = () => {
     setError("");
 
     try {
-      // Send setup email first
+      // Create Firebase user account (will prevent admin logout)
+      await createDepartmentOfficer(
+        newOfficer.email,
+        newOfficer.name,
+        newOfficer.department,
+        userProfile?.email, // Admin's email for re-authentication
+        "Admin@123" // Admin's password for re-authentication (in demo mode)
+      );
+
+      // Add to application store
+      const createdOfficer = applicationStore.addOfficer({
+        name: newOfficer.name,
+        email: newOfficer.email,
+        department: newOfficer.department,
+        role: newOfficer.role,
+        emailSent: false, // Will be set to true after email is sent
+        passwordSetupRequired: true,
+      });
+
+      // Send setup email after account creation
       const emailResult = await sendDepartmentOfficerSetupEmail({
         name: newOfficer.name,
         email: newOfficer.email,
@@ -278,32 +297,21 @@ const AdminDashboard: React.FC = () => {
         role: newOfficer.role,
       });
 
-      if (!emailResult.success) {
-        throw new Error(emailResult.error || "Failed to send setup email");
+      if (emailResult.success) {
+        // Update officer record to indicate email was sent
+        const updatedOfficer = applicationStore.updateOfficer(createdOfficer.id, {
+          emailSent: true,
+        });
+
+        setSuccess(
+          `Department officer "${newOfficer.name}" created successfully! Setup email sent to ${newOfficer.email}. They will receive instructions to set their password.`,
+        );
+      } else {
+        setSuccess(
+          `Department officer "${newOfficer.name}" created successfully! However, setup email failed to send. Please manually share the login instructions.`,
+        );
       }
 
-      // Create Firebase user with temporary password
-      await createDepartmentOfficer(
-        newOfficer.email,
-        emailResult.temporaryPassword,
-        newOfficer.name,
-        newOfficer.department,
-      );
-
-      // Add to application store with email info
-      const createdOfficer = applicationStore.addOfficer({
-        name: newOfficer.name,
-        email: newOfficer.email,
-        department: newOfficer.department,
-        role: newOfficer.role,
-        temporaryPassword: emailResult.temporaryPassword,
-        emailSent: true,
-        passwordSetupRequired: true,
-      });
-
-      setSuccess(
-        `Department officer "${newOfficer.name}" created successfully! Setup email sent to ${newOfficer.email}`,
-      );
       setNewOfficer({ name: "", email: "", department: "", role: "" });
       setShowOfficerForm(false);
       refreshData(); // Refresh the data
