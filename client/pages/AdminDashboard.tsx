@@ -1325,28 +1325,34 @@ const AdminDashboard: React.FC = () => {
                                 <Button
                                   size="sm"
                                   variant="outline"
-                                  onClick={() => {
+                                  onClick={async () => {
                                     if (
                                       confirm(
                                         `Override status for Application #${app.id}?\n\nThis will mark all departments as approved.`,
                                       )
                                     ) {
-                                      await firebaseApplicationService.updateApplicationStatus(
-                                        app.id,
-                                        {
-                                          library: "approved",
-                                          hostel: "approved",
-                                          accounts: "approved",
-                                          lab: "approved",
-                                          sports: "approved",
-                                        },
-                                        app.studentId,
-                                      );
-                                      refreshData();
-                                      setSuccess(
-                                        "Application status overridden successfully!",
-                                      );
-                                      setTimeout(() => setSuccess(""), 3000);
+                                      try {
+                                        await firebaseApplicationService.updateApplicationStatus(
+                                          app.id,
+                                          {
+                                            library: "approved",
+                                            hostel: "approved",
+                                            accounts: "approved",
+                                            lab: "approved",
+                                            sports: "approved",
+                                          },
+                                          app.studentId,
+                                        );
+                                        await refreshData();
+                                        setSuccess(
+                                          "Application status overridden successfully!",
+                                        );
+                                        setTimeout(() => setSuccess(""), 3000);
+                                      } catch (error) {
+                                        console.error("Error overriding application status:", error);
+                                        setError("Failed to override application status");
+                                        setTimeout(() => setError(""), 3000);
+                                      }
                                     }
                                   }}
                                 >
