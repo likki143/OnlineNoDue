@@ -218,8 +218,14 @@ export class FirebaseApplicationService {
         // Check if ALL departments have been processed
         const allProcessed = statuses.every((status) => status !== "pending");
         if (allProcessed) {
-          // If all departments have been processed and some are rejected, mark as partially rejected
-          newStatus = "partially_rejected";
+          // Check if ALL departments rejected the application
+          const allRejected = statuses.every((status) => status === "rejected");
+          if (allRejected) {
+            newStatus = "rejected";
+          } else {
+            // If all departments have been processed and some are rejected, mark as partially rejected
+            newStatus = "partially_rejected";
+          }
         } else {
           // Still waiting for some departments
           newStatus = "in_progress";
