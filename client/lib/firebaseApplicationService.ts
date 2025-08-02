@@ -209,7 +209,15 @@ export class FirebaseApplicationService {
           }
         }
       } else if (statuses.some((status) => status === "rejected")) {
-        newStatus = "rejected";
+        // Check if ALL departments have been processed
+        const allProcessed = statuses.every((status) => status !== "pending");
+        if (allProcessed) {
+          // If all departments have been processed and some are rejected, mark as partially rejected
+          newStatus = "partially_rejected";
+        } else {
+          // Still waiting for some departments
+          newStatus = "in_progress";
+        }
       } else if (statuses.some((status) => status === "approved")) {
         newStatus = "in_progress";
       } else {
