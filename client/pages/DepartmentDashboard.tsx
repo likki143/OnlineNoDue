@@ -191,9 +191,10 @@ const DepartmentDashboard: React.FC = () => {
         [userDepartment]: action === "approve" ? "approved" : "rejected",
       };
 
-      applicationStore.updateApplicationStatus(
+      await firebaseApplicationService.updateApplicationStatus(
         application.id,
         departmentUpdate,
+        application.studentId,
       );
 
       // Add audit log
