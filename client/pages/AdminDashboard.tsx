@@ -588,10 +588,118 @@ const AdminDashboard: React.FC = () => {
                           <TableCell>{app.submissionDate}</TableCell>
                           <TableCell>{getStatusBadge(app.status)}</TableCell>
                           <TableCell>
-                            <Button size="sm" variant="outline">
-                              <Eye className="h-4 w-4 mr-1" />
-                              View
-                            </Button>
+                            <Dialog>
+                              <DialogTrigger asChild>
+                                <Button size="sm" variant="outline">
+                                  <Eye className="h-4 w-4 mr-1" />
+                                  View
+                                </Button>
+                              </DialogTrigger>
+                              <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+                                <DialogHeader>
+                                  <DialogTitle>Application Details - {app.studentName}</DialogTitle>
+                                  <DialogDescription>
+                                    Complete information about this no due application
+                                  </DialogDescription>
+                                </DialogHeader>
+                                <div className="space-y-6">
+                                  {/* Student Information */}
+                                  <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                      <label className="font-medium">Student Name</label>
+                                      <p>{app.studentName}</p>
+                                    </div>
+                                    <div>
+                                      <label className="font-medium">Roll Number</label>
+                                      <p>{app.rollNumber}</p>
+                                    </div>
+                                    <div>
+                                      <label className="font-medium">Email</label>
+                                      <p>{app.email}</p>
+                                    </div>
+                                    <div>
+                                      <label className="font-medium">Department</label>
+                                      <p>{app.department}</p>
+                                    </div>
+                                    <div>
+                                      <label className="font-medium">Course</label>
+                                      <p>{app.course} - {app.year}</p>
+                                    </div>
+                                    <div>
+                                      <label className="font-medium">Submission Date</label>
+                                      <p>{app.submissionDate}</p>
+                                    </div>
+                                  </div>
+
+                                  {/* Application Reason */}
+                                  {app.reason && (
+                                    <div>
+                                      <label className="font-medium">Application Reason</label>
+                                      <p className="text-muted-foreground">{app.reason}</p>
+                                    </div>
+                                  )}
+
+                                  {/* Department Progress with Detailed Feedback */}
+                                  <div>
+                                    <label className="font-medium">Department Progress</label>
+                                    <div className="grid grid-cols-1 gap-3 mt-2">
+                                      {Object.entries(app.progress).map(([dept, status]) => {
+                                        const feedback = app.departmentFeedback?.[dept as keyof typeof app.departmentFeedback];
+                                        return (
+                                          <div key={dept} className="border rounded-lg p-4">
+                                            <div className="flex items-center justify-between mb-2">
+                                              <span className="font-medium capitalize">
+                                                {dept === "lab" ? "Lab/Department" : dept}
+                                              </span>
+                                              <Badge
+                                                className={
+                                                  status === "approved"
+                                                    ? "bg-green-100 text-green-800"
+                                                    : status === "rejected"
+                                                      ? "bg-red-100 text-red-800"
+                                                      : "bg-yellow-100 text-yellow-800"
+                                                }
+                                              >
+                                                {status.toUpperCase()}
+                                              </Badge>
+                                            </div>
+                                            {feedback && (
+                                              <div className="text-sm space-y-1">
+                                                <p><strong>Reviewed by:</strong> {feedback.officerName}</p>
+                                                <p><strong>Date:</strong> {new Date(feedback.date || '').toLocaleDateString()}</p>
+                                                {feedback.reason && (
+                                                  <p><strong>Reason:</strong> {feedback.reason}</p>
+                                                )}
+                                              </div>
+                                            )}
+                                          </div>
+                                        );
+                                      })}
+                                    </div>
+                                  </div>
+
+                                  {/* Overall Status */}
+                                  <div>
+                                    <label className="font-medium">Overall Status</label>
+                                    <div className="mt-2">
+                                      {(() => {
+                                        if (app.status === "approved") {
+                                          return <Badge className="bg-green-100 text-green-800">APPROVED</Badge>;
+                                        } else if (app.status === "rejected") {
+                                          return <Badge className="bg-red-100 text-red-800">REJECTED</Badge>;
+                                        } else if (app.status === "partially_rejected") {
+                                          return <Badge className="bg-red-100 text-red-800">PARTIALLY REJECTED</Badge>;
+                                        } else if (app.status === "in_progress") {
+                                          return <Badge className="bg-blue-100 text-blue-800">IN PROGRESS</Badge>;
+                                        } else {
+                                          return <Badge className="bg-yellow-100 text-yellow-800">PENDING</Badge>;
+                                        }
+                                      })()}
+                                    </div>
+                                  </div>
+                                </div>
+                              </DialogContent>
+                            </Dialog>
                           </TableCell>
                         </TableRow>
                       ))
