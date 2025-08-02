@@ -260,6 +260,22 @@ class ApplicationStore {
     return newOfficer;
   }
 
+  updateOfficer(officerId: string, updates: Partial<DepartmentOfficer>): DepartmentOfficer | null {
+    const officers = this.getAllOfficers();
+    const officerIndex = officers.findIndex(
+      (officer) => officer.id === officerId,
+    );
+
+    if (officerIndex === -1) {
+      return null;
+    }
+
+    officers[officerIndex] = { ...officers[officerIndex], ...updates };
+    localStorage.setItem(this.OFFICERS_KEY, JSON.stringify(officers));
+
+    return officers[officerIndex];
+  }
+
   deleteOfficer(officerId: string): boolean {
     const officers = this.getAllOfficers();
     const officerIndex = officers.findIndex(
