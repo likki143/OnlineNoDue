@@ -84,20 +84,23 @@ export const createDepartmentOfficerSetupEmail = (
             <p>Your account has been created with the following details:</p>
             
             <div class="credentials-box">
-                <h3>🔐 Login Credentials</h3>
+                <h3>🔐 Account Setup Required</h3>
                 <p><strong>Email:</strong> ${email}</p>
-                <p><strong>Temporary Password:</strong> <code style="background: #e5e7eb; padding: 4px 8px; border-radius: 4px; font-family: monospace;">${temporaryPassword}</code></p>
                 <p><strong>Login URL:</strong> <a href="${loginUrl}">${loginUrl}</a></p>
+                <div style="text-align: center; margin: 20px 0;">
+                    <a href="${passwordResetUrl}" class="button">Set Your Password</a>
+                </div>
             </div>
-            
+
             <div class="warning">
-                <strong>⚠️ Important Security Notice:</strong>
-                <ul>
-                    <li>This is a temporary password for your first login</li>
-                    <li>You will be required to change your password after logging in</li>
-                    <li>Do not share these credentials with anyone</li>
-                    <li>This email contains sensitive information - please delete it after setting up your account</li>
-                </ul>
+                <strong>ℹ️ Setup Instructions:</strong>
+                <ol>
+                    <li>Click "Set Your Password" button above</li>
+                    <li>Enter your email address (${email})</li>
+                    <li>Check your email for password reset instructions</li>
+                    <li>Create a secure password</li>
+                    <li>Login to your account and start managing applications</li>
+                </ol>
             </div>
             
             <h3>📋 Your Responsibilities:</h3>
