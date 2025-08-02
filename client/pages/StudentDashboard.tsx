@@ -168,6 +168,26 @@ ${userProfile?.fullName}`;
     }
   };
 
+  const handleReApply = async (application: Application) => {
+    if (!confirm("Are you sure you want to re-apply to the rejected departments? This will reset the status of rejected departments to pending.")) {
+      return;
+    }
+
+    setReApplying(true);
+    try {
+      await firebaseApplicationService.reApplyToRejectedDepartments(
+        application.id,
+        application.studentId
+      );
+      await refreshApplications();
+      alert("Re-application submitted successfully! The rejected departments will review your application again.");
+    } catch (error: any) {
+      alert(error.message || "Failed to re-apply. Please try again.");
+    } finally {
+      setReApplying(false);
+    }
+  };
+
   const handleSignOut = async () => {
     try {
       if (isDemoMode()) {
