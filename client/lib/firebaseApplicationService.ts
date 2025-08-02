@@ -295,6 +295,54 @@ export class FirebaseApplicationService {
     }
   }
 
+  // Re-apply to rejected departments only
+  async reApplyToRejectedDepartments(
+    applicationId: string,
+    studentId?: string,
+  ): Promise<void> {
+    try {
+      const userUid = studentId || this.getCurrentUserUid();
+      const applicationRef = ref(
+        database,
+        `${this.APPLICATIONS_PATH}/${userUid}/${applicationId}`,
+      );
+
+      // Get current application
+      const snapshot = await get(applicationRef);
+      if (!snapshot.exists()) {
+        throw new Error("Application not found");
+      }
+
+      const currentApp = snapshot.val() as Application;
+
+      // Check if re-apply is allowed
+      if (!currentApp.canReApply || currentApp.status !== "partially_rejected") {
+        throw new Error("Re-apply is not allowed for this application");
+      }
+
+      // Reset only rejected departments to pending
+      const updatedProgress = { ...currentApp.progress };
+      Object.keys(updatedProgress).forEach((dept) => {
+        if (updatedProgress[dept as keyof typeof updatedProgress] === "rejected") {
+          updatedProgress[dept as keyof typeof updatedProgress] = "pending";
+        }
+      });
+
+      // Update application
+      await update(applicationRef, {
+        progress: updatedProgress,
+        status: "in_progress",
+        canReApply: false,
+        lastReApplyDate: new Date().toISOString(),
+      });
+
+      console.log("Re-applied to rejected departments successfully");
+    } catch (error) {
+      console.error("Error re-applying to rejected departments:", error);
+      throw error;
+    }
+  }
+
   // Delete an application (if needed)
   async deleteApplication(
     applicationId: string,
