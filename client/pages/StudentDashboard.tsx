@@ -49,25 +49,37 @@ const StudentDashboard: React.FC = () => {
   >("none");
 
   useEffect(() => {
-    if (userProfile?.uid) {
-      // Load applications for current student
-      const studentApplications = applicationStore.getApplicationsByStudentId(
-        userProfile.uid,
-      );
-      setApplications(studentApplications);
+    const loadStudentData = async () => {
+      if (userProfile?.uid) {
+        try {
+          // Load applications for current student from Firebase
+          const studentApplications = await firebaseApplicationService.getApplicationsByStudentId(
+            userProfile.uid,
+          );
+          setApplications(studentApplications);
 
-      // Check if student can apply
-      const canStudentApply = applicationStore.canStudentApply(userProfile.uid);
-      setCanApply(canStudentApply);
+          // Check if student can apply
+          const canStudentApply = await firebaseApplicationService.canStudentApply(userProfile.uid);
+          setCanApply(canStudentApply);
 
-      // Get application status
-      const status = applicationStore.getStudentApplicationStatus(
-        userProfile.uid,
-      );
-      setApplicationStatus(status);
+          // Get application status
+          const status = await firebaseApplicationService.getStudentApplicationStatus(
+            userProfile.uid,
+          );
+          setApplicationStatus(status);
+        } catch (error) {
+          console.error("Error loading student data:", error);
+          // Fallback to show empty state rather than crash
+          setApplications([]);
+          setCanApply(true);
+          setApplicationStatus("none");
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
 
-      setLoading(false);
-    }
+    loadStudentData();
   }, [userProfile]);
 
   const refreshApplications = () => {
