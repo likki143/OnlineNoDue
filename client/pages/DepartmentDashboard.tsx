@@ -107,7 +107,8 @@ const DepartmentDashboard: React.FC = () => {
     if (!userDepartment) return;
 
     try {
-      const allApplications = await firebaseApplicationService.getAllApplications();
+      const allApplications =
+        await firebaseApplicationService.getAllApplications();
 
       // Filter applications that need review from this department
       const departmentApplications = allApplications.filter((app) =>

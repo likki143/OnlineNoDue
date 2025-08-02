@@ -70,7 +70,8 @@ const NoDueForm: React.FC = () => {
     const checkCanApply = async () => {
       if (userProfile?.uid) {
         try {
-          const canStudentApply = await firebaseApplicationService.canStudentApply(userProfile.uid);
+          const canStudentApply =
+            await firebaseApplicationService.canStudentApply(userProfile.uid);
           setCanApply(canStudentApply);
 
           if (!canStudentApply) {
@@ -80,7 +81,9 @@ const NoDueForm: React.FC = () => {
           }
         } catch (error) {
           console.error("Error checking application eligibility:", error);
-          setError("Failed to check application eligibility. Please try again.");
+          setError(
+            "Failed to check application eligibility. Please try again.",
+          );
         }
       }
     };

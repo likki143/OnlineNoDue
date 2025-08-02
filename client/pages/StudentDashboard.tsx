@@ -53,19 +53,22 @@ const StudentDashboard: React.FC = () => {
       if (userProfile?.uid) {
         try {
           // Load applications for current student from Firebase
-          const studentApplications = await firebaseApplicationService.getApplicationsByStudentId(
-            userProfile.uid,
-          );
+          const studentApplications =
+            await firebaseApplicationService.getApplicationsByStudentId(
+              userProfile.uid,
+            );
           setApplications(studentApplications);
 
           // Check if student can apply
-          const canStudentApply = await firebaseApplicationService.canStudentApply(userProfile.uid);
+          const canStudentApply =
+            await firebaseApplicationService.canStudentApply(userProfile.uid);
           setCanApply(canStudentApply);
 
           // Get application status
-          const status = await firebaseApplicationService.getStudentApplicationStatus(
-            userProfile.uid,
-          );
+          const status =
+            await firebaseApplicationService.getStudentApplicationStatus(
+              userProfile.uid,
+            );
           setApplicationStatus(status);
         } catch (error) {
           console.error("Error loading student data:", error);
@@ -85,18 +88,21 @@ const StudentDashboard: React.FC = () => {
   const refreshApplications = async () => {
     if (userProfile?.uid) {
       try {
-        const studentApplications = await firebaseApplicationService.getApplicationsByStudentId(
-          userProfile.uid,
-        );
+        const studentApplications =
+          await firebaseApplicationService.getApplicationsByStudentId(
+            userProfile.uid,
+          );
         setApplications(studentApplications);
 
         // Update application eligibility and status
-        const canStudentApply = await firebaseApplicationService.canStudentApply(userProfile.uid);
+        const canStudentApply =
+          await firebaseApplicationService.canStudentApply(userProfile.uid);
         setCanApply(canStudentApply);
 
-        const status = await firebaseApplicationService.getStudentApplicationStatus(
-          userProfile.uid,
-        );
+        const status =
+          await firebaseApplicationService.getStudentApplicationStatus(
+            userProfile.uid,
+          );
         setApplicationStatus(status);
       } catch (error) {
         console.error("Error refreshing applications:", error);

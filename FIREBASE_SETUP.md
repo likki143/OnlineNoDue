@@ -16,6 +16,7 @@ To ensure proper security for the No Due System, you need to apply the security 
 ### Security Features:
 
 #### Application Data Security:
+
 - **User Isolation**: Each user can only read/write their own applications under `applications/{uid}/`
 - **Authentication Required**: All operations require user authentication
 - **Data Validation**: Strict validation rules for all application fields
@@ -23,6 +24,7 @@ To ensure proper security for the No Due System, you need to apply the security 
 - **Status Validation**: Only allows valid status values (pending, in_progress, approved, rejected)
 
 #### User Data Security:
+
 - **Self Access**: Users can read/write their own profile data
 - **Admin Access**: Admin users can access all user profiles (for management)
 - **Role-Based Access**: Access control based on user roles
@@ -74,6 +76,7 @@ firebase-database/
 ### Testing Security:
 
 You can test the security rules using the Firebase Console simulator:
+
 1. Go to Realtime Database → Rules
-2. Click "Simulator" 
+2. Click "Simulator"
 3. Test different scenarios with different user UIDs and data paths

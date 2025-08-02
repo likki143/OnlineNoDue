@@ -1,36 +1,53 @@
-import { ref, set, get, push, query, orderByChild, equalTo, update, remove } from 'firebase/database';
-import { database, auth } from './firebase';
-import { Application } from './applicationStore';
-import { sendCertificateReadyEmail } from './utils/emailService';
+import {
+  ref,
+  set,
+  get,
+  push,
+  query,
+  orderByChild,
+  equalTo,
+  update,
+  remove,
+} from "firebase/database";
+import { database, auth } from "./firebase";
+import { Application } from "./applicationStore";
+import { sendCertificateReadyEmail } from "./utils/emailService";
 
 export class FirebaseApplicationService {
-  private readonly APPLICATIONS_PATH = 'applications';
+  private readonly APPLICATIONS_PATH = "applications";
 
   // Get current user's UID with validation
   private getCurrentUserUid(): string {
     const user = auth.currentUser;
     if (!user) {
-      throw new Error('User must be logged in to access applications');
+      throw new Error("User must be logged in to access applications");
     }
     return user.uid;
   }
 
   // Submit a new application
   async submitApplication(
-    application: Omit<Application, "id" | "submissionDate" | "status" | "progress">
+    application: Omit<
+      Application,
+      "id" | "submissionDate" | "status" | "progress"
+    >,
   ): Promise<Application> {
     try {
       const userUid = this.getCurrentUserUid();
-      
+
       // Ensure the application belongs to the current user
       if (application.studentId !== userUid) {
-        throw new Error('Access denied: Cannot submit application for another user');
+        throw new Error(
+          "Access denied: Cannot submit application for another user",
+        );
       }
 
       // Check if user already has an application
       const canApply = await this.canStudentApply(userUid);
       if (!canApply) {
-        throw new Error('You have already submitted an application. Only one application per student is allowed.');
+        throw new Error(
+          "You have already submitted an application. Only one application per student is allowed.",
+        );
       }
 
       // Create the new application
@@ -49,19 +66,22 @@ export class FirebaseApplicationService {
       };
 
       // Use push to generate a unique key and store under user's UID
-      const userApplicationsRef = ref(database, `${this.APPLICATIONS_PATH}/${userUid}`);
+      const userApplicationsRef = ref(
+        database,
+        `${this.APPLICATIONS_PATH}/${userUid}`,
+      );
       const newApplicationRef = push(userApplicationsRef);
-      
+
       // Update the application ID to match the Firebase key
       newApplication.id = newApplicationRef.key!;
-      
+
       // Save to Firebase
       await set(newApplicationRef, newApplication);
 
-      console.log('Application submitted to Firebase:', newApplication);
+      console.log("Application submitted to Firebase:", newApplication);
       return newApplication;
     } catch (error) {
-      console.error('Error submitting application to Firebase:', error);
+      console.error("Error submitting application to Firebase:", error);
       throw error;
     }
   }
@@ -70,20 +90,25 @@ export class FirebaseApplicationService {
   async getApplicationsByStudentId(studentId?: string): Promise<Application[]> {
     try {
       const userUid = studentId || this.getCurrentUserUid();
-      
+
       // Ensure user can only access their own applications
       if (studentId && studentId !== this.getCurrentUserUid()) {
         // Only allow if current user is admin (this would need proper role checking in production)
         const currentUser = auth.currentUser;
         if (!currentUser) {
-          throw new Error('Access denied: Cannot access other user applications');
+          throw new Error(
+            "Access denied: Cannot access other user applications",
+          );
         }
         // In production, you'd check if current user has admin role here
       }
 
-      const userApplicationsRef = ref(database, `${this.APPLICATIONS_PATH}/${userUid}`);
+      const userApplicationsRef = ref(
+        database,
+        `${this.APPLICATIONS_PATH}/${userUid}`,
+      );
       const snapshot = await get(userApplicationsRef);
-      
+
       if (!snapshot.exists()) {
         return [];
       }
@@ -91,7 +116,7 @@ export class FirebaseApplicationService {
       const applicationsData = snapshot.val();
       return Object.values(applicationsData) as Application[];
     } catch (error) {
-      console.error('Error fetching applications from Firebase:', error);
+      console.error("Error fetching applications from Firebase:", error);
       return [];
     }
   }
@@ -103,27 +128,27 @@ export class FirebaseApplicationService {
       const applications = await this.getApplicationsByStudentId(userUid);
       return applications.length === 0;
     } catch (error) {
-      console.error('Error checking if student can apply:', error);
+      console.error("Error checking if student can apply:", error);
       return false;
     }
   }
 
   // Get student application status
   async getStudentApplicationStatus(
-    studentId?: string
+    studentId?: string,
   ): Promise<"none" | "pending" | "in_progress" | "approved" | "rejected"> {
     try {
       const userUid = studentId || this.getCurrentUserUid();
       const applications = await this.getApplicationsByStudentId(userUid);
-      
+
       if (applications.length === 0) {
         return "none";
       }
-      
+
       // Return the status of the first (and should be only) application
       return applications[0].status;
     } catch (error) {
-      console.error('Error getting student application status:', error);
+      console.error("Error getting student application status:", error);
       return "none";
     }
   }
@@ -132,20 +157,23 @@ export class FirebaseApplicationService {
   async updateApplicationStatus(
     applicationId: string,
     departmentStatus: Partial<Application["progress"]>,
-    studentId?: string
+    studentId?: string,
   ): Promise<void> {
     try {
       const userUid = studentId || this.getCurrentUserUid();
-      const applicationRef = ref(database, `${this.APPLICATIONS_PATH}/${userUid}/${applicationId}`);
-      
+      const applicationRef = ref(
+        database,
+        `${this.APPLICATIONS_PATH}/${userUid}/${applicationId}`,
+      );
+
       // Get current application
       const snapshot = await get(applicationRef);
       if (!snapshot.exists()) {
-        throw new Error('Application not found');
+        throw new Error("Application not found");
       }
 
       const currentApp = snapshot.val() as Application;
-      
+
       // Update progress
       const updatedProgress = {
         ...currentApp.progress,
@@ -155,12 +183,12 @@ export class FirebaseApplicationService {
       // Determine overall status
       const statuses = Object.values(updatedProgress);
       let newStatus: Application["status"];
-      
+
       const wasFullyApproved = currentApp.status === "approved";
-      
+
       if (statuses.every((status) => status === "approved")) {
         newStatus = "approved";
-        
+
         // Send certificate ready email if this is the first time it's fully approved
         if (!wasFullyApproved) {
           try {
@@ -187,9 +215,9 @@ export class FirebaseApplicationService {
         status: newStatus,
       });
 
-      console.log('Application status updated in Firebase');
+      console.log("Application status updated in Firebase");
     } catch (error) {
-      console.error('Error updating application status in Firebase:', error);
+      console.error("Error updating application status in Firebase:", error);
       throw error;
     }
   }
@@ -200,7 +228,7 @@ export class FirebaseApplicationService {
       // In production, you should verify admin role here
       const applicationsRef = ref(database, this.APPLICATIONS_PATH);
       const snapshot = await get(applicationsRef);
-      
+
       if (!snapshot.exists()) {
         return [];
       }
@@ -210,9 +238,9 @@ export class FirebaseApplicationService {
 
       // Flatten the nested structure
       Object.values(allApplicationsData).forEach((userApplications: any) => {
-        if (userApplications && typeof userApplications === 'object') {
+        if (userApplications && typeof userApplications === "object") {
           Object.values(userApplications).forEach((app: any) => {
-            if (app && typeof app === 'object') {
+            if (app && typeof app === "object") {
               allApplications.push(app as Application);
             }
           });
@@ -221,20 +249,26 @@ export class FirebaseApplicationService {
 
       return allApplications;
     } catch (error) {
-      console.error('Error fetching all applications from Firebase:', error);
+      console.error("Error fetching all applications from Firebase:", error);
       return [];
     }
   }
 
   // Delete an application (if needed)
-  async deleteApplication(applicationId: string, studentId?: string): Promise<void> {
+  async deleteApplication(
+    applicationId: string,
+    studentId?: string,
+  ): Promise<void> {
     try {
       const userUid = studentId || this.getCurrentUserUid();
-      const applicationRef = ref(database, `${this.APPLICATIONS_PATH}/${userUid}/${applicationId}`);
+      const applicationRef = ref(
+        database,
+        `${this.APPLICATIONS_PATH}/${userUid}/${applicationId}`,
+      );
       await remove(applicationRef);
-      console.log('Application deleted from Firebase');
+      console.log("Application deleted from Firebase");
     } catch (error) {
-      console.error('Error deleting application from Firebase:', error);
+      console.error("Error deleting application from Firebase:", error);
       throw error;
     }
   }

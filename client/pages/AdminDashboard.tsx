@@ -1349,8 +1349,13 @@ const AdminDashboard: React.FC = () => {
                                         );
                                         setTimeout(() => setSuccess(""), 3000);
                                       } catch (error) {
-                                        console.error("Error overriding application status:", error);
-                                        setError("Failed to override application status");
+                                        console.error(
+                                          "Error overriding application status:",
+                                          error,
+                                        );
+                                        setError(
+                                          "Failed to override application status",
+                                        );
                                         setTimeout(() => setError(""), 3000);
                                       }
                                     }
