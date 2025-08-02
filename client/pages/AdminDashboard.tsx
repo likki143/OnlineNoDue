@@ -289,26 +289,35 @@ const AdminDashboard: React.FC = () => {
         passwordSetupRequired: true,
       });
 
-      // Send setup email after account creation
-      const emailResult = await sendDepartmentOfficerSetupEmail({
-        name: newOfficer.name,
-        email: newOfficer.email,
-        department: newOfficer.department,
-        role: newOfficer.role,
-      });
+      // Send password reset email to allow officer to set their password
+      try {
+        await resetPassword(newOfficer.email);
 
-      if (emailResult.success) {
-        // Update officer record to indicate email was sent
-        const updatedOfficer = applicationStore.updateOfficer(createdOfficer.id, {
-          emailSent: true,
+        // Send setup email after password reset email
+        const emailResult = await sendDepartmentOfficerSetupEmail({
+          name: newOfficer.name,
+          email: newOfficer.email,
+          department: newOfficer.department,
+          role: newOfficer.role,
         });
 
+        if (emailResult.success) {
+          // Update officer record to indicate email was sent
+          applicationStore.updateOfficer(createdOfficer.id, {
+            emailSent: true,
+          });
+
+          setSuccess(
+            `Department officer "${newOfficer.name}" created successfully! Setup emails sent to ${newOfficer.email}. They will receive instructions to set their password and access their account.`,
+          );
+        } else {
+          setSuccess(
+            `Department officer "${newOfficer.name}" created successfully! Password reset email sent, but setup email failed. The officer can still reset their password and login.`,
+          );
+        }
+      } catch (resetError) {
         setSuccess(
-          `Department officer "${newOfficer.name}" created successfully! Setup email sent to ${newOfficer.email}. They will receive instructions to set their password.`,
-        );
-      } else {
-        setSuccess(
-          `Department officer "${newOfficer.name}" created successfully! However, setup email failed to send. Please manually share the login instructions.`,
+          `Department officer "${newOfficer.name}" created successfully! However, password reset email failed to send. Please manually assist the officer with password setup.`,
         );
       }
 
