@@ -49,7 +49,7 @@ export const generateTemporaryPassword = (): string => {
 export const createDepartmentOfficerSetupEmail = (
   data: DepartmentOfficerSetupData,
 ): EmailTemplate => {
-  const { name, email, department, role, temporaryPassword, loginUrl } = data;
+  const { name, email, department, role, passwordResetUrl, loginUrl } = data;
 
   const htmlContent = `
 <!DOCTYPE html>
