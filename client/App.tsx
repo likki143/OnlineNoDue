@@ -39,8 +39,8 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     return <Navigate to="/login" replace />;
   }
 
-  // Check if user needs to set up password
-  if (userProfile.passwordSetupRequired && window.location.pathname !== '/password-setup') {
+  // Check if user needs to set up password (only for students with temporary passwords)
+  if (userProfile.passwordSetupRequired && userProfile.role === 'student' && window.location.pathname !== '/password-setup') {
     return <Navigate to="/password-setup" replace />;
   }
 
