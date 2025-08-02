@@ -247,8 +247,8 @@ export class FirebaseApplicationService {
         };
         updateData.departmentFeedback = departmentFeedback;
 
-        // Enable re-apply if status is partially rejected
-        if (newStatus === "partially_rejected") {
+        // Enable re-apply if status is partially rejected or fully rejected
+        if (newStatus === "partially_rejected" || newStatus === "rejected") {
           updateData.canReApply = true;
         }
       }
@@ -316,7 +316,7 @@ export class FirebaseApplicationService {
       const currentApp = snapshot.val() as Application;
 
       // Check if re-apply is allowed
-      if (!currentApp.canReApply || currentApp.status !== "partially_rejected") {
+      if (!currentApp.canReApply || (currentApp.status !== "partially_rejected" && currentApp.status !== "rejected")) {
         throw new Error("Re-apply is not allowed for this application");
       }
 
