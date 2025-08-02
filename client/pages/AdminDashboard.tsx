@@ -286,7 +286,6 @@ const AdminDashboard: React.FC = () => {
         department: newOfficer.department,
         role: newOfficer.role,
         emailSent: false, // Will be set to true after email is sent
-        passwordSetupRequired: true,
       });
 
       // Send password reset email to allow officer to set their password
