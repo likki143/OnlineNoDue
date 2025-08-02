@@ -553,7 +553,7 @@ export const sendDepartmentOfficerSetupEmail = async (officerData: {
 }> => {
   try {
     const loginUrl = `${window.location.origin}/login`;
-    const passwordResetUrl = `${window.location.origin}/reset-password`;
+    const passwordResetUrl = `${window.location.origin}/login`; // Use login page where they can request password reset
 
     const emailTemplate = createDepartmentOfficerSetupEmail({
       ...officerData,
