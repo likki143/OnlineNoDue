@@ -21,7 +21,7 @@ import {
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
-import { applicationStore } from "@/lib/applicationStore";
+import { firebaseApplicationService } from "@/lib/firebaseApplicationService";
 import {
   GraduationCap,
   ArrowLeft,
