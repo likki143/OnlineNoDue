@@ -134,6 +134,15 @@ const NoDueForm: React.FC = () => {
       }
 
       // Submit application to Firebase
+      // Prepare documents object, only including files that were actually uploaded
+      const documents: { idCard?: string; supportingDocs?: string } = {};
+      if (formData.idCardFile?.name) {
+        documents.idCard = formData.idCardFile.name;
+      }
+      if (formData.documentsFile?.name) {
+        documents.supportingDocs = formData.documentsFile.name;
+      }
+
       const application = await firebaseApplicationService.submitApplication({
         studentId: userProfile.uid,
         studentName: formData.fullName,
@@ -144,10 +153,8 @@ const NoDueForm: React.FC = () => {
         year: formData.year,
         reason: formData.reason,
         collegeName: formData.collegeName,
-        documents: {
-          idCard: formData.idCardFile?.name,
-          supportingDocs: formData.documentsFile?.name,
-        },
+        // Only include documents if at least one file was uploaded
+        ...(Object.keys(documents).length > 0 && { documents }),
       });
 
       console.log("Application submitted:", application);
