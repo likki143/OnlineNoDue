@@ -114,16 +114,15 @@ export const createDepartmentOfficerSetupEmail = (
             
             <h3>🚀 Getting Started:</h3>
             <ol>
-                <li>Click "Set Your Password" to create your secure password</li>
-                <li>Complete the password reset process</li>
+                <li>Visit the login page</li>
+                <li>Use "Forgot Password?" to set your password</li>
                 <li>Login using your email and new password</li>
                 <li>Complete your profile information</li>
                 <li>Start reviewing pending applications</li>
             </ol>
 
             <div style="text-align: center; margin: 30px 0;">
-                <a href="${passwordResetUrl}" class="button">Set Your Password</a>
-                <a href="${loginUrl}" class="button" style="background: #6b7280;">Go to Login</a>
+                <a href="${loginUrl}" class="button">Go to Login Page</a>
             </div>
             
             <h3>📞 Need Help?</h3>
