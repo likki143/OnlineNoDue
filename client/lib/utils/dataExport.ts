@@ -195,6 +195,10 @@ For support: Contact your department officer or system administrator.
 // Filter applications by status
 export const filterApplicationsByStatus = (applications: Application[], status: string): Application[] => {
   if (status === 'all') return applications;
+  if (status === 'rejected') {
+    // Include both rejected and partially_rejected
+    return applications.filter(app => app.status === 'rejected' || app.status === 'partially_rejected');
+  }
   return applications.filter(app => app.status === status);
 };
 
