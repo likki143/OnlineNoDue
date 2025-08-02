@@ -13,7 +13,7 @@ export interface DepartmentOfficerSetupData {
   email: string;
   department: string;
   role: string;
-  temporaryPassword: string;
+  passwordResetUrl: string;
   loginUrl: string;
 }
 
