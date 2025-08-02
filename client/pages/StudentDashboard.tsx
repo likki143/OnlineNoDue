@@ -53,8 +53,9 @@ const StudentDashboard: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [canApply, setCanApply] = useState(true);
   const [applicationStatus, setApplicationStatus] = useState<
-    "none" | "pending" | "in_progress" | "approved" | "rejected"
+    "none" | "pending" | "in_progress" | "approved" | "rejected" | "partially_rejected"
   >("none");
+  const [reApplying, setReApplying] = useState(false);
 
   useEffect(() => {
     const loadStudentData = async () => {
