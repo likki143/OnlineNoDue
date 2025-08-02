@@ -143,7 +143,7 @@ export class FirebaseApplicationService {
   // Get student application status
   async getStudentApplicationStatus(
     studentId?: string,
-  ): Promise<"none" | "pending" | "in_progress" | "approved" | "rejected"> {
+  ): Promise<"none" | "pending" | "in_progress" | "approved" | "rejected" | "partially_rejected"> {
     try {
       const userUid = studentId || this.getCurrentUserUid();
       const applications = await this.getApplicationsByStudentId(userUid);
